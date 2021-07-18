@@ -1,64 +1,109 @@
 <template>
-  <div class="product-recommendations" :class="orientation">
-    <div v-for="handle in recommendations" :key="handle">
-      <slot :product="getProduct(handle)">
-        <product-card :product-handle="handle"></product-card>
-      </slot>
+  <div class="recommendations container">
+    <h4 class="title is-4">Recommended Products</h4>
+    <div class="columns is-multiline">
+      <product-grid
+        v-if="recommendedProducts.length"
+        :products="recommendedProducts"
+        :show-add-to-cart="true"
+        :show-quantity-update="true"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   props: {
-    productHandle: {
-      type: String,
-      default: ''
-    },
-    limit: {
-      type: Number,
-      default: 0
-    },
-    orientation: {
-      type: String,
-      default: 'horizontal',
-      validator(value) {
-        return ['horizontal', 'vertical'].includes(value)
+    product: {
+      type: Object,
+      default: () => {
+        return null
       }
     }
   },
-  computed: {
-    ...mapGetters('products', ['getRecommendations', 'getProduct']),
-    recommendations() {
-      const recommendations = this.getRecommendations(this.productHandle, {
-        limit: this.limit
-      })
-      const handles = recommendations.map((r) => r.handle)
-      return handles
+  data() {
+    return {
+      recommendedProducts: []
     }
   },
-  created() {
-    this.loadProductRecommendations({ productHandle: this.productHandle })
+  async fetch() {
+    this.recommendedProducts = await this.loadRecommendations(
+      this.product.handle
+    )
   },
   methods: {
-    ...mapActions('products', ['loadProductRecommendations'])
+    async loadRecommendations(handle, count = 4) {
+      if (!handle) {
+        return []
+      }
+      const locale = (this.$store.$nacelle.data.locale || 'en-us').toLowerCase()
+      const baseRecommendationsEndpoint = `https://recommendations.hailfrequency.com/${this.$store.$nacelle.client.id}/v1`
+      let generatedRecommendations = []
+      try {
+        const recommendationsData = await axios.get(
+          `${baseRecommendationsEndpoint}/recommendations/products/${handle}--${locale}.json`
+        )
+        if (recommendationsData) {
+          generatedRecommendations = JSON.parse(recommendationsData.data)
+        }
+      } catch (error) {
+        console.log(
+          `Unable to load generated product recommendations for ${handle}.`
+        )
+      }
+
+      let rulesRecommendations = []
+      try {
+        const merchandisingRulesData = await axios.get(
+          `${baseRecommendationsEndpoint}/merchandising-rules.json`
+        )
+        if (merchandisingRulesData) {
+          const merchandisingRules = merchandisingRulesData.data.rules.find(
+            (rule) => rule.inputs.includes(handle)
+          )
+          rulesRecommendations = merchandisingRules
+            ? merchandisingRules.outputs
+            : []
+        }
+      } catch (error) {
+        console.log(
+          `Unable to load product recommendation rules for ${handle}.`
+        )
+      }
+
+      const recommendations = [
+        ...(rulesRecommendations || []).map((handle) => ({
+          handle,
+          source: 'rule'
+        })),
+        ...(generatedRecommendations || [])
+          .filter((handle) => !rulesRecommendations.includes(handle))
+          .map((handle) => ({
+            handle,
+            source: 'generated'
+          }))
+      ]
+
+      if (!recommendations || !recommendations.length) {
+        return []
+      }
+      return await Promise.all(
+        recommendations.slice(0, count).map((handle) => {
+          return this.$fetchProduct(handle.handle)
+        })
+      )
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.product-recommendations {
-  display: grid;
-  grid-gap: 1rem;
-}
-.product-recommendations.horizontal {
-  grid-auto-flow: column;
-  grid-template-rows: 1fr;
-}
-.product-recommendations.vertical {
-  grid-auto-flow: row;
-  grid-template-columns: 1fr;
+.recommendations {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  margin-top: 1rem;
 }
 </style>
