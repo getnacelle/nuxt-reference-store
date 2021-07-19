@@ -1,9 +1,8 @@
 <template>
-  <div class="recommendations container">
+  <div v-if="recommendedProducts.length" class="recommendations container">
     <h4 class="title is-4">Recommended Products</h4>
     <div class="columns is-multiline">
       <product-grid
-        v-if="recommendedProducts.length"
         :products="recommendedProducts"
         :show-add-to-cart="true"
         :show-quantity-update="true"
