@@ -1,12 +1,17 @@
 <template>
-  <div v-if="recommendedProducts.length" class="recommendations container">
-    <h4 class="title is-4">Recommended Products</h4>
-    <div class="columns is-multiline">
-      <product-grid
-        :products="recommendedProducts"
-        :show-add-to-cart="true"
-        :show-quantity-update="true"
-      />
+  <div>
+    <button class="button nacelle" @click="getRecs">
+      Update Recommendations
+    </button>
+    <div v-if="recommendedProducts.length" class="recommendations container">
+      <h4 class="title is-4">Recommended Products</h4>
+      <div class="columns is-multiline">
+        <product-grid
+          :products="recommendedProducts"
+          :show-add-to-cart="true"
+          :show-quantity-update="true"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +39,11 @@ export default {
     )
   },
   methods: {
+    async getRecs() {
+      this.recommendedProducts = await this.loadRecommendations(
+        this.product.handle
+      )
+    },
     async loadRecommendations(handle, count = 4) {
       if (!handle) {
         return []
