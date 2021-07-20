@@ -39,7 +39,9 @@ export default {
         return []
       }
       const locale = (this.$store.$nacelle.data.locale || 'en-us').toLowerCase()
-      const baseRecommendationsEndpoint = `https://recommendations.hailfrequency.com/${this.$store.$nacelle.client.id}/v1`
+      const baseRecommendationsEndpoint = `https://recommendations${
+        process.env.VERCEL_ENV !== 'production' ? '.dev' : ''
+      }.hailfrequency.com/${this.$store.$nacelle.client.id}/v1`
       let generatedRecommendations = []
       try {
         const recommendationsData = await axios.get(
