@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <button class="button nacelle" @click="getRecs">
       Update Recommendations
     </button>
-    <div v-if="recommendedProducts.length" class="recommendations container">
+    <div v-if="recommendedProducts.length" class="recommendations">
       <h4 class="title is-4">Recommended Products</h4>
       <div class="columns is-multiline">
         <product-grid
