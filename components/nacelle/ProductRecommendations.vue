@@ -5,12 +5,13 @@
     </button>
     <div v-if="recommendedProducts.length" class="recommendations">
       <h4 class="title is-4">Recommended Products</h4>
-      <div class="columns is-multiline">
-        <product-grid
-          :products="recommendedProducts"
-          :show-add-to-cart="true"
-          :show-quantity-update="true"
-        />
+      <div class="product-grid columns is-multiline is-paddingless nacelle">
+        <div
+          v-for="recommendedProduct in recommendedProducts"
+          :key="recommendedProduct.id"
+        >
+          <product-card :product="recommendedProduct" />
+        </div>
       </div>
     </div>
   </div>
