@@ -102,10 +102,12 @@ export default {
       if (!recommendations || !recommendations.length) {
         return []
       }
-      const recommendedHandles = recommendations
-        .slice(0, count)
-        .map((handle) => handle.handle)
-      return this.$nacelle.data.products({ handles: recommendedHandles })
+
+      return await Promise.all(
+        recommendations.slice(0, count).map((handle) => {
+          return this.$fetchProduct(handle.handle)
+        })
+      )
     }
   }
 }
