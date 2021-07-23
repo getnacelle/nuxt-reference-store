@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button class="button nacelle" @click="getRecs">
+    <button class="button nacelle" @click="getRecommendations">
       Update Recommendations
     </button>
     <div v-if="recommendedProducts.length" class="recommendations">
@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   props: {
     product: {
@@ -40,7 +38,7 @@ export default {
     )
   },
   methods: {
-    async getRecs() {
+    async getRecommendations() {
       this.recommendedProducts = await this.loadRecommendations(
         this.product.handle
       )
@@ -49,65 +47,19 @@ export default {
       if (!handle) {
         return []
       }
-      const locale = (this.$store.$nacelle.data.locale || 'en-us').toLowerCase()
-      const baseRecommendationsEndpoint = `https://recommendations${
-        process.env.VERCEL_ENV !== 'production' ? '.dev' : ''
-      }.hailfrequency.com/${this.$store.$nacelle.client.id}/v1`
-      let generatedRecommendations = []
-      try {
-        const recommendationsData = await axios.get(
-          `${baseRecommendationsEndpoint}/recommendations/products/${handle}--${locale}.json`
-        )
-        if (recommendationsData) {
-          generatedRecommendations = JSON.parse(recommendationsData.data)
-        }
-      } catch (error) {
-        console.log(
-          `Unable to load generated product recommendations for ${handle}.`
-        )
-      }
-
-      let rulesRecommendations = []
-      try {
-        const merchandisingRulesData = await axios.get(
-          `${baseRecommendationsEndpoint}/merchandising-rules.json`
-        )
-        if (merchandisingRulesData) {
-          const merchandisingRules = merchandisingRulesData.data.rules.find(
-            (rule) => rule.inputs.includes(handle)
-          )
-          rulesRecommendations = merchandisingRules
-            ? merchandisingRules.outputs
-            : []
-        }
-      } catch (error) {
-        console.log(
-          `Unable to load product recommendation rules for ${handle}.`
-        )
-      }
-
-      const recommendations = [
-        ...(rulesRecommendations || []).map((handle) => ({
+      const locale = (this.$nacelle.data.locale || 'en-us').toLowerCase()
+      const recommendations = await this.$nacelle.recommendations.getByProductHandle(
+        {
           handle,
-          source: 'rule'
-        })),
-        ...(generatedRecommendations || [])
-          .filter((handle) => !rulesRecommendations.includes(handle))
-          .map((handle) => ({
-            handle,
-            source: 'generated'
-          }))
-      ]
-
-      if (!recommendations || !recommendations.length) {
-        return []
-      }
-
-      return await Promise.all(
-        recommendations.slice(0, count).map((handle) => {
-          return this.$fetchProduct(handle.handle)
-        })
+          locale,
+          limit: count
+        }
       )
+
+      return await this.$nacelle.data.products({
+        handles: recommendations.map((recommendation) => recommendation.handle),
+        locale
+      })
     }
   }
 }

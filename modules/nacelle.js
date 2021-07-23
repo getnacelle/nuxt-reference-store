@@ -11,7 +11,8 @@ module.exports = async function (moduleOptions) {
     ...this.options.nacelle,
     ...moduleOptions,
     locale: this.options.nacelle.locale || 'en-us',
-    endpoint: this.options.nacelle.endpoint
+    endpoint: this.options.nacelle.endpoint,
+    recommendationsEndpoint: this.options.nacelle.recommendationsEndpoint
   }
 
   const client = new NacelleClient({
@@ -19,6 +20,7 @@ module.exports = async function (moduleOptions) {
     token: this.options.nacelle.token,
     locale: options.defaultLocale,
     nacelleEndpoint: options.endpoint,
+    recommendationsEndpoint: options.recommendationsEndpoint,
     useStatic: false
   })
 

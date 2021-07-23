@@ -30,7 +30,8 @@ export default {
     contentAssetStorage: process.env.CONTENT_ASSET_STORAGE || '',
     nacelleId: process.env.NACELLE_SPACE_ID,
     nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: process.env.NACELLE_ENDPOINT
+    nacelleEndpoint: process.env.NACELLE_ENDPOINT,
+    recommendationsEndpoint: 'https://recommendations.dev.hailfrequency.com'
   },
   privateRuntimeConfig: {},
 
@@ -71,7 +72,6 @@ export default {
     spaceID: process.env.NACELLE_SPACE_ID,
     token: process.env.NACELLE_GRAPHQL_TOKEN,
     endpoint: process.env.NACELLE_ENDPOINT
-
     /* Optional */
     // Set the default internationalization locales string for Nacelle to use
     // defaultLocale: 'en-us'
