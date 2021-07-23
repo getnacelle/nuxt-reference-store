@@ -80,6 +80,7 @@ export default {
     this.getSearchData()
     this.setDiscountCode(queryString.parse(location.search).discount)
     this.readSession()
+    this.getWishlists()
   },
   methods: {
     ...mapActions(['clearProductIdb']),
@@ -87,7 +88,8 @@ export default {
     ...mapActions('checkout', ['initializeCheckout']),
     ...mapActions('user', ['readSession']),
     ...mapActions('search', ['getSearchData']),
-    ...mapMutations('checkout', ['setDiscountCode'])
+    ...mapMutations('checkout', ['setDiscountCode']),
+    ...mapActions('wishlist', ['getWishlists'])
   }
 }
 </script>
