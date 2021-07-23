@@ -1,0 +1,13 @@
+name: Send to CodeClimate Velocity
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Send Deployment to Velocity
+        run: curl -d "token=${{ secrets.VELOCITY_DEPLOYMENT_TOKEN }}" -d "revision=$GITHUB_SHA" -d "repository_url=https://github.com/${{ github.repository }}" -d "branch=main" -d "environment=development" https://velocity.codeclimate.com/deploys
