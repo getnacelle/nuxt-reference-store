@@ -7,7 +7,6 @@
     <section class="section section-login">
       <login-form />
       <!-- Social Login -->
-      <nacelle-passport :myshopify-domain="$nacelle.myshopifyDomain" />
       <nuxt-link :to="`/account/recover`" class="breadcrumb">
         Forgot your password?
       </nuxt-link>

@@ -50,19 +50,13 @@ export const actions = {
   async getWishlists({ commit, dispatch, state, rootState }) {
     // get products
     const products = (await dispatch('getProductData')) || []
-    console.log('rootState', rootState)
-    console.log('this.nacelle', this.$nacelle)
-    console.log('env', process.env)
-    console.log('rootstate', rootState)
     if (rootState.account && rootState.account.customer) {
       const variables = {
-        customerId: 'rootState.account.customer.id'
+        customerId: rootState.account.customer.id
       }
-      console.log('wishlist', this.$nacelle.wishlist)
       const response = await this.$nacelle.wishlist.get(variables)
       const { data, errors } = response.data
       if (errors && errors.length) {
-        console.log(errors)
         throw new Error(JSON.stringify(errors))
       }
       const { items } = data.getWishlistsByCustomerSourceId
@@ -112,21 +106,19 @@ export const actions = {
   },
 
   async addToWishlist({ commit, dispatch, state, rootState }, payload) {
-    console.log('addToWishlist called', rootState)
     if (payload.variant && payload.product) {
       await commit('pushItem', payload)
       if (rootState.account && rootState.account.customer) {
         const variables = {
           id: state.id,
           title: state.title,
-          customerId: 'rootState.account.customer.id',
+          customerId: rootState.account.customer.id,
           items: state.items.map((item) => ({
             handle: item.product.handle,
             variantId: item.variant.id
           }))
         }
         const response = await this.$nacelle.wishlist.put(variables)
-        console.log('response is', response)
         const { data, errors } = response.data
         if (errors && errors.length) {
           throw new Error(JSON.stringify(errors))
@@ -145,14 +137,13 @@ export const actions = {
     { commit, dispatch, state, rootState },
     { variantId }
   ) {
-    console.log('remove from wishlist called')
     if (variantId) {
       await commit('removeItem', variantId)
       if (rootState.account && rootState.account.customer) {
         const variables = {
           id: state.id,
           title: state.title,
-          customerId: 'rootState.account.customer.id',
+          customerId: rootState.account.customer.id,
           items: state.items.map((item) => ({
             handle: item.product.handle,
             variantId: item.variant.id
@@ -169,12 +160,11 @@ export const actions = {
   },
 
   async updateWishlist({ dispatch, rootState, state }) {
-    console.log('updateWishlist called')
     if (rootState.account && rootState.account.customer) {
       const variables = {
         id: state.id,
         title: state.title,
-        customerId: 'rootState.account.customer.id',
+        customerId: rootState.account.customer.id,
         items: state.items.map((item) => ({
           handle: item.product.handle,
           variantId: item.variant.id

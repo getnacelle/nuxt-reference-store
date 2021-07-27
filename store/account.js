@@ -150,7 +150,7 @@ export const actions = {
     commit('setErrors', userErrors)
   },
 
-  async fetchCustomer({ state, commit }) {
+  async fetchCustomer({ state, commit, dispatch }) {
     const variables = {
       customerAccessToken: state.customerAccessToken.accessToken
     }
@@ -159,6 +159,7 @@ export const actions = {
     const { customer, userErrors } = response.data.data
     if (customer) {
       commit('setCustomer', customer)
+      dispatch('wishlist/getWishlists', null, { root: true })
     }
     commit('setErrors', userErrors)
   },
@@ -196,7 +197,6 @@ export const actions = {
       customerAccessToken,
       userErrors
     } = response.data.data.customerAccessTokenCreate
-
     if (customerAccessToken) {
       await dispatch('updateCustomerAccessToken', customerAccessToken)
       await dispatch('fetchCustomer')
@@ -217,6 +217,7 @@ export const actions = {
     } = response.data.data.customerAccessTokenDelete
     if (deletedAccessToken) {
       dispatch('removeCustomerAccessToken')
+      dispatch('wishlist/resetWishlist', null, { root: true })
     }
     commit('setErrors', userErrors)
   },
@@ -341,7 +342,6 @@ export const actions = {
   async register({ commit }, { firstName, lastName, email, password }) {
     const variables = { input: { firstName, lastName, email, password } }
     const query = CUSTOMER_CREATE
-    console.log('yo we testing', this._vm, this.$shopify.client, this)
     const response = await this.$shopify.client.post(null, { query, variables })
     const { data, errors } = response.data
     if (errors && errors.length) {
