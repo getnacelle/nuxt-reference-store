@@ -73,6 +73,14 @@ export default {
   computed: {
     ...mapGetters('space', ['getMetatag'])
   },
+  created() {
+    // Accounts Modifications
+    // Get, read, validate, and renew accessToken from cookies.
+    if (process.browser || process.client) {
+      const accessToken = this.$cookies.get('customerAccessToken')
+      this.$store.dispatch('account/readCustomerAccessToken', { accessToken })
+    }
+  },
   async mounted() {
     await this.initializeCheckout()
     await this.initializeCart()

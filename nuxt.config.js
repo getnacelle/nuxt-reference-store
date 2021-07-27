@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 export default {
   target: 'static',
 
@@ -30,7 +32,9 @@ export default {
     contentAssetStorage: process.env.CONTENT_ASSET_STORAGE || '',
     nacelleId: process.env.NACELLE_SPACE_ID,
     nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: process.env.NACELLE_ENDPOINT
+    nacelleEndpoint: process.env.NACELLE_ENDPOINT,
+    myshopifyDomain: process.env.MYSHOPIFY_DOMAIN,
+    shopifyToken: process.env.SHOPIFY_GRAPHQL_TOKEN
   },
   privateRuntimeConfig: {},
 
@@ -53,14 +57,16 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/sitemap',
     'nuxt-polyfill',
-    '~/modules/nacelle'
+    '~/modules/nacelle',
+    'cookie-universal-nuxt'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
     { src: '~/plugins/script-loader.js', mode: 'client' },
-    { src: '~/plugins/vuex-product-module-registration.js' }
+    { src: '~/plugins/vuex-product-module-registration.js' },
+    { src: '~/plugins/authOnLoad.js', ssr: false }
   ],
 
   /*
@@ -70,7 +76,9 @@ export default {
   nacelle: {
     spaceID: process.env.NACELLE_SPACE_ID,
     token: process.env.NACELLE_GRAPHQL_TOKEN,
-    endpoint: process.env.NACELLE_ENDPOINT
+    endpoint: process.env.NACELLE_ENDPOINT,
+    myshopifyDomain: process.env.MYSHOPIFY_DOMAIN,
+    shopifyToken: process.env.SHOPIFY_GRAPHQL_TOKEN
 
     /* Optional */
     // Set the default internationalization locales string for Nacelle to use

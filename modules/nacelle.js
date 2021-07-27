@@ -27,6 +27,16 @@ module.exports = async function (moduleOptions) {
 
   // Add $nacelle plugin
   this.addPlugin({
+    src: path.resolve(__dirname, './dollar-shopify.js'),
+    filename: 'dollar-shopify.js',
+    options: {
+      settings: options,
+      space
+    }
+  })
+
+  // Add $nacelle plugin
+  this.addPlugin({
     src: path.resolve(__dirname, './dollar-nacelle.js'),
     filename: 'dollar-nacelle.js',
     options: {
