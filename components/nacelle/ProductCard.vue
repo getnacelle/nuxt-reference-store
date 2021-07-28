@@ -121,10 +121,14 @@ export default {
         : `min-width: ${this.minWidth}; min-height: ${this.minHeight};`
     },
     selectedVariant() {
-      return this.$store.state[`product/${this.product.handle}`].selectedVariant
+      return (
+        this.$store.state[`product/${this.product.handle}`] || this.product
+      ).selectedVariant
     },
     options() {
-      return this.$store.state[`product/${this.product.handle}`].options
+      return (
+        this.$store.state[`product/${this.product.handle}`] || this.product
+      ).options
     },
     displayPrice() {
       if (this.selectedVariant) {

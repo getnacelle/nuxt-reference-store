@@ -5,8 +5,9 @@ export default function (context, inject) {
     id: context.$config.nacelleId,
     token: context.$config.nacelleToken,
     nacelleEndpoint: context.$config.nacelleEndpoint,
-    useStatic: false,
-    wishlistEndpoint: 'https://wishlist.dev.hailfrequency.com/graphql'
+    wishlistEndpoint: 'https://wishlist.dev.hailfrequency.com/graphql',
+    recommendationsEndpoint: context.$config.recommendationsEndpoint,
+    useStatic: false
   })
 
   const setSpace = async () => {
@@ -34,7 +35,8 @@ export default function (context, inject) {
     checkout: client.checkout,
     events: client.events,
     status: client.status,
-    wishlist: client.wishlist
+    wishlist: client.wishlist,
+    recommendations: client.recommendations
   }
 
   inject('nacelle', plugin)
