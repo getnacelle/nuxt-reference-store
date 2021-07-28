@@ -5,7 +5,7 @@ export default function (context, inject) {
     id: context.$config.nacelleId,
     token: context.$config.nacelleToken,
     nacelleEndpoint: context.$config.nacelleEndpoint,
-    wishlistEndpoint: 'https://wishlist.dev.hailfrequency.com/graphql',
+    wishlistEndpoint: context.$config.wishlistEndpoint,
     recommendationsEndpoint: context.$config.recommendationsEndpoint,
     useStatic: false
   })

@@ -35,7 +35,8 @@ export default {
     nacelleEndpoint: process.env.NACELLE_ENDPOINT,
     myshopifyDomain: process.env.MYSHOPIFY_DOMAIN,
     shopifyToken: process.env.SHOPIFY_GRAPHQL_TOKEN,
-    recommendationsEndpoint: 'https://recommendations.dev.hailfrequency.com'
+    recommendationsEndpoint: process.env.RECOMMENDATIONS_ENDPOINT,
+    wishlistEndpoint: process.env.NACELLE_WISHLIST_ENDPOINT
   },
   privateRuntimeConfig: {},
 
