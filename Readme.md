@@ -1,4 +1,4 @@
-# Nacelle Nuxt Starter Project
+# Nacelle Nuxt Starter Project Demo
 
 ## Getting Started
 
