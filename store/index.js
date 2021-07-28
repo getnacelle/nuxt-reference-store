@@ -18,6 +18,21 @@ export const mutations = {
 
 export const actions = {
   async nuxtClientInit(ctx, context) {
+    // handle customerAccessToken
+    let customerAccessToken = null
+    if (context.app && context.app.$cookies) {
+      const accessToken = context.app.$cookies.get('customerAccessToken')
+      if (accessToken) {
+        customerAccessToken = {
+          accessToken,
+          expiresAt: null
+        }
+      }
+    }
+
+    ctx.commit('account/setCustomerAccessToken', customerAccessToken)
+    this.$nacelle.nacelleNuxtServerInit(ctx, context)
+
     const projectId = await get('project-id').then(
       (id) => id && window.atob(id)
     )

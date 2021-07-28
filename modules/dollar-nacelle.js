@@ -5,6 +5,7 @@ export default function (context, inject) {
     id: context.$config.nacelleId,
     token: context.$config.nacelleToken,
     nacelleEndpoint: context.$config.nacelleEndpoint,
+    wishlistEndpoint: context.$config.wishlistEndpoint,
     recommendationsEndpoint: context.$config.recommendationsEndpoint,
     useStatic: false
   })
@@ -34,6 +35,7 @@ export default function (context, inject) {
     checkout: client.checkout,
     events: client.events,
     status: client.status,
+    wishlist: client.wishlist,
     recommendations: client.recommendations
   }
 
