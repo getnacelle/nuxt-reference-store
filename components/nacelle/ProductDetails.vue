@@ -40,10 +40,11 @@ export default {
     ...mapState('user', ['locale']),
 
     selectedVariant() {
-      if(this.$store.state[`product/${this.product.handle}`]){
-      return this.$store.state[`product/${this.product.handle}`].selectedVariant
+      if (this.$store.state[`product/${this.product.handle}`]) {
+        return this.$store.state[`product/${this.product.handle}`]
+          .selectedVariant
       }
-        return null
+      return null
     },
     displayPrice() {
       if (this.selectedVariant) {

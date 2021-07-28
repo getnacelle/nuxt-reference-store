@@ -1,64 +1,74 @@
 <template>
-  <div class="product-recommendations" :class="orientation">
-    <div v-for="handle in recommendations" :key="handle">
-      <slot :product="getProduct(handle)">
-        <product-card :product-handle="handle"></product-card>
-      </slot>
+  <div class="container">
+    <button class="button nacelle" @click="getRecommendations">
+      Update Recommendations
+    </button>
+    <div v-if="recommendedProducts.length" class="recommendations">
+      <h4 class="title is-4">Recommended Products</h4>
+      <div class="product-grid columns is-multiline is-paddingless nacelle">
+        <div
+          v-for="recommendedProduct in recommendedProducts"
+          :key="recommendedProduct.id"
+        >
+          <product-card :product="recommendedProduct" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
 export default {
   props: {
-    productHandle: {
-      type: String,
-      default: ''
-    },
-    limit: {
-      type: Number,
-      default: 0
-    },
-    orientation: {
-      type: String,
-      default: 'horizontal',
-      validator(value) {
-        return ['horizontal', 'vertical'].includes(value)
+    product: {
+      type: Object,
+      default: () => {
+        return null
       }
     }
   },
-  computed: {
-    ...mapGetters('products', ['getRecommendations', 'getProduct']),
-    recommendations() {
-      const recommendations = this.getRecommendations(this.productHandle, {
-        limit: this.limit
-      })
-      const handles = recommendations.map((r) => r.handle)
-      return handles
+  data() {
+    return {
+      recommendedProducts: []
     }
   },
-  created() {
-    this.loadProductRecommendations({ productHandle: this.productHandle })
+  async fetch() {
+    this.recommendedProducts = await this.loadRecommendations(
+      this.product.handle
+    )
   },
   methods: {
-    ...mapActions('products', ['loadProductRecommendations'])
+    async getRecommendations() {
+      this.recommendedProducts = await this.loadRecommendations(
+        this.product.handle
+      )
+    },
+    async loadRecommendations(handle, count = 4) {
+      if (!handle) {
+        return []
+      }
+      const locale = (this.$nacelle.data.locale || 'en-us').toLowerCase()
+      const recommendations = await this.$nacelle.recommendations.getByProductHandle(
+        {
+          handle,
+          locale,
+          limit: count
+        }
+      )
+
+      return await this.$nacelle.data.products({
+        handles: recommendations.map((recommendation) => recommendation.handle),
+        locale
+      })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.product-recommendations {
-  display: grid;
-  grid-gap: 1rem;
-}
-.product-recommendations.horizontal {
-  grid-auto-flow: column;
-  grid-template-rows: 1fr;
-}
-.product-recommendations.vertical {
-  grid-auto-flow: row;
-  grid-template-columns: 1fr;
+.recommendations {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  margin-top: 1rem;
 }
 </style>

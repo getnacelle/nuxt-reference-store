@@ -5,6 +5,7 @@ export default function (context, inject) {
     id: context.$config.nacelleId,
     token: context.$config.nacelleToken,
     nacelleEndpoint: context.$config.nacelleEndpoint,
+    recommendationsEndpoint: context.$config.recommendationsEndpoint,
     useStatic: false
   })
 
@@ -32,7 +33,8 @@ export default function (context, inject) {
     data: client.data,
     checkout: client.checkout,
     events: client.events,
-    status: client.status
+    status: client.status,
+    recommendations: client.recommendations
   }
 
   inject('nacelle', plugin)

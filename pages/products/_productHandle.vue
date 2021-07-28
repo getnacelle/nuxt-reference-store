@@ -44,14 +44,24 @@
         </div>
       </div>
     </section>
+    <section>
+      <product-recommendations
+        v-if="product"
+        :product="product"
+      ></product-recommendations>
+    </section>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import productMetafields from '~/mixins/productMetafields'
+import ProductRecommendations from '~/components/nacelle/ProductRecommendations'
 
 export default {
+  components: {
+    ProductRecommendations
+  },
   mixins: [productMetafields],
   data() {
     return {
