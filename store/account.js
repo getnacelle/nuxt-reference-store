@@ -217,7 +217,6 @@ export const actions = {
     } = response.data.data.customerAccessTokenDelete
     if (deletedAccessToken) {
       dispatch('removeCustomerAccessToken')
-      dispatch('wishlist/resetWishlist', null, { root: true })
     }
     commit('setErrors', userErrors)
   },
