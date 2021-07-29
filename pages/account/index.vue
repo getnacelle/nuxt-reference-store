@@ -58,6 +58,19 @@ export default {
   head: {
     script: [{ src: '/account-head.js' }]
   },
+  computed: {
+    ...mapState('account', [
+      'customerAccessToken',
+      'userErrors',
+      'orders',
+      'defaultAddress',
+      'addresses'
+    ]),
+    action() {
+      // Not being used.
+      return `https://${this.$nacelle.myshopifyDomain}/account/logout`
+    }
+  },
   watch: {
     customerAccessToken(val) {
       if (val === null) {
@@ -71,19 +84,6 @@ export default {
       this.$store.dispatch('account/fetchOrders')
       this.$store.dispatch('account/fetchDefaultAddress')
       this.$store.dispatch('account/fetchAddresses')
-    }
-  },
-  computed: {
-    ...mapState('account', [
-      'customerAccessToken',
-      'userErrors',
-      'orders',
-      'defaultAddress',
-      'addresses'
-    ]),
-    action() {
-      // Not being used.
-      return `https://${this.$nacelle.myshopifyDomain}/account/logout`
     }
   },
   methods: {

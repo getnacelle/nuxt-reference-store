@@ -57,6 +57,14 @@ export default {
   head: {
     script: [{ src: '/account-head.js' }]
   },
+  computed: {
+    ...mapState('account', [
+      'customerAccessToken',
+      'userErrors',
+      'defaultAddress',
+      'addresses'
+    ])
+  },
   watch: {
     customerAccessToken(val) {
       if (val === null) {
@@ -69,14 +77,6 @@ export default {
       this.$store.dispatch('account/fetchDefaultAddress')
       this.$store.dispatch('account/fetchAddresses')
     }
-  },
-  computed: {
-    ...mapState('account', [
-      'customerAccessToken',
-      'userErrors',
-      'defaultAddress',
-      'addresses'
-    ])
   },
   methods: {
     toggleEdit() {

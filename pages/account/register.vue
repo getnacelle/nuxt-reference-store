@@ -26,10 +26,10 @@ export default {
   data() {
     return {}
   },
-  mounted() {},
   computed: {
     ...mapState('account', ['customerAccessToken', 'userErrors'])
   },
+  mounted() {},
   methods: {}
 }
 </script>

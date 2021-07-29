@@ -10,7 +10,19 @@
           v-for="recommendedProduct in recommendedProducts"
           :key="recommendedProduct.id"
         >
-          <product-card :product="recommendedProduct" />
+          <div
+            v-if="recommendedProduct"
+            :key="recommendedProduct.handle"
+            :class="columnClasses"
+          >
+            <product-card
+              v-if="
+                !recommendedProduct.isLoading &&
+                $store.state[`product/${recommendedProduct.handle}`]
+              "
+              :product="recommendedProduct"
+            />
+          </div>
         </div>
       </div>
     </div>

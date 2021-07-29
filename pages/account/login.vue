@@ -30,10 +30,10 @@ export default {
   data() {
     return {}
   },
-  async mounted() {},
   computed: {
     ...mapState('account', ['customerAccessToken', 'userErrors'])
   },
+  async mounted() {},
   methods: {}
 }
 </script>
