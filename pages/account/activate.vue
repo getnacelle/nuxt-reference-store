@@ -56,13 +56,13 @@ export default {
   head: {
     script: [{ src: '/email-referrer-head-check.js' }]
   },
+  computed: {
+    ...mapState('account', ['customerAccessToken', 'userErrors'])
+  },
   mounted() {
     // TODO Guard Route if activateToken and customerId are not available
     this.form.activateToken = this.$route.query.token
     this.form.customerId = this.$route.query.id
-  },
-  computed: {
-    ...mapState('account', ['customerAccessToken', 'userErrors'])
   },
   methods: {
     ...mapActions('account', ['activate']),
