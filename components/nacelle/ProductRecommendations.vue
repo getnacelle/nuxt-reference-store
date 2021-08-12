@@ -15,9 +15,7 @@
             :key="recommendedProduct.handle"
             :class="columnClasses"
           >
-            <product-card
-              :product="recommendedProduct"
-            />
+            <product-card :product="recommendedProduct" />
           </div>
         </div>
       </div>

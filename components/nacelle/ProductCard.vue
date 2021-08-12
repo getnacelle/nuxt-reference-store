@@ -127,8 +127,9 @@ export default {
     },
     options() {
       return (
-        this.$store.state[`product/${this.product.handle}`] || this.product
-      ).options || []
+        (this.$store.state[`product/${this.product.handle}`] || this.product)
+          .options || []
+      )
     },
     displayPrice() {
       if (this.selectedVariant) {
