@@ -128,7 +128,7 @@ export default {
     options() {
       return (
         this.$store.state[`product/${this.product.handle}`] || this.product
-      ).options
+      ).options || []
     },
     displayPrice() {
       if (this.selectedVariant) {
