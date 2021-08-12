@@ -15,13 +15,7 @@
             :key="recommendedProduct.handle"
             :class="columnClasses"
           >
-            <product-card
-              v-if="
-                !recommendedProduct.isLoading &&
-                $store.state[`product/${recommendedProduct.handle}`]
-              "
-              :product="recommendedProduct"
-            />
+            <product-card :product="recommendedProduct" />
           </div>
         </div>
       </div>
