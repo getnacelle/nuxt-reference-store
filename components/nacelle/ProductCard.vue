@@ -181,7 +181,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-width: 300px;
+  flex-wrap: wrap;
+  div {
+    margin: 5px 0;
+  }
 }
 
 .product-card-details ::v-deep a {
