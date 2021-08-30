@@ -49,6 +49,7 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    '@nuxtjs/composition-api/module',
     '@nuxtjs/eslint-module',
     'nuxt-purgecss',
     '~/modules/nacelle-routes'
@@ -93,7 +94,8 @@ export default {
 
   generate: {
     crawler: false,
-    concurrency: 25
+    concurrency: 25,
+    interval: 2000 // add time between pages being generated to allow for any async functions to resolve
   },
 
   polyfill: {
