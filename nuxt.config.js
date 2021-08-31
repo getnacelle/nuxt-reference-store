@@ -19,7 +19,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/global.scss'],
+  css: ['vuetify/dist/vuetify.min.css', '@/assets/global.scss'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: ['~/components/nacelle', '~/components/nacelle/image'],
@@ -50,6 +50,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/composition-api/module',
+    '@nuxtjs/vuetify',
     '@nuxtjs/eslint-module',
     'nuxt-purgecss',
     '~/modules/nacelle-routes'
@@ -127,6 +128,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: ['vuetify/lib'],
     extend(config) {
       config.node = {
         Buffer: false

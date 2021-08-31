@@ -20,6 +20,7 @@
   "dependencies": {
     "@nacelle/client-js-sdk": "^3.4.0",
     "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/vuetify": "^1.12.1",
     "cookie-universal-nuxt": "^2.1.1",
     "date-fns": "^2.17.0",
     "dotenv": "^8.0.0",
