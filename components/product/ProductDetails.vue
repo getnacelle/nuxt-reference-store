@@ -1,21 +1,21 @@
 <template>
-  <div v-if="product">
+  <v-container v-if="product" class="product-details">
     <v-carousel>
       <v-carousel-item>Slide 1</v-carousel-item>
       <v-carousel-item>Slide 2</v-carousel-item>
       <v-carousel-item>Slide 3</v-carousel-item>
     </v-carousel>
     <div>Form Here</div>
-  </div>
+  </v-container>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import { VCarousel, VCarouselItem } from 'vuetify/lib'
+import { VContainer, VCarousel, VCarouselItem } from 'vuetify/lib'
 import useNacelleProducts from '~/composables/useNacelleProducts'
 
 export default defineComponent({
-  components: { VCarousel, VCarouselItem },
+  components: { VContainer, VCarousel, VCarouselItem },
   props: {
     handle: {
       type: String,
@@ -29,3 +29,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.product-details {
+  display: flex;
+  gap: 40px;
+}
+</style>
