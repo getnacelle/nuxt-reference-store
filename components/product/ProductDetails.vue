@@ -1,7 +1,6 @@
 <template>
   <div v-if="product">
-    <div></div>
-    <div>Form Here</div>
+    {{ product }}
   </div>
 </template>
 

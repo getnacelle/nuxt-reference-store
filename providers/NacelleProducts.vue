@@ -44,7 +44,35 @@ export default {
         }))
       }
     }
-    nacelleProductsSet(props.products)
+
+    const nacelleProductsAdd = (products) => {
+      if (products) {
+        const productAdds = products.filter((product) => {
+          return !nacelleProducts.list.find((nacelleProduct) => {
+            return nacelleProduct.handle === product.handle
+          })
+        })
+        nacelleProducts.list = [
+          ...nacelleProducts.list,
+          ...productAdds.map((product) => ({
+            ...product,
+            options: helperGetProductOptions(product)
+          }))
+        ]
+      }
+    }
+
+    const nacelleProductsRemove = (products) => {
+      nacelleProducts.list = nacelleProducts.list.filter((nacelleProduct) => {
+        return !products.find(
+          (product) => product.handle === nacelleProduct.handle
+        )
+      })
+    }
+
+    const nacelleProductsClear = () => {
+      nacelleProducts.list = []
+    }
 
     const nacelleProductsByHandles = (handles) => {
       return nacelleProducts.list.filter((nacelleProduct) =>
@@ -67,8 +95,13 @@ export default {
       }
     }
 
+    nacelleProductsAdd(props.products)
+
     provide('nacelleProducts', readonly(nacelleProducts))
     provide('nacelleProductsSet', nacelleProductsSet)
+    provide('nacelleProductsAdd', nacelleProductsAdd)
+    provide('nacelleProductsRemove', nacelleProductsRemove)
+    provide('nacelleProductsClear', nacelleProductsClear)
     provide('nacelleProductsByHandles', nacelleProductsByHandles)
     provide('nacelleProductsSelectedVariant', nacelleProductsSelectedVariant)
   }
