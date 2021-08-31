@@ -16,11 +16,15 @@ export default {
     maxLength: {
       type: Number,
       default: 15
+    },
+    eventHandlers: {
+      type: Array,
+      default: () => []
     }
   },
   setup(props) {
     const eventLog = ref([])
-    const eventHandlers = ref([])
+    const eventHandlers = ref(props.eventHandlers)
     const lastEvent = computed(() => eventLog.value[0])
 
     /**
@@ -66,17 +70,17 @@ export default {
       // build up a hash table for easy lookups of the
       // ordered callbacks associated with any given event type
       return eventHandlers.value.reduce((table, eventHandler) => {
-        const newTable = {}
+        const tableEntry = {}
         const { callback, name } = eventHandler
         const eventTypeCallbacks = table[eventHandler.type]
           ? table[eventHandler.type].callbacks
           : []
 
-        newTable[eventHandler.type] = {
+        tableEntry[eventHandler.type] = {
           callbacks: [...eventTypeCallbacks, { callback, name }]
         }
 
-        return { ...table, ...newTable }
+        return { ...table, ...tableEntry }
       }, {})
     })
 
