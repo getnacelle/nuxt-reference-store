@@ -35,7 +35,7 @@ export default {
      * @returns {void}
      */
     const addEvent = ({ type, payload }) => {
-      const event = { type, payload, timeStamp: Date.now() }
+      const event = { type, payload, timestamp: Date.now() }
 
       eventLog.value = [event, ...eventLog.value].slice(0, props.maxLength)
     }
