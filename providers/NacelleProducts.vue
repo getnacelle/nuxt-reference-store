@@ -6,7 +6,7 @@ import { readonly, ref, provide } from '@nuxtjs/composition-api'
 
 export default {
   setup() {
-    const products = ref(['product1', 'product2', 'product3'])
+    const products = ref({})
     provide('products', readonly(products))
   }
 }
