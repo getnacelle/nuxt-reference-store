@@ -1,6 +1,7 @@
 <template>
   <div v-if="product">
-    {{ product }}
+    <div></div>
+    <div>Form Here</div>
   </div>
 </template>
 
@@ -17,8 +18,8 @@ export default defineComponent({
   },
   setup(props) {
     const { nacelleProductsByHandles } = useNacelleProducts()
-    const product = nacelleProductsByHandles([props.handle])
-    return { product: product[0] }
+    const product = nacelleProductsByHandles([props.handle])[0]
+    return { product }
   }
 })
 </script>
