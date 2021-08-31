@@ -2,7 +2,9 @@
   <lazy-hydrate when-idle class="app nacelle">
     <div>
       <global-header />
-      <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+      <products-provider>
+        <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+      </products-provider>
       <site-footer />
       <event-dispatcher />
       <error-modal />
@@ -15,8 +17,10 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
+import ProductsProvider from '~/providers/ProductsProvider.vue'
+
 export default {
-  components: { LazyHydrate },
+  components: { LazyHydrate, ProductsProvider },
   head() {
     const properties = {}
     const meta = []
