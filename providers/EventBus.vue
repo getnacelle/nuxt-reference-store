@@ -85,8 +85,8 @@ export default {
     })
 
     watch(lastEvent, (event) => {
-      if (event?.type && eventCallbacks[event.type]) {
-        eventCallbacks[event.type].callbacks.forEach((callbackObj) =>
+      if (event?.type && eventCallbacks.value[event.type]) {
+        eventCallbacks.value[event.type].callbacks.forEach((callbackObj) =>
           callbackObj.callback(event)
         )
       }
