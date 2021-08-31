@@ -1,13 +1,12 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
-    <div>
+    <event-bus>
       <global-header />
       <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
       <site-footer />
-      <event-dispatcher />
       <error-modal />
       <cart-watch />
-    </div>
+    </event-bus>
   </lazy-hydrate>
 </template>
 
@@ -15,8 +14,10 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
+import EventBus from '~/providers/EventBus.vue'
+
 export default {
-  components: { LazyHydrate },
+  components: { EventBus, LazyHydrate },
   head() {
     const properties = {}
     const meta = []
