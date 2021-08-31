@@ -16,6 +16,11 @@ export default {
       list: []
     })
 
+    /**
+     * Helper function for getting product options
+     * @param {Object} product
+     * @returns {Object}
+     */
     const helperGetProductOptions = (product) => {
       const options = []
       product?.variants?.forEach((variant) => {
@@ -36,6 +41,11 @@ export default {
       return options
     }
 
+    /**
+     * Set the products provider should track
+     * @param {Array} products List of products
+     * @returns {void}
+     */
     const nacelleProductsSet = (products) => {
       if (products) {
         nacelleProducts.list = products.map((product) => ({
@@ -45,6 +55,11 @@ export default {
       }
     }
 
+    /**
+     * Add products provider should track
+     * @param {Array} products List of products
+     * @returns {void}
+     */
     const nacelleProductsAdd = (products) => {
       if (products) {
         const productAdds = products.filter((product) => {
@@ -62,6 +77,11 @@ export default {
       }
     }
 
+    /**
+     * Remove products provider should track
+     * @param {Array} products List of products
+     * @returns {void}
+     */
     const nacelleProductsRemove = (products) => {
       nacelleProducts.list = nacelleProducts.list.filter((nacelleProduct) => {
         return !products.find(
@@ -70,16 +90,31 @@ export default {
       })
     }
 
+    /**
+     * Clear products provider should track
+     * @returns {void}
+     */
     const nacelleProductsClear = () => {
       nacelleProducts.list = []
     }
 
+    /**
+     * Get products from provider by handles
+     * @param {Array} handles List of product handles
+     * @returns {Array}
+     */
     const nacelleProductsByHandles = (handles) => {
       return nacelleProducts.list.filter((nacelleProduct) =>
         handles?.includes(nacelleProduct.handle)
       )
     }
 
+    /**
+     * Get selected variant of product from options
+     * @param {Object} product Product to find variant from
+     * @param {Array} options Options used to find selected variant
+     * @returns {Array}
+     */
     const nacelleProductsSelectedVariant = (product, options) => {
       if (options.length === 0) {
         return product.variants[0]
@@ -95,6 +130,9 @@ export default {
       }
     }
 
+    /**
+     Initialize the providers products from props
+     */
     nacelleProductsAdd(props.products)
 
     provide('nacelleProducts', readonly(nacelleProducts))
