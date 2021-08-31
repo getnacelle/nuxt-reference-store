@@ -41,13 +41,10 @@ export default {
      * @param {Object} config
      * @param {string} config.type Type of event to be handled
      * @param {function} config.callback Callback function that processes the event object
-     * @param {number|undefined} config.order The order that this event handler should run, relative to other event handlers operating on the same type of event.
-     * - An event with an order of 0 is called first; An even with an order of 1 is called second, etc.
-     * - An event without an order will follow events with an order of 0 or greater
-     * - An event with an order of -1 will always be called last / after all ordered & unordered events
+     * @param {string} [config.name] Name of the callback handler (for labeling/organization purposes only)
      * @returns {void}
      */
-    const onEvent = ({ type, callback, order }) => {
+    const onEvent = ({ type, callback, name = '' }) => {
       if (typeof type !== 'string' || !type) {
         console.warn(
           "[nacelle] events passed to the EventBus' `onEvent` method must have a `type`."
@@ -62,45 +59,21 @@ export default {
         return
       }
 
-      eventHandlers.value = [...eventHandlers.value, { type, callback, order }]
+      eventHandlers.value = [...eventHandlers.value, { type, callback, name }]
     }
 
     const eventCallbacks = computed(() => {
       // build up a hash table for easy lookups of the
       // ordered callbacks associated with any given event type
-      return eventHandlers.value.reduce((table, evw) => {
+      return eventHandlers.value.reduce((table, eventHandler) => {
         const newTable = {}
-        const { order, callback } = evw
+        const { callback, name } = eventHandler
+        const eventTypeCallbacks = table[eventHandler.type]
+          ? table[eventHandler.type].callbacks
+          : []
 
-        if (!table[evw.type]) {
-          newTable[evw.type] = {
-            callbacks: [
-              { callback, order: typeof order === 'number' ? order : null }
-            ]
-          }
-        } else {
-          newTable[evw.type] = {
-            callbacks: [...table[evw.type].callbacks, { callback, order }].sort(
-              // Objectives of the sort function:
-              // 1. send callbacks with an order of -1 to the end of the callbacks array
-              // 2. position unordered callbacks after ordered callbacks with an order of 0 or greater,
-              //    and before ordered callbacks with an order of -1
-              (a, b) => {
-                if (a.order < 0 || a.order > b.order) {
-                  return 1
-                }
-
-                if (
-                  (typeof a.order !== 'number' && b.order < 0) ||
-                  a.order < b.order
-                ) {
-                  return -1
-                }
-
-                return 0
-              }
-            )
-          }
+        newTable[eventHandler.type] = {
+          callbacks: [...eventTypeCallbacks, { callback, name }]
         }
 
         return { ...table, ...newTable }
