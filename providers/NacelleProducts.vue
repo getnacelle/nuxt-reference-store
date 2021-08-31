@@ -113,7 +113,7 @@ export default {
      * Get selected variant of product from options
      * @param {Object} product Product to find variant from
      * @param {Array} options Options used to find selected variant
-     * @returns {Array}
+     * @returns {Object}
      */
     const nacelleProductsSelectedVariant = (product, options) => {
       if (options.length === 0) {
