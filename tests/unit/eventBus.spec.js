@@ -5,14 +5,6 @@ import eventTypes from '~/utils/eventTypes'
 const sanitizeTemplateObject = (event) =>
   `${JSON.stringify(event)}`.replace(/"/g, `'`)
 
-const eventHandlers = [
-  {
-    type: eventTypes.pageView,
-    callback: (event) =>
-      console.info(`viewed page: ${event.payload.handle} at ${event.timestamp}`)
-  }
-]
-
 const InjectedComponent = (event) => {
   const onClick = event
     ? `() => addEvent(${sanitizeTemplateObject(event)})`
@@ -25,8 +17,8 @@ const InjectedComponent = (event) => {
   }
 }
 
-const EventBusContainer = (busOptions = {}, event) => ({
-  render: (h) => h(EventBus, busOptions, [h(InjectedComponent(event))])
+const EventBusContainer = (event) => ({
+  render: (h) => h(EventBus, [h(InjectedComponent(event))])
 })
 
 describe('Event Bus', () => {
@@ -46,9 +38,7 @@ describe('Event Bus', () => {
       type: eventTypes.pageView,
       payload: { handle: 'some-page' }
     }
-    const eventBus = mount(
-      EventBusContainer({ props: eventHandlers }, pageViewEvent)
-    )
+    const eventBus = mount(EventBusContainer(pageViewEvent))
     const injectedEventsComponent = eventBus.findComponent({
       name: 'InjectedWithEvents'
     })
@@ -57,6 +47,9 @@ describe('Event Bus', () => {
 
     expect(Array.isArray(injectedEventsComponent.vm.events.value)).toBe(true)
     expect(injectedEventsComponent.vm.events.value.length).toBe(1)
+    expect(injectedEventsComponent.vm.events.value[0]).toMatchObject(
+      pageViewEvent
+    )
   })
 
   it('runs an callback registered with `onEvent` when a corresponding event occurs', async () => {
@@ -64,9 +57,7 @@ describe('Event Bus', () => {
       type: eventTypes.collectionView,
       payload: { handle: 'some-collection' }
     }
-    const eventBus = mount(
-      EventBusContainer({ props: eventHandlers }, collectionViewEvent)
-    )
+    const eventBus = mount(EventBusContainer(collectionViewEvent))
     const injectedEventsComponent = eventBus.findComponent({
       name: 'InjectedWithEvents'
     })
