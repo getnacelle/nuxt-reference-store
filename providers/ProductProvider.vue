@@ -2,7 +2,7 @@
   <div><slot /></div>
 </template>
 <script>
-import { reactive, readonly, provide } from '@nuxtjs/composition-api'
+import { reactive, readonly, provide, watch } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -125,9 +125,16 @@ export default {
     }
 
     /**
-     Initialize the providers products from props
+     Initialize the provider products from props
      */
     addProducts(props.products)
+
+    /**
+     Update the provider products from props
+     */
+    watch(props.products, (value) => {
+      setProducts(value)
+    })
 
     provide('products', readonly(productList))
     provide('setProducts', setProducts)
