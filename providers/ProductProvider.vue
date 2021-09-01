@@ -28,7 +28,7 @@ export default {
      * @param {Array} products List of products
      * @returns {void}
      */
-    const setProducts = (products) => {
+    const setProducts = ({ products }) => {
       if (products) {
         productList.value = products.map((product) => ({
           ...product,
@@ -43,7 +43,7 @@ export default {
      * @param {Array} products List of products
      * @returns {void}
      */
-    const addProducts = (products) => {
+    const addProducts = ({ products }) => {
       if (products) {
         productList.value = [
           ...productList.value,
@@ -68,12 +68,18 @@ export default {
      * @param {String} provide Provide the products - options: set/add
      * @returns {void}
      */
-    const fetchProducts = async (handles, provide = false) => {
+    const fetchProducts = async ({ handles, method }) => {
       try {
         if (handles) {
-          const products = await sdk.data.products({ handles })
-          if (provide === 'add') addProducts(products)
-          if (provide === 'set') setProducts(products)
+          const handlesToFetch = handles.filter((handle) => {
+            return !productList.value.find((productItem) => {
+              return handle === productItem.handle
+            })
+          })
+          console.log('h', handlesToFetch)
+          const products = await sdk.data.products({ handles: handlesToFetch })
+          if (method === 'add') addProducts({ products })
+          if (method === 'set') setProducts({ products })
           return { products }
         }
       } catch (err) {
@@ -86,7 +92,7 @@ export default {
      * @param {Array} handles List of product handles
      * @returns {void}
      */
-    const removeProducts = (handles) => {
+    const removeProducts = ({ handles }) => {
       productList.value = productList.value.filter((productItem) => {
         return !handles.includes(productItem.handle)
       })
@@ -105,7 +111,7 @@ export default {
      * @param {Array} handles List of product handles
      * @returns {Array}
      */
-    const getProducts = (handles) => {
+    const getProducts = ({ handles }) => {
       if (handles) {
         return productList.value.filter((productItem) =>
           handles?.includes(productItem.handle)
@@ -114,9 +120,9 @@ export default {
       return productList.value
     }
 
-    const setSelectedVariant = (product, options) => {
+    const setSelectedVariant = ({ product, options }) => {
       if (product && options) {
-        const selectedVariant = getSelectedVariant(product, options)
+        const selectedVariant = getSelectedVariant({ product, options })
         const productIndex = productList.value.findIndex((productItem) => {
           return product.handle === productItem.handle
         })
@@ -135,13 +141,13 @@ export default {
     /**
      Initialize the provider products from props
      */
-    addProducts(props.products)
+    addProducts({ products: props.products })
 
     /**
      Update the provider products from props
      */
     watch(products, (value) => {
-      setProducts(value)
+      setProducts({ products: value })
     })
 
     provide('products', productList)

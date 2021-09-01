@@ -23,9 +23,9 @@
       </h3>
       <div class="product-details__actions">
         <button
-          @click="handleAddProducts(['johannah-boots', 'factor-low-tops'])"
+          @click="handleFetchProducts(['johannah-boots', 'factor-low-tops'])"
         >
-          Add Products ['johannah-boots', 'factor-low-tops']
+          Fetch Products ['johannah-boots', 'factor-low-tops']
         </button>
         <button @click="handleRemoveProducts(['factor-low-tops'])">
           Remove Products ['factor-low-tops']
@@ -61,27 +61,27 @@ export default defineComponent({
     const handleSetSelectedVariant = () => {
       if (product.value) {
         const options = product.value.variants[0].selectedOptions
-        setSelectedVariant(product.value, options)
+        setSelectedVariant({ product: product.value, options })
       }
     }
 
-    const handleAddProducts = (handles) => {
-      fetchProducts(handles, 'add')
+    const handleFetchProducts = (handles) => {
+      fetchProducts({ handles, method: 'add' })
     }
 
     const handleRemoveProducts = (handles) => {
-      removeProducts(handles)
+      removeProducts({ handles })
     }
 
-    const handleClearProducts = (handles) => {
-      clearProducts(handles)
+    const handleClearProducts = () => {
+      clearProducts()
     }
 
     return {
       product,
       products,
       handleSetSelectedVariant,
-      handleAddProducts,
+      handleFetchProducts,
       handleRemoveProducts,
       handleClearProducts
     }
