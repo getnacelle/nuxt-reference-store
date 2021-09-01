@@ -106,9 +106,12 @@ export default {
      * @returns {Array}
      */
     const getProducts = (handles) => {
-      return productList.value.filter((productItem) =>
-        handles?.includes(productItem.handle)
-      )
+      if (handles) {
+        return productList.value.filter((productItem) =>
+          handles?.includes(productItem.handle)
+        )
+      }
+      return productList.value
     }
 
     const setSelectedVariant = (product, options) => {
