@@ -6,7 +6,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import useProducts from '~/composables/useProducts'
+import useProductProvider from '~/composables/useProductProvider'
 
 export default defineComponent({
   props: {
@@ -16,7 +16,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { getProducts } = useProducts()
+    const { getProducts } = useProductProvider()
     const product = getProducts([props.handle])[0]
     return { product }
   }
