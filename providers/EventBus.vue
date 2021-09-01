@@ -45,10 +45,9 @@ export default {
      * @param {Object} config
      * @param {string} config.type Type of event to be handled
      * @param {function} config.callback Callback function that processes the event object
-     * @param {string} [config.name] Name of the callback handler (for labeling/organization purposes only)
      * @returns {void}
      */
-    const onEvent = ({ type, callback, name = '' }) => {
+    const onEvent = ({ type, callback }) => {
       if (typeof type !== 'string' || !type) {
         console.warn(
           "[nacelle] events passed to the EventBus' `onEvent` method must have a `type`."
@@ -63,7 +62,7 @@ export default {
         return
       }
 
-      eventHandlers.value = [...eventHandlers.value, { type, callback, name }]
+      eventHandlers.value = [...eventHandlers.value, { type, callback }]
     }
 
     const eventCallbacks = computed(() => {
@@ -71,13 +70,13 @@ export default {
       // ordered callbacks associated with any given event type
       return eventHandlers.value.reduce((table, eventHandler) => {
         const tableEntry = {}
-        const { callback, name } = eventHandler
+        const { callback } = eventHandler
         const eventTypeCallbacks = table[eventHandler.type]
           ? table[eventHandler.type].callbacks
           : []
 
         tableEntry[eventHandler.type] = {
-          callbacks: [...eventTypeCallbacks, { callback, name }]
+          callbacks: [...eventTypeCallbacks, { callback }]
         }
 
         return { ...table, ...tableEntry }
