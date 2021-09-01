@@ -1,23 +1,19 @@
 <template>
-  <lazy-hydrate when-idle class="app nacelle">
-    <div>
-      <global-header />
-      <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
-      <site-footer />
-      <event-dispatcher />
-      <error-modal />
-      <cart-watch />
-    </div>
-  </lazy-hydrate>
+  <div>
+    <global-header />
+    <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+    <site-footer />
+    <event-dispatcher />
+    <error-modal />
+    <cart-watch />
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import queryString from 'query-string'
-import LazyHydrate from 'vue-lazy-hydration'
 
 export default {
-  components: { LazyHydrate },
   head() {
     const properties = {}
     const meta = []

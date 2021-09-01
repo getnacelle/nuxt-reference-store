@@ -2,7 +2,7 @@
   <div><slot /></div>
 </template>
 <script>
-import { reactive, readonly, ref, provide, watch } from '@vue/composition-api'
+import { ref, provide, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -19,7 +19,7 @@ export default {
     }
   },
   setup(props) {
-    let productList = reactive([])
+    const productList = ref([])
     const products = ref(props.products)
     const { sdk } = useSdk(props.config)
 
@@ -30,7 +30,7 @@ export default {
      */
     const setProducts = (products) => {
       if (products) {
-        productList = products.map((product) => ({
+        productList.value = products.map((product) => ({
           ...product,
           selectedVariant: null,
           options: getProductOptions(product)
@@ -45,11 +45,11 @@ export default {
      */
     const addProducts = (products) => {
       if (products) {
-        productList = [
-          ...productList,
+        productList.value = [
+          ...productList.value,
           ...products
             .filter((product) => {
-              return !productList.find((productItem) => {
+              return !productList.value.find((productItem) => {
                 return productItem.handle === product.handle
               })
             })
@@ -83,14 +83,12 @@ export default {
 
     /**
      * Remove products provider should track
-     * @param {Array} products List of products
+     * @param {Array} handles List of product handles
      * @returns {void}
      */
-    const removeProducts = (products) => {
-      productList = productList.filter((productItem) => {
-        return !products.find(
-          (product) => product.handle === productItem.handle
-        )
+    const removeProducts = (handles) => {
+      productList.value = productList.value.filter((productItem) => {
+        return !handles.includes(productItem.handle)
       })
     }
 
@@ -99,7 +97,7 @@ export default {
      * @returns {void}
      */
     const clearProducts = () => {
-      productList = []
+      productList.value = []
     }
 
     /**
@@ -108,7 +106,7 @@ export default {
      * @returns {Array}
      */
     const getProducts = (handles) => {
-      return productList.filter((productItem) =>
+      return productList.value.filter((productItem) =>
         handles?.includes(productItem.handle)
       )
     }
@@ -116,14 +114,16 @@ export default {
     const setSelectedVariant = (product, options) => {
       if (product && options) {
         const selectedVariant = getSelectedVariant(product, options)
-        const productIndex = productList.find((productItem) => {
+        const productIndex = productList.value.findIndex((productItem) => {
           return product.handle === productItem.handle
         })
         if (selectedVariant && productIndex >= 0) {
-          productList[productIndex] = {
-            ...productList[productIndex],
-            selectedVariant
-          }
+          productList.value = productList.value.map((productItem, index) => {
+            if (productIndex === index) {
+              return { ...productItem, selectedVariant }
+            }
+            return productItem
+          })
         }
         return selectedVariant
       }
@@ -141,7 +141,7 @@ export default {
       setProducts(value)
     })
 
-    provide('products', readonly(productList))
+    provide('products', productList)
     provide('setProducts', setProducts)
     provide('addProducts', addProducts)
     provide('fetchProducts', fetchProducts)
