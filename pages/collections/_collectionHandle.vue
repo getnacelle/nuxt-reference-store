@@ -29,7 +29,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-
 export default {
   data() {
     return {
@@ -43,25 +42,20 @@ export default {
   },
   async fetch() {
     const { collectionHandle: handle } = this.$route.params
-
     this.collection = await this.$nacelle.data
       .collection({ handle })
       .catch(() => console.warn(`No collection with handle: '${handle}' found`))
-
     this.page = await this.$nacelle.data
       .page({ handle })
       .catch(() => console.warn(`No page with handle: '${handle}' found`))
-
     await this.fetchProducts(0, this.productVisibilityCount + this.fetchBuffer)
   },
   head() {
     if (this.collection) {
       const properties = {}
       const meta = []
-
       if (this.collection.title) {
         const fullTitle = this.collection.title
-
         properties.title = fullTitle
         meta.push({
           hid: 'og:title',
@@ -69,7 +63,6 @@ export default {
           content: fullTitle
         })
       }
-
       if (this.collection.description) {
         meta.push({
           hid: 'description',
@@ -82,7 +75,6 @@ export default {
           content: this.collection.description
         })
       }
-
       return {
         ...properties,
         meta
@@ -113,7 +105,6 @@ export default {
   },
   methods: {
     ...mapActions('events', ['collectionView']),
-
     showMore() {
       if (!this.collection) {
         return
@@ -128,7 +119,6 @@ export default {
         return
       }
       this.isFetching = true
-
       const products = this.collection.productLists[0].handles
         .slice(start, end)
         .map((handle, index) => {
@@ -142,14 +132,12 @@ export default {
           const product = await this.$fetchProduct(handle)
           this.$set(this.collectionProducts, index + start, product)
         })
-
       await Promise.all(products)
       this.isFetching = false
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .page-collection {
   min-height: 85vh;

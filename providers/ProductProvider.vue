@@ -4,6 +4,8 @@
 <script>
 import { reactive, readonly, provide } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
+import getProductOptions from '~/utils/getProductOptions'
+import getSelectedVariant from '~/utils/getSelectedVariant'
 
 export default {
   props: {
@@ -17,31 +19,6 @@ export default {
     const { sdk } = useSdk()
 
     /**
-     * Helper function for getting product options
-     * @param {Object} product
-     * @returns {Object}
-     */
-    const getProductOptions = (product) => {
-      const options = []
-      product?.variants?.forEach((variant) => {
-        variant?.selectedOptions?.forEach((selectedOption) => {
-          let optionIndex = options.findIndex(
-            (option) => option.name === selectedOption.name
-          )
-          if (optionIndex < 0) {
-            options.push({ name: selectedOption.name, values: [] })
-            optionIndex = options.length - 1
-          }
-          const value = options[optionIndex].values.find(
-            (value) => value === selectedOption.value
-          )
-          if (!value) options[optionIndex].values.push(selectedOption.value)
-        })
-      })
-      return options
-    }
-
-    /**
      * Set the products provider should track
      * @param {Array} products List of products
      * @returns {void}
@@ -50,6 +27,7 @@ export default {
       if (products) {
         productList = products.map((product) => ({
           ...product,
+          selectedVariant: null,
           options: getProductOptions(product)
         }))
       }
@@ -72,6 +50,7 @@ export default {
             })
             .map((product) => ({
               ...product,
+              selectedVariant: null,
               options: getProductOptions(product)
             }))
         ]
@@ -129,24 +108,19 @@ export default {
       )
     }
 
-    /**
-     * Get selected variant of product from options
-     * @param {Object} product Product to find variant from
-     * @param {Array} options Options used to find selected variant
-     * @returns {Object}
-     */
-    const getSelectedVariant = (product, options) => {
-      if (options.length === 0) {
-        return product.variants[0]
-      } else {
-        return product.variants.find((variant) => {
-          return options.every((option) => {
-            return variant.selectedOptions.some(
-              (variantOption) =>
-                JSON.stringify(variantOption) === JSON.stringify(option)
-            )
-          })
+    const setSelectedVariant = (product, options) => {
+      if (product && options) {
+        const selectedVariant = getSelectedVariant(product, options)
+        const productIndex = productList.find((productItem) => {
+          return product.handle === productItem.handle
         })
+        if (selectedVariant && productIndex >= 0) {
+          productList[productIndex] = {
+            ...productList[productIndex],
+            selectedVariant
+          }
+        }
+        return selectedVariant
       }
     }
 
@@ -161,8 +135,8 @@ export default {
     provide('fetchProducts', fetchProducts)
     provide('removeProducts', removeProducts)
     provide('clearProducts', clearProducts)
+    provide('setSelectedVariant', setSelectedVariant)
     provide('getProducts', getProducts)
-    provide('getSelectedVariant', getSelectedVariant)
   }
 }
 </script>

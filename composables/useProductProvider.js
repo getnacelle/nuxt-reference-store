@@ -8,7 +8,7 @@ export default () => {
   const removeProducts = inject('removeProducts')
   const clearProducts = inject('clearProducts')
   const getProducts = inject('getProducts')
-  const getSelectedVariant = inject('getSelectedVariant')
+  const setSelectedVariant = inject('setSelectedVariant')
   return {
     products,
     setProducts,
@@ -17,6 +17,6 @@ export default () => {
     removeProducts,
     clearProducts,
     getProducts,
-    getSelectedVariant
+    setSelectedVariant
   }
 }
