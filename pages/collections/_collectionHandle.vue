@@ -31,6 +31,7 @@
 import { mapActions } from 'vuex'
 
 export default {
+  inject: ['events', 'addEvent', 'onEvent'],
   data() {
     return {
       collection: null,
@@ -97,8 +98,16 @@ export default {
       return []
     }
   },
+  created() {
+    this.onEvent({
+      type: 'COLLECTION_VIEW',
+      callback: (event) =>
+        console.info('viewed the collection: ', event.payload.handle)
+    })
+  },
   mounted() {
     if (this.collection) {
+      this.addEvent({ type: 'COLLECTION_VIEW', payload: this.collection })
       this.collectionProducts.forEach((product) => {
         this.$registerProduct(product.handle)
       })
