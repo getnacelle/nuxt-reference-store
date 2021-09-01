@@ -3,6 +3,7 @@
 </template>
 <script>
 import { reactive, readonly, provide } from '@nuxtjs/composition-api'
+import useSdk from '~/composables/useSdk'
 
 export default {
   props: {
@@ -13,6 +14,7 @@ export default {
   },
   setup(props) {
     let productList = reactive([])
+    const { sdk } = useSdk()
 
     /**
      * Helper function for getting product options
@@ -77,6 +79,25 @@ export default {
     }
 
     /**
+     * Fetch the products provider should track
+     * @param {Array} handles List of product handles
+     * @param {String} provide Provide the products - options: set/add
+     * @returns {void}
+     */
+    const fetchProducts = async (handles, provide = false) => {
+      try {
+        if (handles) {
+          const products = await sdk.data.products({ handles })
+          if (provide === 'add') addProducts(products)
+          if (provide === 'set') setProducts(products)
+          return { products }
+        }
+      } catch (err) {
+        return { error: err }
+      }
+    }
+
+    /**
      * Remove products provider should track
      * @param {Array} products List of products
      * @returns {void}
@@ -137,6 +158,7 @@ export default {
     provide('products', readonly(productList))
     provide('setProducts', setProducts)
     provide('addProducts', addProducts)
+    provide('fetchProducts', fetchProducts)
     provide('removeProducts', removeProducts)
     provide('clearProducts', clearProducts)
     provide('getProducts', getProducts)
