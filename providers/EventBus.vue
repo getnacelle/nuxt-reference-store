@@ -3,13 +3,7 @@
 </template>
 
 <script>
-import {
-  computed,
-  provide,
-  readonly,
-  ref,
-  watch
-} from '@nuxtjs/composition-api'
+import { computed, provide, readonly, ref, watch } from '@vue/composition-api'
 
 export default {
   props: {
