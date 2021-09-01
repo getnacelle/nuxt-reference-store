@@ -12,16 +12,14 @@ export default {
     }
   },
   setup(props) {
-    const nacelleProducts = reactive({
-      list: []
-    })
+    let productList = reactive([])
 
     /**
      * Helper function for getting product options
      * @param {Object} product
      * @returns {Object}
      */
-    const helperGetProductOptions = (product) => {
+    const getProductOptions = (product) => {
       const options = []
       product?.variants?.forEach((variant) => {
         variant?.selectedOptions?.forEach((selectedOption) => {
@@ -46,11 +44,11 @@ export default {
      * @param {Array} products List of products
      * @returns {void}
      */
-    const nacelleProductsSet = (products) => {
+    const setProducts = (products) => {
       if (products) {
-        nacelleProducts.list = products.map((product) => ({
+        productList = products.map((product) => ({
           ...product,
-          options: helperGetProductOptions(product)
+          options: getProductOptions(product)
         }))
       }
     }
@@ -60,19 +58,20 @@ export default {
      * @param {Array} products List of products
      * @returns {void}
      */
-    const nacelleProductsAdd = (products) => {
+    const addProducts = (products) => {
       if (products) {
-        const productAdds = products.filter((product) => {
-          return !nacelleProducts.list.find((nacelleProduct) => {
-            return nacelleProduct.handle === product.handle
-          })
-        })
-        nacelleProducts.list = [
-          ...nacelleProducts.list,
-          ...productAdds.map((product) => ({
-            ...product,
-            options: helperGetProductOptions(product)
-          }))
+        productList = [
+          ...productList,
+          ...products
+            .filter((product) => {
+              return !productList.find((productItem) => {
+                return productItem.handle === product.handle
+              })
+            })
+            .map((product) => ({
+              ...product,
+              options: getProductOptions(product)
+            }))
         ]
       }
     }
@@ -82,10 +81,10 @@ export default {
      * @param {Array} products List of products
      * @returns {void}
      */
-    const nacelleProductsRemove = (products) => {
-      nacelleProducts.list = nacelleProducts.list.filter((nacelleProduct) => {
+    const removeProducts = (products) => {
+      productList = productList.filter((productItem) => {
         return !products.find(
-          (product) => product.handle === nacelleProduct.handle
+          (product) => product.handle === productItem.handle
         )
       })
     }
@@ -94,8 +93,8 @@ export default {
      * Clear products provider should track
      * @returns {void}
      */
-    const nacelleProductsClear = () => {
-      nacelleProducts.list = []
+    const clearProducts = () => {
+      productList = []
     }
 
     /**
@@ -103,9 +102,9 @@ export default {
      * @param {Array} handles List of product handles
      * @returns {Array}
      */
-    const nacelleProductsByHandles = (handles) => {
-      return nacelleProducts.list.filter((nacelleProduct) =>
-        handles?.includes(nacelleProduct.handle)
+    const getProducts = (handles) => {
+      return productList.filter((productItem) =>
+        handles?.includes(productItem.handle)
       )
     }
 
@@ -115,7 +114,7 @@ export default {
      * @param {Array} options Options used to find selected variant
      * @returns {Object}
      */
-    const nacelleProductsSelectedVariant = (product, options) => {
+    const getSelectedVariant = (product, options) => {
       if (options.length === 0) {
         return product.variants[0]
       } else {
@@ -133,15 +132,15 @@ export default {
     /**
      Initialize the providers products from props
      */
-    nacelleProductsAdd(props.products)
+    addProducts(props.products)
 
-    provide('nacelleProducts', readonly(nacelleProducts))
-    provide('nacelleProductsSet', nacelleProductsSet)
-    provide('nacelleProductsAdd', nacelleProductsAdd)
-    provide('nacelleProductsRemove', nacelleProductsRemove)
-    provide('nacelleProductsClear', nacelleProductsClear)
-    provide('nacelleProductsByHandles', nacelleProductsByHandles)
-    provide('nacelleProductsSelectedVariant', nacelleProductsSelectedVariant)
+    provide('products', readonly(productList))
+    provide('setProducts', setProducts)
+    provide('addProducts', addProducts)
+    provide('removeProducts', removeProducts)
+    provide('clearProducts', clearProducts)
+    provide('getProducts', getProducts)
+    provide('getSelectedVariant', getSelectedVariant)
   }
 }
 </script>

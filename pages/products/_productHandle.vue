@@ -1,22 +1,22 @@
 <template>
-  <nacelle-products v-if="product" :products="[product]">
+  <product-provider v-if="product" :products="[product]">
     <product-details :handle="product.handle" />
-  </nacelle-products>
+  </product-provider>
 </template>
 
 <script>
 import { defineComponent, useContext, useStatic } from '@nuxtjs/composition-api'
-import NacelleProducts from '~/providers/NacelleProducts.vue'
+import ProductProvider from '~/providers/ProductProvider.vue'
 import ProductDetails from '~/components/product/ProductDetails.vue'
-import useNacelleSdk from '~/composables/useNacelleSdk'
+import useSdk from '~/composables/useSdk'
 
 export default defineComponent({
-  components: { NacelleProducts, ProductDetails },
+  components: { ProductProvider, ProductDetails },
   setup() {
-    const { nacelleSdk } = useNacelleSdk()
+    const { sdk } = useSdk()
     const { params } = useContext()
     const product = useStatic(() =>
-      nacelleSdk.data.product({ handle: params.value.productHandle })
+      sdk.data.product({ handle: params.value.productHandle })
     )
     return { product }
   }

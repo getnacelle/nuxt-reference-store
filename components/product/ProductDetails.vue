@@ -6,7 +6,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import useNacelleProducts from '~/composables/useNacelleProducts'
+import useProducts from '~/composables/useProducts'
 
 export default defineComponent({
   props: {
@@ -16,8 +16,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { nacelleProductsByHandles } = useNacelleProducts()
-    const product = nacelleProductsByHandles([props.handle])[0]
+    const { getProducts } = useProducts()
+    const product = getProducts([props.handle])[0]
     return { product }
   }
 })
