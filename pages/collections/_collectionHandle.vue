@@ -1,11 +1,13 @@
 <template>
-  <collection-provider
-    v-if="collection"
-    :config="$config"
-    :collection="collection"
-  >
-    <collection-grid :handle="collection.handle" />
-  </collection-provider>
+  <div>
+    <collection-provider
+      v-if="collection"
+      :config="$config"
+      :collections="[collection]"
+    >
+      <collection-grid :handle="collection.handle" />
+    </collection-provider>
+  </div>
 </template>
 
 <script>
@@ -26,11 +28,15 @@ export default defineComponent({
     const { sdk } = useSdk($config)
     const collection = ref(null)
     useFetch(async () => {
-      collection.value = await sdk.data.collectionPage({
-        handle: params.value.collectionHandle,
-        paginate: true,
-        itemsPerPage: 12
-      })
+      const data = await Promise.all([
+        sdk.data.collection({ handle: params.value.collectionHandle }),
+        sdk.data.collectionPage({
+          handle: params.value.collectionHandle,
+          paginate: true,
+          itemsPerPage: 12
+        })
+      ])
+      collection.value = { ...data[0], products: data[1] }
     })
     return { collection }
   }
