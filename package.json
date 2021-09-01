@@ -13,9 +13,7 @@
     "serve": "serve dist -p 4000",
     "lint": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:fix": "eslint --fix --ext \".js,.vue\" --ignore-path .gitignore .",
-    "test": "jest",
-    "test:ci": "jest --silent --runInBand --collectCoverage",
-    "test:watch": "jest --watch"
+    "test": "jest tests/unit/eventBus.spec.js"
   },
   "dependencies": {
     "@nacelle/client-js-sdk": "^3.4.0",
