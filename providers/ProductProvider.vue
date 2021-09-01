@@ -2,13 +2,17 @@
   <div><slot /></div>
 </template>
 <script>
-import { reactive, readonly, provide, watch } from '@nuxtjs/composition-api'
+import { reactive, readonly, ref, provide, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
 
 export default {
   props: {
+    config: {
+      type: Object,
+      default: null
+    },
     products: {
       type: Array,
       default: null
@@ -16,7 +20,8 @@ export default {
   },
   setup(props) {
     let productList = reactive([])
-    const { sdk } = useSdk()
+    const products = ref(props.products)
+    const { sdk } = useSdk(props.config)
 
     /**
      * Set the products provider should track
@@ -132,7 +137,7 @@ export default {
     /**
      Update the provider products from props
      */
-    watch(props.products, (value) => {
+    watch(products, (value) => {
       setProducts(value)
     })
 

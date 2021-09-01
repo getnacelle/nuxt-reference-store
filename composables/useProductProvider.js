@@ -1,4 +1,4 @@
-import { inject } from '@nuxtjs/composition-api'
+import { inject } from '@vue/composition-api'
 
 export default () => {
   const products = inject('products')
