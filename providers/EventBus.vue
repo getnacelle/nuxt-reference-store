@@ -3,7 +3,13 @@
 </template>
 
 <script>
-import { computed, provide, readonly, ref, watch } from '@vue/composition-api'
+import {
+  computed,
+  provide,
+  readonly,
+  ref,
+  watch
+} from '@nuxtjs/composition-api'
 
 export default {
   props: {
@@ -61,7 +67,7 @@ export default {
 
     const eventCallbacks = computed(() => {
       // build up a hash table for easy lookups of the
-      // ordered callbacks associated with any given event type
+      // callbacks associated with any given event type
       return eventHandlers.value.reduce((table, eventHandler) => {
         const tableEntry = {}
         const { callback } = eventHandler
