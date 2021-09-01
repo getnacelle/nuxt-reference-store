@@ -17,8 +17,8 @@ const InjectedComponent = (event) => {
   }
 }
 
-const EventBusContainer = (event) => ({
-  render: (h) => h(EventBus, [h(InjectedComponent(event))])
+const EventBusContainer = ({ props = {}, event } = {}) => ({
+  render: (h) => h(EventBus, { props }, [h(InjectedComponent(event))])
 })
 
 describe('Event Bus', () => {
@@ -38,10 +38,22 @@ describe('Event Bus', () => {
       type: eventTypes.pageView,
       payload: { handle: 'some-page' }
     }
-    const eventBus = mount(EventBusContainer(pageViewEvent))
+    const pageViewEventHandler = {
+      type: eventTypes.pageView,
+      callback: jest.fn()
+    }
+    const eventBus = mount(
+      EventBusContainer({
+        event: pageViewEvent,
+        props: {
+          eventHandlers: [pageViewEventHandler]
+        }
+      })
+    )
     const injectedEventsComponent = eventBus.findComponent({
       name: 'InjectedWithEvents'
     })
+
     const button = injectedEventsComponent.find('button')
     await button.trigger('click')
 
@@ -50,6 +62,7 @@ describe('Event Bus', () => {
     expect(injectedEventsComponent.vm.events.value[0]).toMatchObject(
       pageViewEvent
     )
+    expect(pageViewEventHandler.callback).toHaveBeenCalledTimes(1)
   })
 
   it('runs an callback registered with `onEvent` when a corresponding event occurs', async () => {
@@ -57,7 +70,7 @@ describe('Event Bus', () => {
       type: eventTypes.collectionView,
       payload: { handle: 'some-collection' }
     }
-    const eventBus = mount(EventBusContainer(collectionViewEvent))
+    const eventBus = mount(EventBusContainer({ event: collectionViewEvent }))
     const injectedEventsComponent = eventBus.findComponent({
       name: 'InjectedWithEvents'
     })
@@ -88,5 +101,38 @@ describe('Event Bus', () => {
       })
     )
     expect(unexpectedCallback).toHaveBeenCalledTimes(0)
+  })
+
+  it('prevents the event log from growing beyond its maximum length', async () => {
+    const productViewEvent = {
+      type: eventTypes.productView,
+      payload: { handle: 'some-product' }
+    }
+    const eventBus = mount(
+      EventBusContainer({ props: { maxLength: 5 }, event: productViewEvent })
+    )
+    const injectedEventsComponent = eventBus.findComponent({
+      name: 'InjectedWithEvents'
+    })
+    const button = injectedEventsComponent.find('button')
+
+    const callback = jest.fn()
+    injectedEventsComponent.vm.onEvent({
+      type: eventTypes.productView,
+      callback
+    })
+
+    for (let step = 0; step < 10; step++) {
+      await button.trigger('click')
+    }
+
+    expect(Array.isArray(injectedEventsComponent.vm.events.value)).toBe(true)
+    expect(callback).toHaveBeenCalledTimes(10)
+    expect(injectedEventsComponent.vm.events.value.length).toBe(5)
+    expect(callback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...productViewEvent
+      })
+    )
   })
 })
