@@ -4,6 +4,7 @@ import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
 
 export default {
+  name: 'ProductProvider',
   props: {
     config: {
       type: Object,

@@ -2,6 +2,7 @@ import { computed, h, provide, ref, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 import ProductProvider from '~/providers/ProductProvider'
 export default {
+  name: 'CollectionProvider',
   props: {
     config: {
       type: Object,
@@ -224,17 +225,15 @@ export default {
      Render component
     */
     return () =>
-      h('template', [
-        h(
-          ProductProvider,
-          {
-            props: {
-              config: props.config,
-              products: productList.value
-            }
-          },
-          h('slot', context.slots.default)
-        )
-      ])
+      h(
+        ProductProvider,
+        {
+          props: {
+            config: props.config,
+            products: productList.value
+          }
+        },
+        context.slots.default()
+      )
   }
 }

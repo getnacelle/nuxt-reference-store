@@ -29,8 +29,8 @@
         </span>
       </h3>
       <div class="collection-details__actions">
-        <button @click="handleFetchCollections(['womens', 'mens'])">
-          Fetch Collections ['womens', 'mens']
+        <button @click="handleFetchCollections(['clothing', 'womens', 'mens'])">
+          Fetch Collections ['clothes', 'womens', 'mens']
         </button>
         <button @click="handleRemoveCollections(['womens'])">
           Remove Collections ['womens']
@@ -60,7 +60,9 @@ export default defineComponent({
       getCollections,
       fetchCollectionProducts
     } = useCollectionProvider()
-    const collection = computed(() => getCollections([props.handle])[0])
+    const collection = computed(
+      () => getCollections({ handles: [props.handle] })[0]
+    )
 
     const handleFetchCollectionProducts = (handle) => {
       fetchCollectionProducts({ handle })
