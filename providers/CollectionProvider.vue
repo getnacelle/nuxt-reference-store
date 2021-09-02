@@ -129,20 +129,70 @@ export default {
      * @returns {Array}
      */
     const getCollections = ({ handles }) => {
-      console.log('handles', handles)
       if (handles) {
-        console.log(
-          'fire me up',
-          collectionList.value.filter((collectionItem) =>
-            handles?.includes(collectionItem.handle)
-          )
-        )
         return collectionList.value.filter((collectionItem) =>
           handles?.includes(collectionItem.handle)
         )
       }
       return collectionList.value
     }
+    /**
+     * Fetch the collection products provider should track
+     * @param {String} handle Collection handle to fetch
+     * @param {Number} count Number of products to fetch
+     * @param {Number} offset Index of first product to fetch
+     * @returns {void}
+     */
+    const fetchCollectionProducts = async ({ handle, count, offset }) => {
+      try {
+        const collectionIndex = collectionList.value.findIndex(
+          (collectionItem) => {
+            return handle === collectionItem.handle
+          }
+        )
+        if (collectionIndex >= 0) {
+          const collection = collectionList.value[collectionIndex]
+          const allHandles = collection.productLists[0]?.handles
+          const indexedHandles = collection.products.map(
+            (product) => product.handle
+          )
+          const indexedCount = indexedHandles?.length || 0
+          const totalCount = allHandles?.length
+          if (totalCount > indexedCount) {
+            const startIndex = offset || indexedCount
+            const endIndex = count ? startIndex + count : startIndex + 12
+            if (totalCount >= endIndex) {
+              const handlesToFetch = allHandles
+                .slice(startIndex, endIndex)
+                .filter((handle) => {
+                  return !indexedHandles.find(
+                    (indexedHandle) => handle === indexedHandle
+                  )
+                })
+              if (handlesToFetch.length) {
+                const products = await sdk.data.products({
+                  handles: handlesToFetch
+                })
+                collectionList.value = collectionList.value.map(
+                  (collectionItem, index) => {
+                    if (collectionIndex === index) {
+                      return {
+                        ...collectionItem,
+                        products: [...collectionItem.products, ...products]
+                      }
+                    }
+                    return collectionItem
+                  }
+                )
+              }
+            }
+          }
+        }
+      } catch (err) {
+        return { error: err }
+      }
+    }
+
     /**
      Initialize the provider collections from props
      */
@@ -162,6 +212,7 @@ export default {
     provide('removeCollections', removeCollections)
     provide('clearCollections', clearCollections)
     provide('getCollections', getCollections)
+    provide('fetchCollectionProducts', fetchCollectionProducts)
   }
 }
 </script>

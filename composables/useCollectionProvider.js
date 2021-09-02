@@ -8,6 +8,7 @@ export default () => {
   const removeCollections = inject('removeCollections')
   const clearCollections = inject('clearCollections')
   const getCollections = inject('getCollections')
+  const fetchCollectionProducts = inject('fetchCollectionProducts')
   return {
     collections,
     setCollections,
@@ -15,6 +16,7 @@ export default () => {
     fetchCollections,
     removeCollections,
     clearCollections,
-    getCollections
+    getCollections,
+    fetchCollectionProducts
   }
 }

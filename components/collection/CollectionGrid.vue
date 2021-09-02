@@ -12,6 +12,11 @@
         </span>
       </h4>
       <em>** Will be empty if collections have been cleared **</em>
+      <div class="collection-details__actions">
+        <button @click="handleFetchCollectionProducts(collection.handle)">
+          Fetch Collection Products
+        </button>
+      </div>
     </div>
     <div class="collection-details__block">
       <h3 v-if="collections">
@@ -49,9 +54,14 @@ export default defineComponent({
       fetchCollections,
       removeCollections,
       clearCollections,
-      getCollections
+      getCollections,
+      fetchCollectionProducts
     } = useCollectionProvider()
     const collection = computed(() => getCollections([props.handle])[0])
+
+    const handleFetchCollectionProducts = (handle) => {
+      fetchCollectionProducts({ handle })
+    }
 
     const handleFetchCollections = (handles) => {
       fetchCollections({ handles, method: 'add' })
@@ -66,6 +76,7 @@ export default defineComponent({
     return {
       collection,
       collections,
+      handleFetchCollectionProducts,
       handleFetchCollections,
       handleRemoveCollections,
       handleClearCollections
