@@ -1,5 +1,6 @@
-import { computed, provide, ref, watch } from '@vue/composition-api'
+import { computed, h, provide, ref, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
+import ProductProvider from '~/providers/ProductProvider'
 export default {
   props: {
     config: {
@@ -15,7 +16,7 @@ export default {
     const collectionList = ref([])
     const collections = ref(props.collections)
     const productList = computed(() =>
-      collections.flatMap((collectionItem) => {
+      collections.value.flatMap((collectionItem) => {
         return collectionItem.products
       })
     )
@@ -222,6 +223,18 @@ export default {
     /**
      Render component
     */
-    return context.slots.default
+    return () =>
+      h('template', [
+        h(
+          ProductProvider,
+          {
+            props: {
+              config: props.config,
+              products: productList.value
+            }
+          },
+          h('slot', context.slots.default)
+        )
+      ])
   }
 }

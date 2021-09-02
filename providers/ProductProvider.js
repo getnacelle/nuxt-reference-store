@@ -72,7 +72,6 @@ export default {
               return handle === productItem.handle
             })
           })
-          console.log('h', handlesToFetch)
           const products = await sdk.data.products({ handles: handlesToFetch })
           if (method === 'add') addProducts({ products })
           if (method === 'set') setProducts({ products })

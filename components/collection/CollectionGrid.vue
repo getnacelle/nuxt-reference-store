@@ -12,7 +12,10 @@
         </span>
       </h4>
       <em>** Will be empty if collections have been cleared **</em>
-      <div class="collection-details__actions">
+      <div
+        v-if="collection && collection.handle"
+        class="collection-details__actions"
+      >
         <button @click="handleFetchCollectionProducts(collection.handle)">
           Fetch Collection Products
         </button>
