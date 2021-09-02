@@ -1,15 +1,4 @@
-<template>
-  <div><slot /></div>
-</template>
-
-<script>
-import {
-  computed,
-  provide,
-  readonly,
-  ref,
-  watch
-} from '@nuxtjs/composition-api'
+import { computed, provide, readonly, ref, watch } from '@vue/composition-api'
 
 export default {
   props: {
@@ -22,7 +11,7 @@ export default {
       default: () => []
     }
   },
-  setup(props) {
+  setup(props, context) {
     const eventLog = ref([])
     const eventHandlers = ref(props.eventHandlers)
     const lastEvent = computed(() => eventLog.value[0])
@@ -94,6 +83,7 @@ export default {
     provide('events', readonly(eventLog))
     provide('addEvent', addEvent)
     provide('onEvent', onEvent)
+
+    return context.slots.default
   }
 }
-</script>
