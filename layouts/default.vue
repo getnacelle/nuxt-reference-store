@@ -1,19 +1,29 @@
 <template>
-  <div>
-    <global-header />
-    <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
-    <site-footer />
-    <event-dispatcher />
-    <error-modal />
-    <cart-watch />
-  </div>
+  <lazy-hydrate when-idle class="app nacelle">
+    <event-bus :event-handlers="eventHandlers">
+      <global-header />
+      <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+      <site-footer />
+      <error-modal />
+      <cart-watch />
+    </event-bus>
+  </lazy-hydrate>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import queryString from 'query-string'
+import LazyHydrate from 'vue-lazy-hydration'
+import EventBus from '~/providers/EventBus.vue'
+import eventTypes from '~/utils/eventTypes'
 
 export default {
+  components: { EventBus, LazyHydrate },
+  data() {
+    return {
+      eventHandlers: []
+    }
+  },
   head() {
     const properties = {}
     const meta = []
@@ -71,9 +81,20 @@ export default {
     ...mapGetters('space', ['getMetatag'])
   },
   created() {
+    this.eventHandlers = [
+      // Configure event handlers used by the Event Bus
+      {
+        type: eventTypes.pageView,
+        callback: (event) =>
+          console.info(
+            `viewed page: ${event.payload.handle} at ${event.timestamp}`
+          )
+      }
+    ]
+
     // Accounts Modifications
     // Get, read, validate, and renew accessToken from cookies.
-    if (process.browser || process.client) {
+    if (process.client) {
       const accessToken = this.$cookies.get('customerAccessToken')
       this.$store.dispatch('account/readCustomerAccessToken', { accessToken })
     }

@@ -38,11 +38,9 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# nuxt.js build output
-.nuxt
-
-# Nuxt generate
+# Nuxt build outputs
 dist
+.nuxt
 
 # Service worker
 sw.*
@@ -52,3 +50,6 @@ sw.*
 
 # Storybook
 .out
+
+# Vercel CLI
+.vercel
