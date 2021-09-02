@@ -1,6 +1,5 @@
 import cart from '../store/cart'
 import checkout from '../store/checkout'
-import menu from '../store/menu'
 import modal from '../store/modal'
 import events from '../store/events'
 import product from '../store/product/productModule'
@@ -14,7 +13,6 @@ export default () => {
     modules: {
       cart,
       checkout,
-      menu,
       modal,
       events,
       product,

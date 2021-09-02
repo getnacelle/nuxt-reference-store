@@ -19,6 +19,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import useNavigationProvider from '~/composables/useNavigationProvider'
 
 export default {
   props: {
@@ -35,8 +36,11 @@ export default {
       default: 'Search...'
     }
   },
+  setup() {
+    const { disableMenu } = useNavigationProvider()
+    return { disableMenu }
+  },
   methods: {
-    ...mapMutations('menu', ['disableMenu']),
     ...mapMutations('search', ['setQuery']),
     updateQuery(query) {
       this.setQuery({ query, position: this.position })

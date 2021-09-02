@@ -39,7 +39,6 @@ export default {
      * @returns {Object} localized menu
      */
     const getLocalizedLinks = (handle) => {
-      console.log(handle, props.linklists)
       const locale =
         props.locale && props.locale.locale
           ? props.locale.locale.toLowerCase()
