@@ -14,7 +14,7 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
-import EventBus from '~/providers/EventBus.vue'
+import EventBus from '~/providers/EventBus'
 import eventTypes from '~/utils/eventTypes'
 
 export default {

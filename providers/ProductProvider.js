@@ -1,4 +1,4 @@
-import { provide, ref, watch } from '@vue/composition-api'
+import { h, provide, ref, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -161,6 +161,6 @@ export default {
     /**
      Render component
     */
-    return context.slots.default
+    return () => h('div', context.slots.default())
   }
 }
