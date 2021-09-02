@@ -134,7 +134,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { computed } from '@vue/composition-api'
+import { mapState, mapGetters } from 'vuex'
+import useNavigationProvider from '~/composables/useNavigationProvider'
+
 export default {
   props: {
     isSticky: {
@@ -142,20 +145,29 @@ export default {
       default: true
     }
   },
-  computed: {
-    ...mapState('space', ['id', 'name', 'linklists']),
-    ...mapState('menu', ['menuVisible']),
-    ...mapState('search', ['globalQuery']),
-    ...mapGetters('space', ['getLocalizedLinks']),
-    mainMenu() {
-      return this.getLocalizedLinks('main-menu')
-    },
-    mobileMenu() {
-      return this.getLocalizedLinks('mobile-menu')
+  setup() {
+    const {
+      menuVisible,
+      toggleShowMenu,
+      disableMenu,
+      getLocalizedLinks
+    } = useNavigationProvider()
+
+    const mainMenu = computed(() => getLocalizedLinks('main-menu'))
+    const mobileMenu = computed(() => getLocalizedLinks('mobile-menu'))
+
+    return {
+      menuVisible,
+      toggleShowMenu,
+      disableMenu,
+      mainMenu,
+      mobileMenu
     }
   },
-  methods: {
-    ...mapMutations('menu', ['disableMenu', 'toggleShowMenu'])
+  computed: {
+    ...mapState('space', ['id', 'name', 'linklists']),
+    ...mapState('search', ['globalQuery']),
+    ...mapGetters('space', ['getLocalizedLinks'])
   }
 }
 </script>

@@ -1,24 +1,27 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
-    <event-bus :event-handlers="eventHandlers">
-      <global-header />
-      <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
-      <site-footer />
-      <error-modal />
-      <cart-watch />
-    </event-bus>
+    <navigation-provider :linklists="linklists" :locale="locale">
+      <event-bus :event-handlers="eventHandlers">
+        <global-header />
+        <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+        <site-footer />
+        <error-modal />
+        <cart-watch />
+      </event-bus>
+    </navigation-provider>
   </lazy-hydrate>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import EventBus from '~/providers/EventBus.vue'
+import NavigationProvider from '~/providers/NavigationProvider.vue'
 import eventTypes from '~/utils/eventTypes'
 
 export default {
-  components: { EventBus, LazyHydrate },
+  components: { EventBus, LazyHydrate, NavigationProvider },
   data() {
     return {
       eventHandlers: []
@@ -78,7 +81,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('space', ['getMetatag'])
+    ...mapGetters('space', ['getMetatag']),
+    ...mapState('space', ['linklists']),
+    ...mapState('user', ['locale'])
   },
   created() {
     this.eventHandlers = [

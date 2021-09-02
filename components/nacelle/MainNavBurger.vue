@@ -13,16 +13,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
+import useNavigationProvider from '~/composables/useNavigationProvider'
 
-export default {
-  computed: {
-    ...mapState('menu', ['menuVisible'])
-  },
-  methods: {
-    ...mapMutations('menu', ['toggleShowMenu'])
+export default defineComponent({
+  setup() {
+    const { menuVisible, toggleShowMenu } = useNavigationProvider()
+    return {
+      menuVisible,
+      toggleShowMenu
+    }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
