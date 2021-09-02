@@ -1,8 +1,4 @@
-<template>
-  <div><slot /></div>
-</template>
-<script>
-import { ref, provide, watch } from '@vue/composition-api'
+import { provide, ref, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -18,7 +14,7 @@ export default {
       default: null
     }
   },
-  setup(props) {
+  setup(props, context) {
     const productList = ref([])
     const products = ref(props.products)
     const { sdk } = useSdk(props.config)
@@ -150,6 +146,9 @@ export default {
       setProducts({ products: value })
     })
 
+    /**
+     Pass down items to provide
+    */
     provide('products', productList)
     provide('setProducts', setProducts)
     provide('addProducts', addProducts)
@@ -158,6 +157,10 @@ export default {
     provide('clearProducts', clearProducts)
     provide('setSelectedVariant', setSelectedVariant)
     provide('getProducts', getProducts)
+
+    /**
+     Render component
+    */
+    return context.slots.default
   }
 }
-</script>

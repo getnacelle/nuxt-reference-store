@@ -11,7 +11,7 @@ import {
   useContext,
   useFetch
 } from '@nuxtjs/composition-api'
-import ProductProvider from '~/providers/ProductProvider.vue'
+import ProductProvider from '~/providers/ProductProvider'
 import ProductDetails from '~/components/product/ProductDetails.vue'
 import useSdk from '~/composables/useSdk'
 

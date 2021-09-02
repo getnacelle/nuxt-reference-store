@@ -1,8 +1,4 @@
-<template>
-  <div><slot /></div>
-</template>
-<script>
-import { ref, provide, watch } from '@vue/composition-api'
+import { computed, provide, ref, watch } from '@vue/composition-api'
 import useSdk from '~/composables/useSdk'
 export default {
   props: {
@@ -15,9 +11,14 @@ export default {
       default: null
     }
   },
-  setup(props) {
+  setup(props, context) {
     const collectionList = ref([])
     const collections = ref(props.collections)
+    const productList = computed(() =>
+      collections.flatMap((collectionItem) => {
+        return collectionItem.products
+      })
+    )
     const { sdk } = useSdk(props.config)
     /**
      * Set the collections provider should track
@@ -204,6 +205,10 @@ export default {
       setCollections({ collections: value })
     })
 
+    /**
+     Pass down items to provide
+    */
+    provide('products', productList)
     provide('collections', collectionList)
     provide('setCollections', setCollections)
     provide('addCollections', addCollections)
@@ -213,6 +218,10 @@ export default {
     provide('clearCollections', clearCollections)
     provide('getCollections', getCollections)
     provide('fetchCollectionProducts', fetchCollectionProducts)
+
+    /**
+     Render component
+    */
+    return context.slots.default
   }
 }
-</script>

@@ -17,7 +17,7 @@ import {
   useContext,
   useFetch
 } from '@nuxtjs/composition-api'
-import CollectionProvider from '~/providers/CollectionProvider.vue'
+import CollectionProvider from '~/providers/CollectionProvider'
 import CollectionGrid from '~/components/collection/CollectionGrid.vue'
 import useSdk from '~/composables/useSdk'
 
