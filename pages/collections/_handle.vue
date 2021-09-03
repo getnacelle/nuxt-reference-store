@@ -1,5 +1,5 @@
 <template>
-  <div>So Fresh, So Clean</div>
+  <div>Collection Page</div>
 </template>
 
 <script>

@@ -17,21 +17,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-h1 {
-  font-weight: 500;
-  text-align: center;
-  font-size: 72pt;
-}
-p {
-  text-align: center;
-}
-.error {
-  min-height: 50vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-</style>
