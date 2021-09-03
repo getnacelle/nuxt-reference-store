@@ -10,22 +10,8 @@ export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext()
     const { sdk } = useSdk($config)
-    const initialSpace = useAsync(() => sdk.data.space())
+    const space = useAsync(() => sdk.data.space())
 
-    /**
-     * Get metatags from metafields
-     * @param {String} tag
-     * @returns {Object|null}
-     */
-    const getMetatag = (tag) => {
-      if (initialSpace.metafields) {
-        return initialSpace.metafields.find(
-          (field) => field.namespace === 'metatag' && field.key === tag
-        )
-      }
-      return null
-    }
-    provide('initialSpace', initialSpace)
-    provide('getMetatag', getMetatag)
+    provide('space', space)
   })
 }
