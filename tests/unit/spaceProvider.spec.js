@@ -4,7 +4,7 @@ import SpaceProvider from '~/providers/SpaceProvider'
 
 const InjectedWithSpaceData = () => {
   return {
-    name: 'InjectedWithEvents',
+    name: 'InjectedWithSpaceData',
     inject: [
       'id',
       'metafields',
