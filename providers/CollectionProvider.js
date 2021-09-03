@@ -16,10 +16,11 @@ export default {
   setup(props, context) {
     const collectionList = ref([])
     const collections = ref(props.collections)
-    const productList = computed(() =>
-      collections.value.flatMap((collectionItem) => {
-        return collectionItem.products
-      })
+    const productList = computed(
+      () =>
+        collections?.value?.flatMap((collectionItem) => {
+          return collectionItem.products
+        }) || []
     )
     const { sdk } = useSdk(props.config)
     /**

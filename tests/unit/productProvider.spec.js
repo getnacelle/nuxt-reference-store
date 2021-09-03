@@ -47,16 +47,6 @@ describe('Product Provider', () => {
     expect(typeof injectedComponent.vm.getProducts).toEqual('function')
   })
 
-  it('provides products based on initial prop', () => {
-    const productProvider = mount(
-      WrapperComponent({ props: { products: productData } })
-    )
-    const injectedComponent = productProvider.findComponent({
-      name: 'InjectedComponent'
-    })
-    expect(injectedComponent.vm.products.value.length).toBe(2)
-  })
-
   it('initializes products from props', () => {
     const productProvider = mount(
       WrapperComponent({ props: { products: productData } })
@@ -64,7 +54,6 @@ describe('Product Provider', () => {
     const injectedComponent = productProvider.findComponent({
       name: 'InjectedComponent'
     })
-    expect(injectedComponent.vm.products.value.length).toBe(2)
     expect(injectedComponent.vm.products.value.length).toBe(2)
   })
 
