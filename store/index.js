@@ -31,7 +31,6 @@ export const actions = {
     }
 
     ctx.commit('account/setCustomerAccessToken', customerAccessToken)
-    this.$nacelle.nacelleNuxtServerInit(ctx, context)
 
     const projectId = await get('project-id').then(
       (id) => id && window.atob(id)
@@ -42,12 +41,8 @@ export const actions = {
     }
 
     set('project-id', window.btoa(this.$nacelle.client.id))
+  },
 
-    await this.$nacelle.nacelleNuxtServerInit(ctx, context)
-  },
-  async nuxtServerInit(ctx, context) {
-    await this.$nacelle.nacelleNuxtServerInit(ctx, context)
-  },
   async clearProductIdb({ state, commit }) {
     if (!state.productIdbState) {
       commit('setProductIdbState', 'clearing')

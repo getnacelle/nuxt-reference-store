@@ -13,16 +13,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { defineComponent, inject } from '@vue/composition-api'
 
-export default {
-  computed: {
-    ...mapState('menu', ['menuVisible'])
-  },
-  methods: {
-    ...mapMutations('menu', ['toggleShowMenu'])
+export default defineComponent({
+  setup() {
+    const menuVisible = inject('menuVisible')
+    const toggleShowMenu = inject('toggleShowMenu')
+    return {
+      menuVisible,
+      toggleShowMenu
+    }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

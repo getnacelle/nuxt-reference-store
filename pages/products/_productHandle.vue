@@ -54,7 +54,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
+import { inject } from '@nuxtjs/composition-api'
 import productMetafields from '~/mixins/productMetafields'
 import ProductRecommendations from '~/components/nacelle/ProductRecommendations'
 
@@ -63,6 +64,10 @@ export default {
     ProductRecommendations
   },
   mixins: [productMetafields],
+  setup() {
+    const getMetatag = inject('getMetatag')
+    return { getMetatag }
+  },
   data() {
     return {
       namespace: '',
@@ -120,9 +125,7 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters('space', ['getMetatag'])
-  },
+
   mounted() {
     this.namespace = `product/${this.$route.params.productHandle}`
     this.$registerProduct(this.$route.params.productHandle)
