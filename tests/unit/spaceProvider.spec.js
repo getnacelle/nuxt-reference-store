@@ -2,17 +2,13 @@ import { mount } from '@vue/test-utils'
 import { linklists, mainMenu } from '../mocks/linklists'
 import SpaceProvider from '~/providers/SpaceProvider'
 
-const InjectedComponent = () => {
+const InjectedWithSpaceData = () => {
   return {
     name: 'InjectedWithEvents',
     inject: [
       'id',
       'metafields',
       'linklists',
-      'setId',
-      'setName',
-      'setDomain',
-      'addMetafield',
       'getMetafieldsObj',
       'getMetafield',
       'getLocalizedLinks'
@@ -22,7 +18,7 @@ const InjectedComponent = () => {
 }
 
 const SpaceProviderContainer = ({ props }) => ({
-  render: (h) => h(SpaceProvider, { props }, [h(InjectedComponent())])
+  render: (h) => h(SpaceProvider, { props }, [h(InjectedWithSpaceData())])
 })
 
 describe('Space Provider', () => {
@@ -30,7 +26,13 @@ describe('Space Provider', () => {
     id: '1234',
     name: 'test-store',
     domain: 'test-store.com',
-    metafields: [],
+    metafields: [
+      {
+        namespace: 'metatag',
+        key: 'og:image',
+        value: 'https://demo.getnacelle.com/starship_logo.png'
+      }
+    ],
     linklists
   }
 
@@ -39,44 +41,18 @@ describe('Space Provider', () => {
     name: 'InjectedWithEvents'
   })
 
-  it('updates id', () => {
-    injectedEventsComponent.vm.setId('5678')
-    expect(injectedEventsComponent.vm.id.value).toEqual('5678')
-  })
-
-  it('adds a metafield to metafields array', () => {
-    injectedEventsComponent.vm.addMetafield({
-      namespace: 'metatag',
-      key: 'og:image',
-      value: 'https://demo.getnacelle.com/starship_logo.png'
-    })
-    expect(injectedEventsComponent.vm.metafields.value).toEqual([
-      {
-        namespace: 'metatag',
-        key: 'og:image',
-        value: 'https://demo.getnacelle.com/starship_logo.png'
-      }
-    ])
-  })
   it('gets metafield object', () => {
-    injectedEventsComponent.vm.addMetafield({
-      namespace: 'metatag',
-      key: 'og:image',
-      value: 'https://demo.getnacelle.com/starship_logo.png'
-    })
     expect(injectedEventsComponent.vm.getMetafieldsObj()).toEqual({
       metatag: { 'og:image': 'https://demo.getnacelle.com/starship_logo.png' }
     })
   })
 
   it('gets metafield', () => {
-    injectedEventsComponent.vm.addMetafield({
-      namespace: 'metatag',
-      key: 'og:image',
-      value: 'https://demo.getnacelle.com/starship_logo.png'
-    })
     expect(
-      injectedEventsComponent.vm.getMetafield('metatag', 'og:image')
+      injectedEventsComponent.vm.getMetafield({
+        namespace: 'metatag',
+        key: 'og:image'
+      })
     ).toEqual('https://demo.getnacelle.com/starship_logo.png')
   })
 

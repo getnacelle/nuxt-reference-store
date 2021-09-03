@@ -23,7 +23,7 @@ export default () => {
           (field) => field.namespace === 'metatag' && field.key === tag
         )
       }
-      return {}
+      return null
     }
     provide('initialSpace', initialSpace)
     provide('getMetatag', getMetatag)

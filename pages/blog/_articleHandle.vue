@@ -65,7 +65,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { inject } from '@vue/composition-api'
+import { inject } from '@nuxtjs/composition-api'
 
 export default {
   setup() {

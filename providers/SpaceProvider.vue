@@ -9,82 +9,19 @@ export default {
   props: {
     space: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     locale: {
-      type: Object,
+      type: String,
       default: null
     }
   },
   setup(props) {
-    const id = ref(props.space.id)
-    const name = ref(props.space.name)
-    const domain = ref(props.space.domain)
+    const id = ref(props.space.id || '')
+    const name = ref(props.space.name || '')
+    const domain = ref(props.space.domain || '')
     const metafields = ref(props.space.metafields || [])
     const linklists = ref(props.space.linklists || [])
-
-    /**
-     * Updates id value
-     * @param {String} id
-     * @returns {void}
-     */
-    const setId = (payload) => {
-      id.value = payload
-    }
-
-    /**
-     * Updates name value
-     * @param {String} name
-     * @returns {void}
-     */
-    const setName = (payload) => {
-      name.value = payload
-    }
-
-    /**
-     * Updates domain value
-     * @param {String} domain
-     * @returns {void}
-     */
-    const setDomain = (payload) => {
-      domain.value = payload
-    }
-
-    /**
-     * Updates metafields value
-     * @param {Array} metafields
-     * @returns {void}
-     */
-    const setMetafields = (payload) => {
-      metafields.value = payload
-    }
-
-    /**
-     * Add metafield to array
-     * @param {Object} metafield
-     * @returns {void}
-     */
-    const addMetafield = (payload) => {
-      metafields.value = [...metafields.value, payload]
-    }
-
-    /**
-     * Updates linklists value
-     * @param {Array} linklists
-     * @returns {void}
-     */
-    const setLinklists = (payload) => {
-      linklists.value = payload
-    }
-
-    /**
-     * Add linklist to array
-     * @param {Object} linklist
-     * @returns {void}
-     */
-    const addLinklist = (payload) => {
-      linklists.value = [...linklists.value, payload]
-    }
 
     /**
      * Finds menu by handle in linklists array
@@ -105,10 +42,7 @@ export default {
      * @returns {Object} localized menu
      */
     const getLocalizedLinks = (handle) => {
-      const locale =
-        props.locale && props.locale.locale
-          ? props.locale.locale.toLowerCase()
-          : ''
+      const locale = props.locale ? props.locale.toLowerCase() : ''
       const appendLocale = locale.length && locale !== 'en-US'.toLowerCase()
       const localizedHandle = appendLocale ? `${handle}-${locale}` : handle
       const localizedLinks = getLinks(localizedHandle)
@@ -126,7 +60,7 @@ export default {
           (field) => field.namespace === 'metatag' && field.key === tag
         )
       }
-      return {}
+      return null
     }
 
     /**
@@ -137,18 +71,14 @@ export default {
       if (metafields.value) {
         return metafields.value.reduce((obj, metafield) => {
           const { namespace, key, value } = metafield
-
-          if (obj[namespace]) {
-            obj[namespace][key] = value
-          } else {
+          if (!obj[namespace]) {
             obj[namespace] = {}
-            obj[namespace][key] = value
           }
-
+          obj[namespace][key] = value
           return obj
         }, {})
       }
-      return {}
+      return null
     }
 
     /**
@@ -156,7 +86,7 @@ export default {
      * @param {String} namespace
      * @returns {Object} meta namespace
      */
-    const getMetaNamespace = (namespace) => {
+    const getMetafieldsByNamespace = (namespace) => {
       if (metafields.value) {
         return metafields.value.reduce((obj, metafield) => {
           if (metafield.namespace === namespace) {
@@ -166,8 +96,7 @@ export default {
           return obj
         }, {})
       }
-
-      return {}
+      return null
     }
 
     /**
@@ -176,7 +105,7 @@ export default {
      * @param {String} key
      * @returns {String} meta namespace
      */
-    const getMetafield = (namespace, key) => {
+    const getMetafield = ({ namespace, key }) => {
       if (metafields.value) {
         const metafield = metafields.value.find(
           (field) => field.namespace === namespace && field.key === key
@@ -186,7 +115,7 @@ export default {
           return metafield.value
         }
       }
-      return undefined
+      return null
     }
 
     provide('id', id)
@@ -194,17 +123,10 @@ export default {
     provide('domain', domain)
     provide('metafields', metafields)
     provide('linklists', linklists)
-    provide('setId', setId)
-    provide('setName', setName)
-    provide('setDomain', setDomain)
-    provide('setMetafields', setMetafields)
-    provide('addMetafield', addMetafield)
-    provide('setLinklists', setLinklists)
-    provide('addLinklist', addLinklist)
     provide('getLocalizedLinks', getLocalizedLinks)
     provide('getMetatag', getMetatag)
     provide('getMetafieldsObj', getMetafieldsObj)
-    provide('getMetaNamespace', getMetaNamespace)
+    provide('getMetafieldsByNamespace', getMetafieldsByNamespace)
     provide('getMetafield', getMetafield)
   }
 }

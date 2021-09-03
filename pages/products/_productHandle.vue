@@ -55,7 +55,7 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
-import { inject } from '@vue/composition-api'
+import { inject } from '@nuxtjs/composition-api'
 import productMetafields from '~/mixins/productMetafields'
 import ProductRecommendations from '~/components/nacelle/ProductRecommendations'
 

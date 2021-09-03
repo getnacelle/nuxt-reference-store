@@ -1,6 +1,6 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
-    <space-provider :space="initialSpace" :locale="locale">
+    <space-provider :space="initialSpace" :locale="locale.locale">
       <event-bus :event-handlers="eventHandlers">
         <global-header />
         <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
