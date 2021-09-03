@@ -15,7 +15,7 @@ export default () => {
     /**
      * Get metatags from metafields
      * @param {String} tag
-     * @returns {Object}
+     * @returns {Object|null}
      */
     const getMetatag = (tag) => {
       if (initialSpace.metafields) {

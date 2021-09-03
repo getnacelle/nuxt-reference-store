@@ -13,7 +13,7 @@ export default {
     },
     locale: {
       type: String,
-      default: null
+      default: ''
     }
   },
   setup(props) {
