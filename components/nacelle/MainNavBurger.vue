@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
-import useNavigationProvider from '~/composables/useNavigationProvider'
+import { defineComponent, inject } from '@vue/composition-api'
 
 export default defineComponent({
   setup() {
-    const { menuVisible, toggleShowMenu } = useNavigationProvider()
+    const menuVisible = inject('menuVisible')
+    const toggleShowMenu = inject('toggleShowMenu')
     return {
       menuVisible,
       toggleShowMenu

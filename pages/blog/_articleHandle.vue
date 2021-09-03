@@ -64,9 +64,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
+import { inject } from '@vue/composition-api'
 
 export default {
+  setup() {
+    const getMetatag = inject('getMetatag')
+    return { getMetatag }
+  },
   data() {
     return {
       article: null
@@ -130,9 +135,6 @@ export default {
         meta
       }
     }
-  },
-  computed: {
-    ...mapGetters('space', ['getMetatag'])
   },
   mounted() {
     this.articleView({ article: this.article })

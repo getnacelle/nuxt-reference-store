@@ -5,7 +5,6 @@
         <nuxt-link to="/">
           <strong>{{ name }}</strong>
         </nuxt-link>
-
         <locale-selector :locale-list="localeList" />
       </div>
       <div class="column is-12 has-text-centered">© {{ currentYear }}</div>
@@ -14,33 +13,28 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { defineComponent, ref, computed } from '@vue/composition-api'
 import { defaultLocales } from '../../tests/mocks/defaultObjects'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 
-export default {
-  data() {
+export default defineComponent({
+  setup() {
+    const { name, getLocalizedLinks } = useSpaceProvider()
+    const aboutMenu = computed(() => getLocalizedLinks('about'))
+    const shopMenu = computed(() => getLocalizedLinks('shop'))
+    const accountMenu = computed(() => getLocalizedLinks('account'))
+    const currentYear = computed(() => new Date().getFullYear())
+    const localeList = ref(defaultLocales.locales)
     return {
-      localeList: defaultLocales.locales
-    }
-  },
-  computed: {
-    ...mapState('space', ['id', 'name', 'linklists']),
-    ...mapGetters('space', ['getLocalizedLinks']),
-
-    aboutMenu() {
-      return this.getLocalizedLinks('about')
-    },
-    shopMenu() {
-      return this.getLocalizedLinks('shop')
-    },
-    accountMenu() {
-      return this.getLocalizedLinks('account')
-    },
-    currentYear() {
-      return new Date().getFullYear()
+      name,
+      aboutMenu,
+      shopMenu,
+      accountMenu,
+      currentYear,
+      localeList
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

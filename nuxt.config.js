@@ -69,7 +69,8 @@ export default {
     { src: '~/plugins/nuxt-client-init.js', mode: 'client' },
     { src: '~/plugins/script-loader.js', mode: 'client' },
     { src: '~/plugins/vuex-product-module-registration.js' },
-    { src: '~/plugins/authOnLoad.js', ssr: false }
+    { src: '~/plugins/authOnLoad.js', ssr: false },
+    { src: '~/plugins/globalSetup.js' }
   ],
 
   /*

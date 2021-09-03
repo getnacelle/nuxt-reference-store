@@ -134,9 +134,9 @@
 </template>
 
 <script>
-import { computed } from '@vue/composition-api'
-import { mapState, mapGetters } from 'vuex'
-import useNavigationProvider from '~/composables/useNavigationProvider'
+import { computed, inject } from '@vue/composition-api'
+import { mapState } from 'vuex'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 
 export default {
   props: {
@@ -146,17 +146,15 @@ export default {
     }
   },
   setup() {
-    const {
-      menuVisible,
-      toggleShowMenu,
-      disableMenu,
-      getLocalizedLinks
-    } = useNavigationProvider()
-
+    const { name, getLocalizedLinks } = useSpaceProvider()
+    const menuVisible = inject('menuVisible')
+    const toggleShowMenu = inject('toggleShowMenu')
+    const disableMenu = inject('disableMenu')
     const mainMenu = computed(() => getLocalizedLinks('main-menu'))
     const mobileMenu = computed(() => getLocalizedLinks('mobile-menu'))
 
     return {
+      name,
       menuVisible,
       toggleShowMenu,
       disableMenu,
@@ -165,9 +163,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('space', ['id', 'name', 'linklists']),
-    ...mapState('search', ['globalQuery']),
-    ...mapGetters('space', ['getLocalizedLinks'])
+    ...mapState('search', ['globalQuery'])
   }
 }
 </script>

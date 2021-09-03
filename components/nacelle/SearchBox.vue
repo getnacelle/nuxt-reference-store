@@ -19,7 +19,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import useNavigationProvider from '~/composables/useNavigationProvider'
+import { inject } from '@vue/composition-api'
 
 export default {
   props: {
@@ -37,7 +37,7 @@ export default {
     }
   },
   setup() {
-    const { disableMenu } = useNavigationProvider()
+    const disableMenu = inject('getLocalizedLinks')
     return { disableMenu }
   },
   methods: {
