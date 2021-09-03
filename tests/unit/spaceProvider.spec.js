@@ -7,8 +7,6 @@ const InjectedComponent = () => {
     name: 'InjectedWithEvents',
     inject: [
       'id',
-      'name',
-      'domain',
       'metafields',
       'linklists',
       'setId',
@@ -44,16 +42,6 @@ describe('Space Provider', () => {
   it('updates id', () => {
     injectedEventsComponent.vm.setId('5678')
     expect(injectedEventsComponent.vm.id.value).toEqual('5678')
-  })
-
-  it('updates name', () => {
-    injectedEventsComponent.vm.setName('store-test')
-    expect(injectedEventsComponent.vm.name.value).toEqual('store-test')
-  })
-
-  it('updates domain', () => {
-    injectedEventsComponent.vm.setDomain('store-test.com')
-    expect(injectedEventsComponent.vm.domain.value).toEqual('store-test.com')
   })
 
   it('adds a metafield to metafields array', () => {
