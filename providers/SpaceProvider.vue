@@ -20,8 +20,8 @@ export default {
     const id = ref(props.space.id)
     const name = ref(props.space.name)
     const domain = ref(props.space.domain)
-    const metafields = ref(props.space.metafields)
-    const linklists = ref(props.space.linklists)
+    const metafields = ref(props.space.metafields || [])
+    const linklists = ref(props.space.linklists || [])
 
     /**
      * Updates id value
@@ -121,8 +121,8 @@ export default {
      * @returns {Object}
      */
     const getMetatag = (tag) => {
-      if (metafields) {
-        return metafields.find(
+      if (metafields.value) {
+        return metafields.value.find(
           (field) => field.namespace === 'metatag' && field.key === tag
         )
       }
@@ -134,8 +134,8 @@ export default {
      * @returns {Object} localized menu
      */
     const getMetafieldsObj = () => {
-      if (metafields) {
-        return metafields.reduce((obj, metafield) => {
+      if (metafields.value) {
+        return metafields.value.reduce((obj, metafield) => {
           const { namespace, key, value } = metafield
 
           if (obj[namespace]) {
@@ -157,8 +157,8 @@ export default {
      * @returns {Object} meta namespace
      */
     const getMetaNamespace = (namespace) => {
-      if (metafields) {
-        return metafields.reduce((obj, metafield) => {
+      if (metafields.value) {
+        return metafields.value.reduce((obj, metafield) => {
           if (metafield.namespace === namespace) {
             obj[metafield.key] = metafield.value
           }
@@ -177,8 +177,8 @@ export default {
      * @returns {String} meta namespace
      */
     const getMetafield = (namespace, key) => {
-      if (metafields) {
-        const metafield = metafields.find(
+      if (metafields.value) {
+        const metafield = metafields.value.find(
           (field) => field.namespace === namespace && field.key === key
         )
 
