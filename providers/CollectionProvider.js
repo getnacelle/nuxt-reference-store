@@ -1,4 +1,4 @@
-import { computed, h, provide, ref, watch } from '@vue/composition-api'
+import { computed, h, provide, ref, watch } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
 import ProductProvider from '~/providers/ProductProvider'
 export default {

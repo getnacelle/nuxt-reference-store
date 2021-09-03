@@ -1,4 +1,4 @@
-import { inject } from '@vue/composition-api'
+import { inject } from '@nuxtjs/composition-api'
 
 export default () => {
   const collections = inject('collections')
