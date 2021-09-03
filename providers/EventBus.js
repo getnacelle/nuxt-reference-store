@@ -5,7 +5,7 @@ import {
   readonly,
   ref,
   watch
-} from '@vue/composition-api'
+} from '@nuxtjs/composition-api'
 
 export default {
   props: {
