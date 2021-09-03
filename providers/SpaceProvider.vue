@@ -52,7 +52,7 @@ export default {
     /**
      * Get metatags from metafields
      * @param {String} tag
-     * @returns {Object}
+     * @returns {Object|null}
      */
     const getMetatag = (tag) => {
       if (metafields.value) {
@@ -65,7 +65,7 @@ export default {
 
     /**
      * Get Metafields as Object
-     * @returns {Object} localized menu
+     * @returns {Object|null} localized menu
      */
     const getMetafieldsObj = () => {
       if (metafields.value) {
@@ -84,7 +84,7 @@ export default {
     /**
      * Get meta namespace as Object
      * @param {String} namespace
-     * @returns {Object} meta namespace
+     * @returns {Object|null} meta namespace
      */
     const getMetafieldsByNamespace = (namespace) => {
       if (metafields.value) {
@@ -103,7 +103,7 @@ export default {
      * Get metafield values
      * @param {String} namespace
      * @param {String} key
-     * @returns {String} meta namespace
+     * @returns {String|null} meta namespace
      */
     const getMetafield = ({ namespace, key }) => {
       if (metafields.value) {
