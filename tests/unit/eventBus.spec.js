@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import EventBus from '~/providers/EventBus'
+import EventProvider from '~/providers/EventProvider'
 import eventTypes from '~/utils/eventTypes'
 
 const sanitizeTemplateObject = (event) =>
@@ -17,14 +17,14 @@ const InjectedComponent = (event) => {
   }
 }
 
-const EventBusContainer = ({ props = {}, event } = {}) => ({
-  render: (h) => h(EventBus, { props }, [h(InjectedComponent(event))])
+const EventProviderContainer = ({ props = {}, event } = {}) => ({
+  render: (h) => h(EventProvider, { props }, [h(InjectedComponent(event))])
 })
 
 describe('Event Bus', () => {
   it('provides `events`, `onEvent`, and `addEvent` to children', () => {
-    const eventBus = mount(EventBusContainer())
-    const injectedEventsComponent = eventBus.findComponent({
+    const eventProvider = mount(EventProviderContainer())
+    const injectedEventsComponent = eventProvider.findComponent({
       name: 'InjectedWithEvents'
     })
 
@@ -42,15 +42,15 @@ describe('Event Bus', () => {
       type: eventTypes.pageView,
       callback: jest.fn()
     }
-    const eventBus = mount(
-      EventBusContainer({
+    const eventProvider = mount(
+      EventProviderContainer({
         event: pageViewEvent,
         props: {
           eventHandlers: [pageViewEventHandler]
         }
       })
     )
-    const injectedEventsComponent = eventBus.findComponent({
+    const injectedEventsComponent = eventProvider.findComponent({
       name: 'InjectedWithEvents'
     })
 
@@ -70,8 +70,8 @@ describe('Event Bus', () => {
       type: eventTypes.collectionView,
       payload: { handle: 'some-collection' }
     }
-    const eventBus = mount(EventBusContainer({ event: collectionViewEvent }))
-    const injectedEventsComponent = eventBus.findComponent({
+    const eventProvider = mount(EventProviderContainer({ event: collectionViewEvent }))
+    const injectedEventsComponent = eventProvider.findComponent({
       name: 'InjectedWithEvents'
     })
     const button = injectedEventsComponent.find('button')
@@ -108,10 +108,10 @@ describe('Event Bus', () => {
       type: eventTypes.productView,
       payload: { handle: 'some-product' }
     }
-    const eventBus = mount(
-      EventBusContainer({ props: { maxLength: 5 }, event: productViewEvent })
+    const eventProvider = mount(
+      EventProviderContainer({ props: { maxLength: 5 }, event: productViewEvent })
     )
-    const injectedEventsComponent = eventBus.findComponent({
+    const injectedEventsComponent = eventProvider.findComponent({
       name: 'InjectedWithEvents'
     })
     const button = injectedEventsComponent.find('button')
