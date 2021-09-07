@@ -122,52 +122,48 @@ export default {
      * @returns {void}
      */
     const loadCollectionProducts = async ({ handle, count, offset }) => {
-      try {
-        const collectionIndex = collectionList.value.findIndex(
-          (collectionItem) => {
-            return handle === collectionItem.handle
-          }
+      const collectionIndex = collectionList.value.findIndex(
+        (collectionItem) => {
+          return handle === collectionItem.handle
+        }
+      )
+      if (collectionIndex >= 0) {
+        const collection = collectionList.value[collectionIndex]
+        const allHandles = collection.productLists[0]?.handles
+        const indexedHandles = collection.products.map(
+          (product) => product.handle
         )
-        if (collectionIndex >= 0) {
-          const collection = collectionList.value[collectionIndex]
-          const allHandles = collection.productLists[0]?.handles
-          const indexedHandles = collection.products.map(
-            (product) => product.handle
-          )
-          const indexedCount = indexedHandles?.length || 0
-          const totalCount = allHandles?.length
-          if (totalCount > indexedCount) {
-            const startIndex = offset || indexedCount
-            const endIndex = count ? startIndex + count : startIndex + 12
-            if (totalCount >= endIndex) {
-              const handlesToFetch = allHandles
-                .slice(startIndex, endIndex)
-                .filter((handle) => {
-                  return !indexedHandles.find(
-                    (indexedHandle) => handle === indexedHandle
-                  )
-                })
-              if (handlesToFetch.length) {
-                const products = await sdk.data.products({
-                  handles: handlesToFetch
-                })
-                collectionList.value = collectionList.value.map(
-                  (collectionItem, index) => {
-                    if (collectionIndex === index) {
-                      return {
-                        ...collectionItem,
-                        products: [...collectionItem.products, ...products]
-                      }
-                    }
-                    return collectionItem
-                  }
+        const indexedCount = indexedHandles?.length || 0
+        const totalCount = allHandles?.length
+        if (totalCount > indexedCount) {
+          const startIndex = offset || indexedCount
+          const endIndex = count ? startIndex + count : startIndex + 12
+          if (totalCount >= startIndex) {
+            const handlesToFetch = allHandles
+              .slice(startIndex, endIndex)
+              .filter((handle) => {
+                return !indexedHandles.find(
+                  (indexedHandle) => handle === indexedHandle
                 )
-              }
+              })
+            if (handlesToFetch.length) {
+              const products = await sdk.data.products({
+                handles: handlesToFetch
+              })
+              collectionList.value = collectionList.value.map(
+                (collectionItem, index) => {
+                  if (collectionIndex === index) {
+                    return {
+                      ...collectionItem,
+                      products: [...collectionItem.products, ...products]
+                    }
+                  }
+                  return collectionItem
+                }
+              )
             }
           }
         }
-      } catch (err) {
-        return { error: err }
       }
     }
 

@@ -5,12 +5,6 @@ import productData from '~/utils/productData'
 
 jest.mock('@nacelle/client-js-sdk')
 
-sdk.mockImplementation(() => ({
-  data: {
-    products: () => Promise.resolve([productData[1]])
-  }
-}))
-
 const InjectedComponent = () => {
   return {
     name: 'InjectedComponent',
@@ -67,6 +61,9 @@ describe('Product Provider', () => {
   })
 
   it('calls addProducts function to fetch & append products', async () => {
+    sdk.mockImplementation(() => ({
+      data: { products: () => Promise.resolve([productData[1]]) }
+    }))
     const productProvider = mount(
       WrapperComponent({ props: { products: [productData[0]] } })
     )

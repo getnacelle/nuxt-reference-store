@@ -1,13 +1,9 @@
 import { mount } from '@vue/test-utils'
+import sdk from '@nacelle/client-js-sdk'
 import CollectionProvider from '~/providers/CollectionProvider'
 import collectionData from '~/utils/collectionData'
-require('dotenv').config()
 
-const config = {
-  nacelleId: process.env.NACELLE_SPACE_ID,
-  nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
-}
+jest.mock('@nacelle/client-js-sdk')
 
 const InjectedComponent = () => {
   return {
@@ -24,10 +20,7 @@ const InjectedComponent = () => {
 }
 
 const WrapperComponent = ({ props = {} } = {}) => ({
-  render: (h) =>
-    h(CollectionProvider, { props: { ...props, config } }, [
-      h(InjectedComponent())
-    ])
+  render: (h) => h(CollectionProvider, { props }, [h(InjectedComponent())])
 })
 
 describe('Collection Provider', () => {
@@ -64,6 +57,27 @@ describe('Collection Provider', () => {
     })
     jest.spyOn(injectedComponent.vm, 'addCollections')
     injectedComponent.vm.addCollections({ collections: [collectionData[1]] })
+    expect(injectedComponent.vm.addCollections).toHaveBeenCalledTimes(1)
+    expect(injectedComponent.vm.collections.value.length).toBe(2)
+  })
+
+  it('calls addCollections function to fetch & append collections', async () => {
+    sdk.mockImplementation(() => ({
+      data: {
+        collection: () => Promise.resolve([collectionData[1]]),
+        collectionPage: () => Promise.resolve([collectionData[1].products])
+      }
+    }))
+    const collectionProvider = mount(
+      WrapperComponent({ props: { collections: [collectionData[0]] } })
+    )
+    const injectedComponent = collectionProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    jest.spyOn(injectedComponent.vm, 'addCollections')
+    await injectedComponent.vm.addCollections({
+      handles: [collectionData[1].handle]
+    })
     expect(injectedComponent.vm.addCollections).toHaveBeenCalledTimes(1)
     expect(injectedComponent.vm.collections.value.length).toBe(2)
   })
@@ -148,5 +162,36 @@ describe('Collection Provider', () => {
     expect(shirtsAndHats[1].handle).toBe('hats')
     expect(allProducts.length).toBe(2)
     expect(injectedComponent.vm.getCollections).toHaveBeenCalledTimes(3)
+  })
+
+  it('calls loadCollectionProducts function to add collection products', async () => {
+    sdk.mockImplementation(() => ({
+      data: {
+        products: () =>
+          Promise.resolve([{ products: collectionData[0].products }])
+      }
+    }))
+    const collectionProvider = mount(
+      WrapperComponent({
+        props: {
+          collections: [
+            {
+              handle: collectionData[0].handle,
+              productLists: collectionData[0].productLists,
+              products: []
+            }
+          ]
+        }
+      })
+    )
+    const injectedComponent = collectionProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    jest.spyOn(injectedComponent.vm, 'loadCollectionProducts')
+    await injectedComponent.vm.loadCollectionProducts({
+      handle: collectionData[0].handle
+    })
+    expect(injectedComponent.vm.loadCollectionProducts).toHaveBeenCalledTimes(1)
+    expect(injectedComponent.vm.collections.value[0].products.length).toBe(1)
   })
 })

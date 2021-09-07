@@ -2,6 +2,7 @@
 export default [
   {
     handle: 'shirts',
+    productLists: [{ handles: ['shirt'] }],
     products: [
       {
         handle: 'shirt',
@@ -20,6 +21,7 @@ export default [
   },
   {
     handle: 'hats',
+    productLists: [{ handles: ['hat'] }],
     products: [
       {
         handle: 'hat',

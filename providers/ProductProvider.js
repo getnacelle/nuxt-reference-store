@@ -44,7 +44,7 @@ export default {
             return handle === productItem.handle
           })
         })
-        if (uniqueHandles.length > 0) {
+        if (uniqueHandles.length) {
           const fetchedProducts = await sdk.data.products({
             handles: uniqueHandles
           })
