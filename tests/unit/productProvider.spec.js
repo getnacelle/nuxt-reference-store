@@ -1,13 +1,15 @@
 import { mount } from '@vue/test-utils'
+import sdk from '@nacelle/client-js-sdk'
 import ProductProvider from '~/providers/ProductProvider'
 import productData from '~/utils/productData'
-require('dotenv').config()
 
-const config = {
-  nacelleId: process.env.NACELLE_SPACE_ID,
-  nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
-  nacelleEndpoint: process.env.NACELLE_ENDPOINT
-}
+jest.mock('@nacelle/client-js-sdk')
+
+sdk.mockImplementation(() => ({
+  data: {
+    products: () => Promise.resolve([productData[1]])
+  }
+}))
 
 const InjectedComponent = () => {
   return {
@@ -24,15 +26,12 @@ const InjectedComponent = () => {
 }
 
 const WrapperComponent = ({ props = {} } = {}) => ({
-  render: (h) =>
-    h(ProductProvider, { props: { ...props, config } }, [
-      h(InjectedComponent())
-    ])
+  render: (h) => h(ProductProvider, { props }, [h(InjectedComponent())])
 })
 
 describe('Product Provider', () => {
   it('provides `products`, `addProducts`,`removeProducts`, `setSelectedVariant` and `getProducts` to children', () => {
-    const productProvider = mount(WrapperComponent({ props: { config } }))
+    const productProvider = mount(WrapperComponent())
     const injectedComponent = productProvider.findComponent({
       name: 'InjectedComponent'
     })
@@ -63,6 +62,19 @@ describe('Product Provider', () => {
     })
     jest.spyOn(injectedComponent.vm, 'addProducts')
     injectedComponent.vm.addProducts({ products: [productData[1]] })
+    expect(injectedComponent.vm.addProducts).toHaveBeenCalledTimes(1)
+    expect(injectedComponent.vm.products.value.length).toBe(2)
+  })
+
+  it('calls addProducts function to fetch & append products', async () => {
+    const productProvider = mount(
+      WrapperComponent({ props: { products: [productData[0]] } })
+    )
+    const injectedComponent = productProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    jest.spyOn(injectedComponent.vm, 'addProducts')
+    await injectedComponent.vm.addProducts({ handles: [productData[1].handle] })
     expect(injectedComponent.vm.addProducts).toHaveBeenCalledTimes(1)
     expect(injectedComponent.vm.products.value.length).toBe(2)
   })
