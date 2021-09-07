@@ -1,24 +1,47 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
-    <event-bus :event-handlers="eventHandlers">
-      <global-header />
-      <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
-      <site-footer />
-      <error-modal />
-      <cart-watch />
-    </event-bus>
+    <space-provider :space="initialSpace" :locale="locale.locale">
+      <event-bus :event-handlers="eventHandlers">
+        <global-header />
+        <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+        <site-footer />
+        <error-modal />
+        <cart-watch />
+      </event-bus>
+    </space-provider>
   </lazy-hydrate>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
-import EventBus from '~/providers/EventBus'
+import { ref, inject, provide } from '@vue/composition-api'
+import EventBus from '~/providers/EventBus.vue'
+import SpaceProvider from '~/providers/SpaceProvider.vue'
 import eventTypes from '~/utils/eventTypes'
 
 export default {
-  components: { EventBus, LazyHydrate },
+  components: { EventBus, LazyHydrate, SpaceProvider },
+  setup() {
+    const initialSpace = inject('initialSpace')
+    const getMetatag = inject('getMetatag')
+    const menuVisible = ref(false)
+    const openMenu = () => {
+      menuVisible.value = true
+    }
+    const toggleShowMenu = () => {
+      menuVisible.value = !menuVisible.value
+    }
+    const disableMenu = () => {
+      menuVisible.value = false
+    }
+    provide('menuVisible', menuVisible)
+    provide('openMenu', openMenu)
+    provide('toggleShowMenu', toggleShowMenu)
+    provide('disableMenu', disableMenu)
+    return { initialSpace, getMetatag }
+  },
   data() {
     return {
       eventHandlers: []
@@ -78,7 +101,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('space', ['getMetatag'])
+    ...mapState('user', ['locale'])
   },
   created() {
     this.eventHandlers = [

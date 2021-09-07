@@ -10,26 +10,7 @@ export default function (context, inject) {
     useStatic: false
   })
 
-  const setSpace = async () => {
-    const { commit } = context.store
-    const space = await client.data.space()
-    if (space) {
-      const { id, name, domain, metafields, linklists } = space
-      commit('space/setId', id)
-      commit('space/setName', name)
-      commit('space/setDomain', domain)
-      commit('space/setMetafields', metafields)
-      commit('space/setLinklists', linklists)
-    }
-  }
-
-  const nacelleNuxtServerInit = async () => {
-    await setSpace()
-  }
-
   const plugin = {
-    nacelleNuxtServerInit,
-    setSpace,
     client,
     data: client.data,
     checkout: client.checkout,

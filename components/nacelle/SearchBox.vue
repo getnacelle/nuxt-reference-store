@@ -19,6 +19,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import { inject } from '@vue/composition-api'
 
 export default {
   props: {
@@ -35,8 +36,11 @@ export default {
       default: 'Search...'
     }
   },
+  setup() {
+    const disableMenu = inject('getLocalizedLinks')
+    return { disableMenu }
+  },
   methods: {
-    ...mapMutations('menu', ['disableMenu']),
     ...mapMutations('search', ['setQuery']),
     updateQuery(query) {
       this.setQuery({ query, position: this.position })

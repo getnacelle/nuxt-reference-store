@@ -134,7 +134,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { computed, inject } from '@vue/composition-api'
+import { mapState } from 'vuex'
+import useSpaceProvider from '~/composables/useSpaceProvider'
+
 export default {
   props: {
     isSticky: {
@@ -142,20 +145,25 @@ export default {
       default: true
     }
   },
-  computed: {
-    ...mapState('space', ['id', 'name', 'linklists']),
-    ...mapState('menu', ['menuVisible']),
-    ...mapState('search', ['globalQuery']),
-    ...mapGetters('space', ['getLocalizedLinks']),
-    mainMenu() {
-      return this.getLocalizedLinks('main-menu')
-    },
-    mobileMenu() {
-      return this.getLocalizedLinks('mobile-menu')
+  setup() {
+    const { name, getLocalizedLinks } = useSpaceProvider()
+    const menuVisible = inject('menuVisible')
+    const toggleShowMenu = inject('toggleShowMenu')
+    const disableMenu = inject('disableMenu')
+    const mainMenu = computed(() => getLocalizedLinks('main-menu'))
+    const mobileMenu = computed(() => getLocalizedLinks('mobile-menu'))
+
+    return {
+      name,
+      menuVisible,
+      toggleShowMenu,
+      disableMenu,
+      mainMenu,
+      mobileMenu
     }
   },
-  methods: {
-    ...mapMutations('menu', ['disableMenu', 'toggleShowMenu'])
+  computed: {
+    ...mapState('search', ['globalQuery'])
   }
 }
 </script>
