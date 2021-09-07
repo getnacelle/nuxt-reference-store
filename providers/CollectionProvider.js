@@ -1,6 +1,7 @@
 import { computed, h, provide, ref, watch } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
 import ProductProvider from '~/providers/ProductProvider'
+
 export default {
   name: 'CollectionProvider',
   props: {
@@ -23,110 +24,83 @@ export default {
         }) || []
     )
     const { sdk } = useSdk(props.config)
-    /**
-     * Set the collections provider should track
-     * @param {Array} collections List of collections
-     * @returns {void}
-     */
-    const setCollections = ({ collections }) => {
-      if (collections) {
-        collectionList.value = collections.map((collection) => ({
-          ...collection
-        }))
-      }
-    }
-    /**
-     * Add collections provider should track
-     * @param {Array} collections List of collections
-     * @returns {void}
-     */
-    const addCollections = ({ collections }) => {
-      if (collections) {
-        collectionList.value = [
-          ...collectionList.value,
-          ...collections
-            .filter((collection) => {
-              return !collectionList.value.find((collectionItem) => {
-                return collectionItem.handle === collection.handle
-              })
-            })
-            .map((product) => ({
-              ...product
-            }))
-        ]
-      }
-    }
+
     /**
      * Fetch the collection provider should track
-     * @param {Array} handle Collection handle
-     * @param {String} method Method to provide the collection - options: set/add
+     * @param {String} handle Collection handle
      * @returns {void}
      */
-    const fetchCollection = async ({ handle, method }) => {
-      try {
-        const shouldFetch = !collectionList.value.find((collectionItem) => {
-          return handle === collectionItem.handle
+    const fetchCollection = async ({ handle }) => {
+      const data = await Promise.all([
+        sdk.data.collection({ handle }),
+        sdk.data.collectionPage({
+          handle,
+          paginate: true,
+          itemsPerPage: 12
         })
-        if (shouldFetch) {
-          const data = await Promise.all([
-            sdk.data.collection({ handle }),
-            sdk.data.collectionPage({
-              handle,
-              paginate: true,
-              itemsPerPage: 12
-            })
-          ])
-          const collection = { ...data[0], products: data[1] }
-          if (method === 'add') addCollections({ collections: [collection] })
-          if (method === 'set') setCollections({ collections: [collection] })
-          return { collection }
-        }
-      } catch (err) {
-        return { error: err }
-      }
+      ])
+      return { ...data[0], products: data[1] }
     }
+
     /**
-     * Fetch the collections provider should track
-     * @param {Array} handles List of collection handles
-     * @param {String} provide Provide the collections - options: set/add
+     * Add collections provider should track
+     * @param {Array} collections List of products
+     * @param {Array} handles List of handles
+     * @param {String} method Method of storing products - options: append, replace
      * @returns {void}
      */
-    const fetchCollections = async ({ handles, method }) => {
-      try {
-        if (handles) {
-          const handlesToFetch = handles.filter((handle) => {
-            return !collectionList.value.find((productItem) => {
-              return handle === productItem.handle
-            })
+
+    const addCollections = async ({ collections, handles, method }) => {
+      let newCollections = []
+      if (collections) {
+        const uniqueCollections = collections.filter((collection) => {
+          return !collectionList.value.find((collectionItem) => {
+            return collection.handle === collectionItem.handle
           })
-          const data = await Promise.all([
-            ...handlesToFetch.forEach((handle) => {
-              return fetchCollection({ handle, method })
+        })
+        newCollections = [...uniqueCollections]
+      }
+      if (handles) {
+        const uniqueHandles = handles.filter((handle) => {
+          return ![...collectionList.value, ...newCollections].find(
+            (collectionItem) => {
+              return handle === collectionItem.handle
+            }
+          )
+        })
+        if (uniqueHandles.length > 0) {
+          const fetchedCollections = await Promise.all([
+            ...uniqueHandles.forEach((uniqueHandle) => {
+              return fetchCollection({ handle: uniqueHandle })
             })
           ])
-          return { collections: data }
+          if (fetchedCollections) {
+            newCollections = [...newCollections, ...fetchedCollections]
+          }
         }
-      } catch (err) {
-        return { error: err }
+      }
+      if (method === 'replace') {
+        collectionList.value = newCollections
+      } else {
+        collectionList.value = [...collectionList.value, ...newCollections]
       }
     }
+
     /**
      * Remove collections provider should track
      * @param {Array} handles List of collection handles
      * @returns {void}
      */
     const removeCollections = ({ handles }) => {
-      collectionList.value = collectionList.value.filter((collectionItem) => {
-        return !handles.includes(collectionItem.handle)
-      })
+      if (handles) {
+        collectionList.value = collectionList.value.filter((collectionItem) => {
+          return !handles.includes(collectionItem.handle)
+        })
+      } else {
+        collectionList.value = []
+      }
     }
-    /**
-     * Clear collections provider should track
-     * @returns {void}
-     */
-    const clearCollections = () => {
-      collectionList.value = []
-    }
+
     /**
      * Get collections from provider by handles
      * @param {Array} handles List of collection handles
@@ -147,7 +121,7 @@ export default {
      * @param {Number} offset Index of first product to fetch
      * @returns {void}
      */
-    const fetchCollectionProducts = async ({ handle, count, offset }) => {
+    const loadCollectionProducts = async ({ handle, count, offset }) => {
       try {
         const collectionIndex = collectionList.value.findIndex(
           (collectionItem) => {
@@ -205,22 +179,17 @@ export default {
      Update the provider collections from props
      */
     watch(collections, (value) => {
-      setCollections({ collections: value })
+      addCollections({ collections: value, method: 'replace' })
     })
 
     /**
      Pass down items to provide
     */
-    provide('products', productList)
     provide('collections', collectionList)
-    provide('setCollections', setCollections)
     provide('addCollections', addCollections)
-    provide('fetchCollection', fetchCollection)
-    provide('fetchCollections', fetchCollections)
     provide('removeCollections', removeCollections)
-    provide('clearCollections', clearCollections)
     provide('getCollections', getCollections)
-    provide('fetchCollectionProducts', fetchCollectionProducts)
+    provide('loadCollectionProducts', loadCollectionProducts)
 
     /**
      Render component

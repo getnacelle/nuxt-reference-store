@@ -127,7 +127,7 @@ export default {
      Update the provider products from props
      */
     watch(products, (value) => {
-      addProducts({ products: value })
+      addProducts({ products: value, method: 'replace' })
     })
 
     /**

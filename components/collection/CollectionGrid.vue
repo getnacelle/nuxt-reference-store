@@ -16,8 +16,8 @@
         v-if="collection && collection.handle"
         class="collection-details__actions"
       >
-        <button @click="handleFetchCollectionProducts(collection.handle)">
-          Fetch Collection Products
+        <button @click="handleLoadCollectionProducts(collection.handle)">
+          Load Collection Products
         </button>
       </div>
     </div>
@@ -29,13 +29,15 @@
         </span>
       </h3>
       <div class="collection-details__actions">
-        <button @click="handleFetchCollections(['clothing', 'womens', 'mens'])">
-          Fetch Collections ['clothes', 'womens', 'mens']
+        <button @click="handleAddCollections(['clothing', 'womens', 'mens'])">
+          Add Collections ['clothes', 'womens', 'mens']
         </button>
         <button @click="handleRemoveCollections(['womens'])">
           Remove Collections ['womens']
         </button>
-        <button @click="handleClearCollections">Clear Collections</button>
+        <button @click="handleRemoveCollections(null)">
+          Clear Collections
+        </button>
       </div>
     </div>
   </div>
@@ -54,37 +56,32 @@ export default defineComponent({
   setup(props) {
     const {
       collections,
-      fetchCollections,
+      addCollections,
       removeCollections,
-      clearCollections,
       getCollections,
-      fetchCollectionProducts
+      loadCollectionProducts
     } = useCollectionProvider()
     const collection = computed(
       () => getCollections({ handles: [props.handle] })[0]
     )
 
-    const handleFetchCollectionProducts = (handle) => {
-      fetchCollectionProducts({ handle })
+    const handleLoadCollectionProducts = (handle) => {
+      loadCollectionProducts({ handle })
     }
 
-    const handleFetchCollections = (handles) => {
-      fetchCollections({ handles, method: 'add' })
+    const handleAddCollections = (handles) => {
+      addCollections({ handles, method: 'append' })
     }
     const handleRemoveCollections = (handles) => {
       removeCollections({ handles })
-    }
-    const handleClearCollections = () => {
-      clearCollections()
     }
 
     return {
       collection,
       collections,
-      handleFetchCollectionProducts,
-      handleFetchCollections,
-      handleRemoveCollections,
-      handleClearCollections
+      handleLoadCollectionProducts,
+      handleAddCollections,
+      handleRemoveCollections
     }
   }
 })
