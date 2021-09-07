@@ -30,7 +30,7 @@
         <button @click="handleRemoveProducts(['factor-low-tops'])">
           Remove Products ['factor-low-tops']
         </button>
-        <button @click="handleClearProducts">Clear Products</button>
+        <button @click="handleRemoveProducts(null)">Clear Products</button>
       </div>
     </div>
   </div>

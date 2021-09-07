@@ -70,7 +70,7 @@ export default {
         })
         if (uniqueHandles.length > 0) {
           const fetchedCollections = await Promise.all([
-            ...uniqueHandles.forEach((uniqueHandle) => {
+            ...uniqueHandles.map((uniqueHandle) => {
               return fetchCollection({ handle: uniqueHandle })
             })
           ])
