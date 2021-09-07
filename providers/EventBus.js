@@ -8,6 +8,7 @@ import {
 } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'EventProvider',
   props: {
     maxLength: {
       type: Number,

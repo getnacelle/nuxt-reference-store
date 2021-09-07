@@ -37,19 +37,19 @@ describe('Space Provider', () => {
   }
 
   const spaceProvider = mount(SpaceProviderContainer({ props: { space } }))
-  const injectedEventsComponent = spaceProvider.findComponent({
-    name: 'InjectedWithEvents'
+  const injectedSpaceComponent = spaceProvider.findComponent({
+    name: 'InjectedWithSpaceData'
   })
 
   it('gets metafield object', () => {
-    expect(injectedEventsComponent.vm.getMetafieldsObj()).toEqual({
+    expect(injectedSpaceComponent.vm.getMetafieldsObj()).toEqual({
       metatag: { 'og:image': 'https://demo.getnacelle.com/starship_logo.png' }
     })
   })
 
   it('gets metafield', () => {
     expect(
-      injectedEventsComponent.vm.getMetafield({
+      injectedSpaceComponent.vm.getMetafield({
         namespace: 'metatag',
         key: 'og:image'
       })
@@ -57,7 +57,7 @@ describe('Space Provider', () => {
   })
 
   it('gets menu by handle', () => {
-    expect(injectedEventsComponent.vm.getLocalizedLinks('main-menu')).toEqual(
+    expect(injectedSpaceComponent.vm.getLocalizedLinks('main-menu')).toEqual(
       mainMenu.links
     )
   })

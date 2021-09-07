@@ -1,4 +1,4 @@
-import NacelleClient from '@nacelle/client-js-sdk/dist/client-js-sdk.esm'
+import NacelleClient from '@nacelle/client-js-sdk'
 
 export default (config) => {
   const sdk = new NacelleClient({

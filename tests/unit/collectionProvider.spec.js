@@ -1,6 +1,13 @@
 import { mount } from '@vue/test-utils'
 import CollectionProvider from '~/providers/CollectionProvider'
 import collectionData from '~/utils/collectionData'
+require('dotenv').config()
+
+const config = {
+  nacelleId: process.env.NACELLE_SPACE_ID,
+  nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.NACELLE_ENDPOINT
+}
 
 const InjectedComponent = () => {
   return {
@@ -17,7 +24,10 @@ const InjectedComponent = () => {
 }
 
 const WrapperComponent = ({ props = {} } = {}) => ({
-  render: (h) => h(CollectionProvider, { props }, [h(InjectedComponent())])
+  render: (h) =>
+    h(CollectionProvider, { props: { ...props, config } }, [
+      h(InjectedComponent())
+    ])
 })
 
 describe('Collection Provider', () => {
