@@ -23,7 +23,7 @@
       </h3>
       <div class="product-details__actions">
         <button
-          @click="handleFetchProducts(['johannah-boots', 'factor-low-tops'])"
+          @click="handleAddProducts(['johannah-boots', 'factor-low-tops'])"
         >
           Fetch Products ['johannah-boots', 'factor-low-tops']
         </button>
@@ -50,9 +50,8 @@ export default defineComponent({
   setup(props) {
     const {
       products,
-      fetchProducts,
+      addProducts,
       removeProducts,
-      clearProducts,
       getProducts,
       setSelectedVariant
     } = useProductProvider()
@@ -65,25 +64,20 @@ export default defineComponent({
       }
     }
 
-    const handleFetchProducts = (handles) => {
-      fetchProducts({ handles, method: 'add' })
+    const handleAddProducts = (handles) => {
+      addProducts({ handles, method: 'add' })
     }
 
     const handleRemoveProducts = (handles) => {
       removeProducts({ handles })
     }
 
-    const handleClearProducts = () => {
-      clearProducts()
-    }
-
     return {
       product,
       products,
       handleSetSelectedVariant,
-      handleFetchProducts,
-      handleRemoveProducts,
-      handleClearProducts
+      handleAddProducts,
+      handleRemoveProducts
     }
   }
 })

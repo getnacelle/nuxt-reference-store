@@ -21,85 +21,63 @@ export default {
     const { sdk } = useSdk(props.config)
 
     /**
-     * Set the products provider should track
-     * @param {Array} products List of products
-     * @returns {void}
-     */
-    const setProducts = ({ products }) => {
-      if (products) {
-        productList.value = products.map((product) => ({
-          ...product,
-          selectedVariant: null,
-          options: getProductOptions({ product })
-        }))
-      }
-    }
-
-    /**
      * Add products provider should track
      * @param {Array} products List of products
+     * @param {Array} handles List of handles
+     * @param {String} method Method of storing products - options: append, replace
      * @returns {void}
      */
-    const addProducts = ({ products }) => {
-      if (products) {
-        productList.value = [
-          ...productList.value,
-          ...products
-            .filter((product) => {
-              return !productList.value.find((productItem) => {
-                return productItem.handle === product.handle
-              })
-            })
-            .map((product) => ({
-              ...product,
-              selectedVariant: null,
-              options: getProductOptions({ product })
-            }))
-        ]
-      }
-    }
 
-    /**
-     * Fetch the products provider should track
-     * @param {Array} handles List of product handles
-     * @param {String} provide Provide the products - options: set/add
-     * @returns {void}
-     */
-    const fetchProducts = async ({ handles, method }) => {
-      try {
-        if (handles) {
-          const handlesToFetch = handles.filter((handle) => {
-            return !productList.value.find((productItem) => {
-              return handle === productItem.handle
-            })
+    const addProducts = async ({ products, handles, method }) => {
+      let newProducts = []
+      if (products) {
+        const uniqueProducts = products.filter((product) => {
+          return !productList.value.find((productItem) => {
+            return product.handle === productItem.handle
           })
-          const products = await sdk.data.products({ handles: handlesToFetch })
-          if (method === 'add') addProducts({ products })
-          if (method === 'set') setProducts({ products })
-          return { products }
+        })
+        newProducts = [...uniqueProducts]
+      }
+      if (handles) {
+        const uniqueHandles = handles.filter((handle) => {
+          return ![...productList.value, ...newProducts].find((productItem) => {
+            return handle === productItem.handle
+          })
+        })
+        if (uniqueHandles.length > 0) {
+          const fetchedProducts = await sdk.data.products({
+            handles: uniqueHandles
+          })
+          if (fetchedProducts)
+            newProducts = [...newProducts, ...fetchedProducts]
         }
-      } catch (err) {
-        return { error: err }
+      }
+      newProducts = newProducts.map((newProduct) => ({
+        ...newProduct,
+        selectedVariant: null,
+        options: getProductOptions({ product: newProduct })
+      }))
+      if (method === 'replace') {
+        productList.value = newProducts
+      } else {
+        productList.value = [...productList.value, ...newProducts]
       }
     }
 
     /**
      * Remove products provider should track
-     * @param {Array} handles List of product handles
+     * @param {Object} config
+     * @param {Array, null} handles List of product handles
      * @returns {void}
      */
     const removeProducts = ({ handles }) => {
-      productList.value = productList.value.filter((productItem) => {
-        return !handles.includes(productItem.handle)
-      })
-    }
-
-    /**
-     * Clear products provider should track
-     * @returns {void}
-     */
-    const clearProducts = () => {
-      productList.value = []
+      if (handles) {
+        productList.value = productList.value.filter((productItem) => {
+          return !handles.includes(productItem.handle)
+        })
+      } else {
+        productList.value = []
+      }
     }
 
     /**
@@ -116,6 +94,12 @@ export default {
       return productList.value
     }
 
+    /**
+     * Set selected variant of product
+     * @param {Object} product Product to set variant on
+     * @param {Array} options Options to find selected variant
+     * @returns {Array}
+     */
     const setSelectedVariant = ({ product, options }) => {
       if (product && options) {
         const selectedVariant = getSelectedVariant({ product, options })
@@ -143,18 +127,15 @@ export default {
      Update the provider products from props
      */
     watch(products, (value) => {
-      setProducts({ products: value })
+      addProducts({ products: value })
     })
 
     /**
      Pass down items to provide
     */
     provide('products', productList)
-    provide('setProducts', setProducts)
     provide('addProducts', addProducts)
-    provide('fetchProducts', fetchProducts)
     provide('removeProducts', removeProducts)
-    provide('clearProducts', clearProducts)
     provide('setSelectedVariant', setSelectedVariant)
     provide('getProducts', getProducts)
 
