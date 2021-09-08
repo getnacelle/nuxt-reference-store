@@ -1,13 +1,15 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
     <space-provider :space="initialSpace" :locale="locale.locale">
-      <event-bus :event-handlers="eventHandlers">
-        <global-header />
-        <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
-        <site-footer />
-        <error-modal />
-        <cart-watch />
-      </event-bus>
+      <search-provider :search-data="products">
+        <event-bus :event-handlers="eventHandlers">
+          <global-header />
+          <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+          <site-footer />
+          <error-modal />
+          <cart-watch />
+        </event-bus>
+      </search-provider>
     </space-provider>
   </lazy-hydrate>
 </template>
@@ -16,17 +18,28 @@
 import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
-import { ref, inject, provide } from '@vue/composition-api'
+import {
+  ref,
+  inject,
+  provide,
+  useContext,
+  useAsync
+} from '@nuxtjs/composition-api'
 import EventBus from '~/providers/EventBus.vue'
 import SpaceProvider from '~/providers/SpaceProvider.vue'
+import SearchProvider from '~/providers/SearchProvider.vue'
 import eventTypes from '~/utils/eventTypes'
+import useSdk from '~/composables/useSdk'
 
 export default {
-  components: { EventBus, LazyHydrate, SpaceProvider },
+  components: { EventBus, LazyHydrate, SpaceProvider, SearchProvider },
   setup() {
     const initialSpace = inject('initialSpace')
     const getMetatag = inject('getMetatag')
     const menuVisible = ref(false)
+    const { $config } = useContext()
+    const { sdk } = useSdk($config)
+    const products = useAsync(() => sdk.data.allProducts())
     const openMenu = () => {
       menuVisible.value = true
     }
@@ -40,7 +53,7 @@ export default {
     provide('openMenu', openMenu)
     provide('toggleShowMenu', toggleShowMenu)
     provide('disableMenu', disableMenu)
-    return { initialSpace, getMetatag }
+    return { initialSpace, getMetatag, products }
   },
   data() {
     return {
