@@ -17,8 +17,8 @@ import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ref, inject, provide } from '@vue/composition-api'
-import EventBus from '~/providers/EventBus.vue'
-import SpaceProvider from '~/providers/SpaceProvider.vue'
+import EventBus from '~/providers/EventBus'
+import SpaceProvider from '~/providers/SpaceProvider'
 import eventTypes from '~/utils/eventTypes'
 
 export default {

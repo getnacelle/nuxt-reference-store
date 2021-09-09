@@ -1,10 +1,6 @@
-<template>
-  <div><slot /></div>
-</template>
-
-<script>
 import {
   computed,
+  h,
   provide,
   readonly,
   ref,
@@ -12,6 +8,7 @@ import {
 } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'EventProvider',
   props: {
     maxLength: {
       type: Number,
@@ -22,7 +19,7 @@ export default {
       default: () => []
     }
   },
-  setup(props) {
+  setup(props, context) {
     const eventLog = ref([])
     const eventHandlers = ref(props.eventHandlers)
     const lastEvent = computed(() => eventLog.value[0])
@@ -94,6 +91,7 @@ export default {
     provide('events', readonly(eventLog))
     provide('addEvent', addEvent)
     provide('onEvent', onEvent)
+
+    return () => h('div', context.slots.default())
   }
 }
-</script>
