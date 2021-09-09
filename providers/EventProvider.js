@@ -25,7 +25,7 @@ export default {
     const lastEvent = computed(() => eventLog.value[0])
 
     /**
-     * Registers an event with the Event Bus.
+     * Registers an event with the Event Provider.
      * @param {Object} config
      * @param {string} config.type Type of event
      * @param {Object} config.payload Data associated with the event
@@ -38,7 +38,7 @@ export default {
     }
 
     /**
-     * Registers an event handler with the Event Bus.
+     * Registers an event handler with the Event Provider.
      * @param {Object} config
      * @param {string} config.type Type of event to be handled
      * @param {function} config.callback Callback function that processes the event object
@@ -47,14 +47,14 @@ export default {
     const onEvent = ({ type, callback }) => {
       if (typeof type !== 'string' || !type) {
         console.warn(
-          "[nacelle] events passed to the EventBus' `onEvent` method must have a `type`."
+          "[nacelle] events passed to the EventProvider's `onEvent` method must have a `type`."
         )
         return
       }
 
       if (typeof callback !== 'function') {
         console.warn(
-          "[nacelle] events passed to the EventBus' `onEvent` method must have a valid `callback` function."
+          "[nacelle] events passed to the EventProvider's `onEvent` method must have a valid `callback` function."
         )
         return
       }
