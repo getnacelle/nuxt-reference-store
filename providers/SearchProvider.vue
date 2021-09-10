@@ -4,7 +4,7 @@
 
 <script>
 import { ref, provide } from '@vue/composition-api'
-import fetchSearchData from '~/utils/fetchSearchData'
+import useSdk from '~/composables/useSdk'
 
 export default {
   props: {
@@ -25,6 +25,7 @@ export default {
     const searchOptions = ref(props.defaultSearchOptions)
     const searchWorker = ref(null)
     const results = ref([])
+    // const { sdk } = useSdk()
 
     if (Array.isArray(props.searchData) && props.searchData.length) {
       searchData.value = props.searchData
@@ -36,11 +37,14 @@ export default {
         })
         .catch((err) => console.error(err))
     } else {
-      fetchSearchData()
-        .then((res) => {
-          searchData.value = res.data ? res.data : res
-        })
-        .catch((err) => console.error(err))
+      // const searchDataWorker = new Worker('/worker/searchData.js')
+      // searchDataWorker.postMessage(sdk)
+      // fetchSearchData()
+      //   .then((res) => {
+      //     console.log('AAA', res)
+      //     searchData.value = res.data ? res.data : res
+      //   })
+      //   .catch((err) => console.error(err))
     }
 
     const setSearchOptions = (options) => {
