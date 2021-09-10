@@ -13,10 +13,15 @@ export default {
     product: {
       type: Object,
       default: null
+    },
+    productHandle: {
+      type: String,
+      default: null
     }
   },
   setup(props, context) {
     const product = ref(props.product)
+    const productHandle = ref(props.productHandle)
     const productProvided = ref(null)
     let isFetching = ref(false)
 
@@ -44,11 +49,13 @@ export default {
         productObject = await sdk.data.product({ handle })
         isFetching = false
       }
-      productProvided.value = {
-        selectedOptions: null,
-        selectedVariant: null,
-        options: getProductOptions({ product }),
-        ...productObject
+      if (productObject) {
+        productProvided.value = {
+          selectedOptions: null,
+          selectedVariant: null,
+          options: getProductOptions({ productObject }),
+          ...productObject
+        }
       }
     }
 
@@ -102,17 +109,22 @@ export default {
     }
 
     /**
-     Initialize provider with product from props
+     Initialize provider with product or productHandle props
      */
     if (props.product) {
       setProduct({ product: props.product })
+    } else if (props.productHandle) {
+      setProduct({ handle: props.productHandle })
     }
 
     /**
-     Update provider with product from props
+     Update provider with product or productHandle props
      */
     watch(product, (value) => {
       setProduct({ product: value })
+    })
+    watch(productHandle, (value) => {
+      setProduct({ handle: value })
     })
 
     /**

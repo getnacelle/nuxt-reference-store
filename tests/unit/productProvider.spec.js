@@ -41,9 +41,24 @@ describe('Product Provider', () => {
     )
   })
 
-  it('initializes product from props', () => {
+  it('initializes provider with product prop', () => {
     const productProvider = mount(
       ProductProviderContainer({ props: { product: productData } })
+    )
+    const injectedProductComponent = productProvider.findComponent({
+      name: 'InjectedWithProduct'
+    })
+    expect(injectedProductComponent.vm.product.value.handle).toEqual(
+      productData.handle
+    )
+  })
+
+  it('initializes provider with productHandle prop', async () => {
+    sdk.mockImplementation(() => ({
+      data: { product: () => Promise.resolve(productData) }
+    }))
+    const productProvider = await mount(
+      ProductProviderContainer({ props: { productHandle: productData.handle } })
     )
     const injectedProductComponent = productProvider.findComponent({
       name: 'InjectedWithProduct'
@@ -66,7 +81,7 @@ describe('Product Provider', () => {
     )
   })
 
-  it('it calls setProduct with a handle', async () => {
+  it('it calls setProduct with a product handle', async () => {
     sdk.mockImplementation(() => ({
       data: { product: () => Promise.resolve(productData) }
     }))
