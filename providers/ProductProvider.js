@@ -45,6 +45,7 @@ export default {
         isFetching = false
       }
       productProvided.value = {
+        selectedOptions: null,
         selectedVariant: null,
         options: getProductOptions({ product }),
         ...productObject
@@ -52,22 +53,51 @@ export default {
     }
 
     /**
-     * Set selected variant of product
+     * Set selected options of product
      * @param {Array} options Product options selected
      * @returns {Array}
      */
-    const setSelectedVariant = ({ options }) => {
+    const setSelectedOptions = ({ options }) => {
       if (!options) {
         console.warn(
-          "[nacelle] ProductProvider's `setSelectedVariant` method requires a `options` parameter."
+          "[nacelle] ProductProvider's `setSelectedOptions` method requires a `options` parameter."
         )
       }
       productProvided.value = {
         ...productProvided.value,
+        selectedOptions: options,
         selectedVariant: getSelectedVariant({
           product: productProvided.value,
           options
         })
+      }
+    }
+
+    /**
+     * Set selected variant of product
+     * @param {Object} variant Variant object selected
+     * @param {String} id Variant id selected
+     * @returns {Array}
+     */
+    const setSelectedVariant = ({ variant, id }) => {
+      if (!variant && !id) {
+        console.warn(
+          "[nacelle] ProductProvider's `setSelectedVariant` method requires a `variant` or `id` parameter."
+        )
+      }
+      let selectedVariant = null
+      if (variant) selectedVariant = variant
+      else if (id) {
+        selectedVariant = productProvided.value.variants?.find((variant) => {
+          return variant.id === id
+        })
+      }
+      if (selectedVariant) {
+        productProvided.value = {
+          ...productProvided.value,
+          selectedOptions: selectedVariant.selectedOptions,
+          selectedVariant
+        }
       }
     }
 
@@ -91,6 +121,7 @@ export default {
     provide('product', productProvided)
     provide('isFetching', isFetching)
     provide('setProduct', setProduct)
+    provide('setSelectedOptions', setSelectedOptions)
     provide('setSelectedVariant', setSelectedVariant)
 
     /**

@@ -8,7 +8,13 @@ jest.mock('@nacelle/client-js-sdk')
 const InjectedComponent = () => {
   return {
     name: 'InjectedWithProduct',
-    inject: ['product', 'isFetching', 'setProduct', 'setSelectedVariant'],
+    inject: [
+      'product',
+      'isFetching',
+      'setProduct',
+      'setSelectedOptions',
+      'setSelectedVariant'
+    ],
     template: `<div></div>`
   }
 }
@@ -27,6 +33,9 @@ describe('Product Provider', () => {
     expect(injectedProductComponent.vm.product.value).toBe(null)
     expect(injectedProductComponent.vm.isFetching.value).toBe(false)
     expect(typeof injectedProductComponent.vm.setProduct).toEqual('function')
+    expect(typeof injectedProductComponent.vm.setSelectedOptions).toEqual(
+      'function'
+    )
     expect(typeof injectedProductComponent.vm.setSelectedVariant).toEqual(
       'function'
     )
@@ -73,7 +82,29 @@ describe('Product Provider', () => {
     )
   })
 
-  it('it calls setSelectedVariant with options array', async () => {
+  it('it calls setSelectedOptions with options array', () => {
+    const productProvider = mount(
+      ProductProviderContainer({ props: { product: productData } })
+    )
+    const injectedProductComponent = productProvider.findComponent({
+      name: 'InjectedWithProduct'
+    })
+    jest.spyOn(injectedProductComponent.vm, 'setSelectedOptions')
+    injectedProductComponent.vm.setSelectedOptions({
+      options: productData.variants[0].selectedOptions
+    })
+    expect(
+      injectedProductComponent.vm.setSelectedOptions
+    ).toHaveBeenCalledTimes(1)
+    expect(injectedProductComponent.vm.product.value.selectedOptions).toEqual(
+      productData.variants[0].selectedOptions
+    )
+    expect(injectedProductComponent.vm.product.value.handle).toEqual(
+      productData.handle
+    )
+  })
+
+  it('it calls setSelectedVariant with variant object', () => {
     const productProvider = mount(
       ProductProviderContainer({ props: { product: productData } })
     )
@@ -81,14 +112,33 @@ describe('Product Provider', () => {
       name: 'InjectedWithProduct'
     })
     jest.spyOn(injectedProductComponent.vm, 'setSelectedVariant')
-    await injectedProductComponent.vm.setSelectedVariant({
-      options: productData.variants[0].selectedOptions
+    injectedProductComponent.vm.setSelectedVariant({
+      variant: productData.variants[0]
     })
     expect(
       injectedProductComponent.vm.setSelectedVariant
     ).toHaveBeenCalledTimes(1)
-    expect(injectedProductComponent.vm.product.value.handle).toEqual(
-      productData.handle
+    expect(
+      injectedProductComponent.vm.product.value.selectedVariant.handle
+    ).toEqual(productData.variants[0].handle)
+  })
+
+  it('it calls setSelectedVariant with variant id', () => {
+    const productProvider = mount(
+      ProductProviderContainer({ props: { product: productData } })
     )
+    const injectedProductComponent = productProvider.findComponent({
+      name: 'InjectedWithProduct'
+    })
+    jest.spyOn(injectedProductComponent.vm, 'setSelectedVariant')
+    injectedProductComponent.vm.setSelectedVariant({
+      id: productData.variants[0].id
+    })
+    expect(
+      injectedProductComponent.vm.setSelectedVariant
+    ).toHaveBeenCalledTimes(1)
+    expect(
+      injectedProductComponent.vm.product.value.selectedVariant.handle
+    ).toEqual(productData.variants[0].handle)
   })
 })
