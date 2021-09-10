@@ -38,7 +38,7 @@ describe('Space Provider', () => {
 
   const spaceProvider = mount(SpaceProviderContainer({ props: { space } }))
   const injectedEventsComponent = spaceProvider.findComponent({
-    name: 'InjectedWithEvents'
+    name: 'InjectedWithSpaceData'
   })
 
   it('gets metafield object', () => {

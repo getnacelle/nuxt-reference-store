@@ -1,7 +1,7 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
     <space-provider :space="initialSpace" :locale="locale.locale">
-      <search-provider :search-data="products">
+      <search-provider>
         <event-bus :event-handlers="eventHandlers">
           <global-header />
           <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
@@ -18,18 +18,11 @@
 import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
-import {
-  ref,
-  inject,
-  provide,
-  useContext,
-  useAsync
-} from '@nuxtjs/composition-api'
+import { ref, inject, provide } from '@nuxtjs/composition-api'
 import EventBus from '~/providers/EventBus.vue'
 import SpaceProvider from '~/providers/SpaceProvider.vue'
 import SearchProvider from '~/providers/SearchProvider.vue'
 import eventTypes from '~/utils/eventTypes'
-import useSdk from '~/composables/useSdk'
 
 export default {
   components: { EventBus, LazyHydrate, SpaceProvider, SearchProvider },
@@ -37,9 +30,6 @@ export default {
     const initialSpace = inject('initialSpace')
     const getMetatag = inject('getMetatag')
     const menuVisible = ref(false)
-    const { $config } = useContext()
-    const { sdk } = useSdk($config)
-    const products = useAsync(() => sdk.data.allProducts())
     const openMenu = () => {
       menuVisible.value = true
     }
@@ -53,7 +43,7 @@ export default {
     provide('openMenu', openMenu)
     provide('toggleShowMenu', toggleShowMenu)
     provide('disableMenu', disableMenu)
-    return { initialSpace, getMetatag, products }
+    return { initialSpace, getMetatag }
   },
   data() {
     return {
