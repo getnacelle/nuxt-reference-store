@@ -6,12 +6,18 @@ export default {
     {
       id: 'shirt-v-1',
       name: 'blue-shirt',
-      selectedOptions: [{ name: 'color', value: 'blue' }]
+      selectedOptions: [
+        { name: 'color', value: 'blue' },
+        { name: 'size', value: 'large' }
+      ]
     },
     {
       id: 'shirt-v-2',
       name: 'red-shirt',
-      selectedOptions: [{ name: 'color', value: 'red' }]
+      selectedOptions: [
+        { name: 'color', value: 'red' },
+        { name: 'size', value: 'small' }
+      ]
     }
   ]
 }
