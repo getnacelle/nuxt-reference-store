@@ -17,21 +17,16 @@ export default {
       type: String,
       default: null
     },
-    products: {
-      type: Array,
-      default: null
-    },
-    productHandles: {
-      type: Array,
-      default: null
+    productsPerFetch: {
+      type: Number,
+      default: 12
     }
   },
   setup(props, context) {
     const collection = ref(props.collection)
-    // const products = ref(props.products)
     const collectionHandle = ref(props.collectionHandle)
-    // const productHandles = ref(props.productHandles)
     const collectionProvided = ref(null)
+    const productsPerFetch = ref(props.productsPerFetch)
     let isFetching = ref(false)
 
     const config = props.config || null
@@ -47,7 +42,7 @@ export default {
     const setCollection = async ({ collection, handle }) => {
       if (!collection && !handle) {
         console.warn(
-          "[nacelle] ProductProvider's `setCollection` method requires a `collection` or `handle` parameter."
+          "[nacelle] CollectionProvider's `setCollection` method requires a `collection` or `handle` parameter."
         )
         return
       }
@@ -55,7 +50,17 @@ export default {
       if (collection) collectionObject = collection
       else if (handle) {
         isFetching = true
-        collectionObject = await sdk?.data?.collection({ handle })
+        const data = await Promise.all([
+          sdk.data.collection({ handle }),
+          sdk.data.collectionPage({
+            handle,
+            paginate: true,
+            itemsPerPage: productsPerFetch || 12
+          })
+        ])
+        if (data) {
+          collectionObject = { ...data[0], products: data[1] }
+        }
         isFetching = false
       }
       if (collectionObject) {
@@ -66,12 +71,38 @@ export default {
     }
 
     /**
-     * Set products provider should track
+     * Load collection products provider should track
      * @param {Object} config
-     * @param {Array} products Product objects to track
-     * @param {Array} handles Product handles to track
+     * @param {Number} count Number of collection products to load
+     * @param {Number} offset Offset of collection products to load
      * @returns {void}
      */
+    const loadProducts = async ({ count, offset }) => {
+      if (collectionProvided) {
+        const productHandles = collectionProvided.value.productLists[0]?.handles
+        const totalProducts = productHandles?.length || 0
+        const indexedProducts = collectionProvided.value.products?.length || 0
+        if (totalProducts > indexedProducts) {
+          const startIndex = offset || indexedProducts
+          const endIndex = count ? startIndex + count : startIndex + 12
+          if (totalProducts >= startIndex) {
+            const handlesToFetch = productHandles.slice(startIndex, endIndex)
+            if (handlesToFetch.length) {
+              const products = await sdk.data.products({
+                handles: handlesToFetch
+              })
+              collectionProvided.value = {
+                ...collectionProvided.value,
+                products: {
+                  ...collectionProvided.value.products,
+                  ...products
+                }
+              }
+            }
+          }
+        }
+      }
+    }
 
     /**
      Initialize provider with collection or collectionHandle props
@@ -98,22 +129,21 @@ export default {
     provide('collection', collectionProvided)
     provide('isFetching', isFetching)
     provide('setCollection', setCollection)
-    /* LoadMore
-      // accepts, count
-      // accepts productHandles, count
-    */
+    provide('loadProducts', loadProducts)
 
     /**
      Render component
     */
     return () => {
       const { slots } = context
-      const topSlot = slots.top ? slots.top() : null
-      const productSlot = slots.product ? slots.product() : ''
-      const bottomSlot = slots.bottom ? slots.bottom() : null
+      const topSlot = slots.top ? slots.top() : []
+      const defaultSlot = slots.default ? slots.default() : []
+      const productSlot = slots.product ? slots.product() : []
+      const bottomSlot = slots.bottom ? slots.bottom() : []
 
       return h('div', [
         ...topSlot,
+        ...defaultSlot,
         ...productSlot.map((item, index) => {
           const products = collectionProvided.value?.products || []
           return h(ProductProvider, { product: products[index] }, [item])
