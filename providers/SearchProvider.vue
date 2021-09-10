@@ -25,6 +25,7 @@ export default {
     const searchOptions = ref(props.defaultSearchOptions)
     const searchWorker = ref(null)
     const results = ref([])
+    // const { sdk } = useSdk()
 
     // Worker blobs
     const catalogWorkerBlob = (origin) => [
