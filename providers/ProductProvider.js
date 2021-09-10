@@ -46,7 +46,7 @@ export default {
       if (product) productObject = product
       else if (handle) {
         isFetching = true
-        productObject = await sdk.data.product({ handle })
+        productObject = await sdk?.data?.product({ handle })
         isFetching = false
       }
       if (productObject) {
