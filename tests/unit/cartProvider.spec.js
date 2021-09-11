@@ -21,6 +21,7 @@ const InjectedComponent = () => {
       'cart',
       'addItem',
       'removeItem',
+      'updateItem',
       'incrementItem',
       'decrementItem',
       'clearCart'
@@ -29,12 +30,12 @@ const InjectedComponent = () => {
   }
 }
 
-const CartProviderContainer = () => ({
-  render: (h) => h(CartProvider, {}, [h(InjectedComponent())])
+const CartProviderContainer = ({ props = {} } = {}) => ({
+  render: (h) => h(CartProvider, { props }, [h(InjectedComponent())])
 })
 
 describe('Cart Provider', () => {
-  it('provides `cart`, `addItem`, `removeItem`, `incrementItem`, `decrementItem`, `clearCart` to children', () => {
+  it('provides `cart`, `addItem`, `removeItem`, `updateItem`, `incrementItem`, `decrementItem`, `clearCart` to children', () => {
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
@@ -43,6 +44,7 @@ describe('Cart Provider', () => {
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(typeof injectedComponent.vm.addItem).toEqual('function')
     expect(typeof injectedComponent.vm.removeItem).toEqual('function')
+    expect(typeof injectedComponent.vm.updateItem).toEqual('function')
     expect(typeof injectedComponent.vm.incrementItem).toEqual('function')
     expect(typeof injectedComponent.vm.decrementItem).toEqual('function')
     expect(typeof injectedComponent.vm.clearCart).toEqual('function')
@@ -53,11 +55,29 @@ describe('Cart Provider', () => {
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    injectedComponent.vm.addItem(product)
+    injectedComponent.vm.addItem({ ...product })
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
     expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+  })
+
+  it('increases quantity with `addItem` if item is already in cart', () => {
+    const cartProvider = mount(CartProviderContainer())
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    injectedComponent.vm.addItem({ ...product })
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+
+    injectedComponent.vm.addItem({ ...product })
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
   })
 
   it('removes item from cart with `removeItem`', () => {
@@ -65,7 +85,7 @@ describe('Cart Provider', () => {
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    injectedComponent.vm.addItem(product)
+    injectedComponent.vm.addItem({ ...product })
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
@@ -77,12 +97,35 @@ describe('Cart Provider', () => {
     expect(injectedComponent.vm.cart.value.length).toBe(0)
   })
 
+  it('updates item in cart with `updateItem`', () => {
+    const cartProvider = mount(CartProviderContainer())
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    injectedComponent.vm.addItem({ ...product })
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+
+    const cart = injectedComponent.vm.cart.value
+    const updatedProduct = {
+      ...product,
+      id: cart[0].id,
+      quantity: 2
+    }
+    injectedComponent.vm.updateItem(updatedProduct)
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0]).toMatchObject(updatedProduct)
+  })
+
   it('increases item quantity by 1 with `incrementItem`', () => {
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    injectedComponent.vm.addItem(product)
+    injectedComponent.vm.addItem({ ...product })
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)

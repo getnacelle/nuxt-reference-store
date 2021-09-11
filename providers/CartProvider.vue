@@ -76,7 +76,18 @@ export default {
      * @param {String} payload
      * @returns {void}
      */
-    // const updateItem = () => {}
+    const updateItem = (payload) => {
+      // find matching item in cart
+      const index = cart.value.findIndex((item) => item.id === payload.id)
+      // loop through keys in the payload to update
+      Object.keys(cart.value[index]).forEach((key) => {
+        const value = payload[key]
+        if (key !== 'id' && cart.value[index][key] !== value) {
+          cart.value[index][key] = value
+        }
+      })
+      cacheCart()
+    }
 
     /**
      * Increases item quantity in cart.
@@ -123,7 +134,7 @@ export default {
     provide('cart', readonly(cart))
     provide('addItem', addItem)
     provide('removeItem', removeItem)
-    // provide('updateItem', updateItem)
+    provide('updateItem', updateItem)
     provide('incrementItem', incrementItem)
     provide('decrementItem', decrementItem)
     provide('clearCart', clearCart)
