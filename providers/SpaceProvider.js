@@ -1,7 +1,12 @@
 import { h, ref, provide } from '@nuxtjs/composition-api'
+import useSdk from '~/composables/useSdk'
 
 export default {
   props: {
+    config: {
+      type: Object,
+      default: null
+    },
     space: {
       type: Object,
       default: () => ({})
@@ -17,6 +22,9 @@ export default {
     const domain = ref(props.space.domain || '')
     const metafields = ref(props.space.metafields || [])
     const linklists = ref(props.space.linklists || [])
+
+    const config = props.config || null
+    const { sdk } = useSdk({ config })
 
     /**
      * Finds menu by handle in linklists array
@@ -118,6 +126,7 @@ export default {
     provide('domain', domain)
     provide('metafields', metafields)
     provide('linklists', linklists)
+    provide('sdk', sdk)
     provide('getLocalizedLinks', getLocalizedLinks)
     provide('getMetatag', getMetatag)
     provide('getMetafieldsObj', getMetafieldsObj)
