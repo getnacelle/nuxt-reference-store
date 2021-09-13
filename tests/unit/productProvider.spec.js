@@ -63,6 +63,7 @@ describe('Product Provider', () => {
     const injectedProductComponent = productProvider.findComponent({
       name: 'InjectedWithProduct'
     })
+    await new Promise((resolve) => setTimeout(() => resolve(true)))
     expect(injectedProductComponent.vm.product.value.handle).toEqual(
       productData.handle
     )
