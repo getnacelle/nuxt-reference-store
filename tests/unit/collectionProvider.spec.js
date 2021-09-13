@@ -82,28 +82,28 @@ describe('Collection Provider', () => {
     )
   })
 
-  // it('it calls setCollection with a collection handle', async () => {
-  //   sdk.mockImplementation(() => ({
-  //     data: {
-  //       collection: () => Promise.resolve({ ...collectionData, products: [] }),
-  //       collectionPage: () => Promise.resolve(collectionData.products)
-  //     }
-  //   }))
-  //   const collectionProvider = mount(CollectionProviderContainer())
-  //   const injectedCollectionComponent = collectionProvider.findComponent({
-  //     name: 'InjectedWithCollection'
-  //   })
-  //   jest.spyOn(injectedCollectionComponent.vm, 'setCollection')
-  //   await injectedCollectionComponent.vm.setCollection({
-  //     handle: collectionData.handle
-  //   })
-  //   expect(injectedCollectionComponent.vm.setCollection).toHaveBeenCalledTimes(
-  //     1
-  //   )
-  //   expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
-  //     collectionData.handle
-  //   )
-  // })
+  it('it calls setCollection with a collection handle', async () => {
+    sdk.mockImplementation(() => ({
+      data: {
+        collection: () => Promise.resolve({ ...collectionData, products: [] }),
+        collectionPage: () => Promise.resolve(collectionData.products)
+      }
+    }))
+    const collectionProvider = mount(CollectionProviderContainer())
+    const injectedCollectionComponent = collectionProvider.findComponent({
+      name: 'InjectedWithCollection'
+    })
+    jest.spyOn(injectedCollectionComponent.vm, 'setCollection')
+    await injectedCollectionComponent.vm.setCollection({
+      handle: collectionData.handle
+    })
+    expect(injectedCollectionComponent.vm.setCollection).toHaveBeenCalledTimes(
+      1
+    )
+    expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
+      collectionData.handle
+    )
+  })
 
   it('it calls loadProducts with empty parameters', async () => {
     sdk.mockImplementation(() => ({
