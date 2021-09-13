@@ -61,9 +61,7 @@ describe('Collection Provider', () => {
     const injectedCollectionComponent = collectionProvider.findComponent({
       name: 'InjectedWithCollection'
     })
-    await new Promise((resolve) => {
-      setTimeout(() => resolve(true))
-    })
+    await new Promise((resolve) => setTimeout(() => resolve(true)))
     expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
       collectionData.handle
     )
