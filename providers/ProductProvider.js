@@ -118,6 +118,17 @@ export default {
     }
 
     /**
+     Emit product to parent for v-model use
+     */
+    watch(
+      productProvided,
+      (value) => {
+        context.emit('input', value)
+      },
+      { immediate: true }
+    )
+
+    /**
      Update provider with product or productHandle props
      */
     watch(product, (value) => {
