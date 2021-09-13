@@ -1,6 +1,5 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
-import ProductProvider from '~/providers/ProductProvider'
 
 export default {
   name: 'CollectionProvider',
@@ -50,6 +49,7 @@ export default {
       if (collection) collectionObject = collection
       else if (handle) {
         isFetching = true
+        // Jest does not wait for this
         const data = await Promise.all([
           sdk.data.collection({ handle }),
           sdk.data.collectionPage({
@@ -71,7 +71,7 @@ export default {
     }
 
     /**
-     * Load collection products provider should track
+     * Load products provider should track
      * @param {Object} config
      * @param {Number} count Number of collection products to load
      * @param {Number} offset Offset of collection products to load
@@ -93,10 +93,7 @@ export default {
               })
               collectionProvided.value = {
                 ...collectionProvided.value,
-                products: {
-                  ...collectionProvided.value.products,
-                  ...products
-                }
+                products: [...collectionProvided.value.products, ...products]
               }
             }
           }
@@ -112,6 +109,17 @@ export default {
     } else if (props.collectionHandle) {
       setCollection({ handle: props.collectionHandle })
     }
+
+    /**
+     Emit collection to parent for v-model use
+     */
+    watch(
+      collectionProvided,
+      (value) => {
+        context.emit('input', value)
+      },
+      { immediate: true }
+    )
 
     /**
      Update provider with collection or collectionHandle props
@@ -134,22 +142,6 @@ export default {
     /**
      Render component
     */
-    return () => {
-      const { slots } = context
-      const topSlot = slots.top ? slots.top() : []
-      const defaultSlot = slots.default ? slots.default() : []
-      const productSlot = slots.product ? slots.product() : []
-      const bottomSlot = slots.bottom ? slots.bottom() : []
-
-      return h('div', [
-        ...topSlot,
-        ...defaultSlot,
-        ...productSlot.map((item, index) => {
-          const products = collectionProvided.value?.products || []
-          return h(ProductProvider, { product: products[index] }, [item])
-        }),
-        ...bottomSlot
-      ])
-    }
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }

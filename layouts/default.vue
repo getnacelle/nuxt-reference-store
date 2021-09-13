@@ -3,12 +3,6 @@
     <space-provider :space="initialSpace" :locale="locale.locale">
       <event-provider :event-handlers="eventHandlers">
         <global-header />
-        <collection-provider>
-          <div slot="top">Top Slot</div>
-          <Test slot="product">Product 1</Test>
-          <Test slot="product">Product 2</Test>
-          <div slot="bottom">Bottom Slot</div>
-        </collection-provider>
         <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
         <site-footer />
         <error-modal />
@@ -24,19 +18,19 @@ import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ref, inject, provide } from '@vue/composition-api'
 import EventProvider from '~/providers/EventProvider'
-import SpaceProvider from '~/providers/SpaceProvider'
-import CollectionProvider from '~/providers/CollectionProvider'
-import Test from '~/components/Test.vue'
+// import SpaceProvider from '~/providers/SpaceProvider'
+// import CollectionProvider from '~/providers/CollectionProvider'
+// import Test from '~/components/Test.vue'
 
 import eventTypes from '~/utils/eventTypes'
 
 export default {
   components: {
     EventProvider,
-    LazyHydrate,
-    SpaceProvider,
-    CollectionProvider,
-    Test
+    LazyHydrate
+    // SpaceProvider,
+    // CollectionProvider,
+    // Test
   },
   setup() {
     const initialSpace = inject('initialSpace')

@@ -128,6 +128,17 @@ export default {
     })
 
     /**
+     Emit product on change
+     */
+    watch(
+      productProvided,
+      (value) => {
+        context.emit('input', value)
+      },
+      { immediate: true }
+    )
+
+    /**
      Provide values
     */
     provide('product', productProvided)
@@ -139,6 +150,6 @@ export default {
     /**
      Render component
     */
-    return () => h('div', context.slots.default())
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }

@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils'
-// import sdk from '@nacelle/client-js-sdk'
+import sdk from '@nacelle/client-js-sdk'
 import CollectionProvider from '~/providers/CollectionProvider'
-// import productData from '~/tests/mocks/product'
+import collectionData from '~/tests/mocks/collection'
 
 jest.mock('@nacelle/client-js-sdk')
 
@@ -31,6 +31,101 @@ describe('Collection Provider', () => {
     )
     expect(typeof injectedCollectionComponent.vm.loadProducts).toEqual(
       'function'
+    )
+  })
+
+  it('initializes provider with collection prop', () => {
+    const collectionProvider = mount(
+      CollectionProviderContainer({ props: { collection: collectionData } })
+    )
+    const injectedCollectionComponent = collectionProvider.findComponent({
+      name: 'InjectedWithCollection'
+    })
+    expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
+      collectionData.handle
+    )
+  })
+
+  it('initializes provider with collectionHandle prop', async () => {
+    sdk.mockImplementation(() => ({
+      data: {
+        collection: () => Promise.resolve({ ...collectionData, products: [] }),
+        collectionPage: () => Promise.resolve(collectionData.products)
+      }
+    }))
+    const collectionProvider = await mount(
+      CollectionProviderContainer({
+        props: { collectionHandle: collectionData.handle }
+      })
+    )
+    const injectedCollectionComponent = collectionProvider.findComponent({
+      name: 'InjectedWithCollection'
+    })
+    await new Promise((resolve) => {
+      setTimeout(() => resolve(true))
+    })
+    expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
+      collectionData.handle
+    )
+  })
+
+  it('it calls setCollection with a collection object', () => {
+    const collectionProvider = mount(CollectionProviderContainer())
+    const injectedCollectionComponent = collectionProvider.findComponent({
+      name: 'InjectedWithCollection'
+    })
+    jest.spyOn(injectedCollectionComponent.vm, 'setCollection')
+    injectedCollectionComponent.vm.setCollection({ collection: collectionData })
+    expect(injectedCollectionComponent.vm.setCollection).toHaveBeenCalledTimes(
+      1
+    )
+    expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
+      collectionData.handle
+    )
+  })
+
+  // it('it calls setCollection with a collection handle', async () => {
+  //   sdk.mockImplementation(() => ({
+  //     data: {
+  //       collection: () => Promise.resolve({ ...collectionData, products: [] }),
+  //       collectionPage: () => Promise.resolve(collectionData.products)
+  //     }
+  //   }))
+  //   const collectionProvider = mount(CollectionProviderContainer())
+  //   const injectedCollectionComponent = collectionProvider.findComponent({
+  //     name: 'InjectedWithCollection'
+  //   })
+  //   jest.spyOn(injectedCollectionComponent.vm, 'setCollection')
+  //   await injectedCollectionComponent.vm.setCollection({
+  //     handle: collectionData.handle
+  //   })
+  //   expect(injectedCollectionComponent.vm.setCollection).toHaveBeenCalledTimes(
+  //     1
+  //   )
+  //   expect(injectedCollectionComponent.vm.collection.value.handle).toEqual(
+  //     collectionData.handle
+  //   )
+  // })
+
+  it('it calls loadProducts with empty parameters', async () => {
+    sdk.mockImplementation(() => ({
+      data: {
+        products: () => Promise.resolve(collectionData.products)
+      }
+    }))
+    const collectionProvider = mount(
+      CollectionProviderContainer({
+        props: { collection: { ...collectionData, products: [] } }
+      })
+    )
+    const injectedCollectionComponent = collectionProvider.findComponent({
+      name: 'InjectedWithCollection'
+    })
+    jest.spyOn(injectedCollectionComponent.vm, 'loadProducts')
+    await injectedCollectionComponent.vm.loadProducts({})
+    expect(injectedCollectionComponent.vm.loadProducts).toHaveBeenCalledTimes(1)
+    expect(injectedCollectionComponent.vm.collection.value.products).toEqual(
+      collectionData.products
     )
   })
 })
