@@ -150,6 +150,6 @@ export default {
     /**
      Render component
     */
-    return () => h('div', context.slots.default())
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }
