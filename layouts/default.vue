@@ -18,19 +18,15 @@ import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ref, inject, provide } from '@vue/composition-api'
 import EventProvider from '~/providers/EventProvider'
-// import SpaceProvider from '~/providers/SpaceProvider'
-// import CollectionProvider from '~/providers/CollectionProvider'
-// import Test from '~/components/Test.vue'
+import SpaceProvider from '~/providers/SpaceProvider'
 
 import eventTypes from '~/utils/eventTypes'
 
 export default {
   components: {
     EventProvider,
-    LazyHydrate
-    // SpaceProvider,
-    // CollectionProvider,
-    // Test
+    LazyHydrate,
+    SpaceProvider
   },
   setup() {
     const initialSpace = inject('initialSpace')
