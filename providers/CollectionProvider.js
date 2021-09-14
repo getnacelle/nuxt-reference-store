@@ -84,7 +84,7 @@ export default {
      */
     const loadProducts = async ({ count, offset }) => {
       try {
-        if (collectionProvided) {
+        if (collectionProvided.value) {
           const productHandles =
             collectionProvided.value.productLists[0]?.handles
           const totalProducts = productHandles?.length || 0
