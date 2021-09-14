@@ -19,9 +19,9 @@ import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ref, inject, provide } from '@nuxtjs/composition-api'
-import EventProvider from '~/providers/EventProvider.vue'
-import SpaceProvider from '~/providers/SpaceProvider.vue'
-import SearchProvider from '~/providers/SearchProvider.vue'
+import EventProvider from '~/providers/EventProvider'
+import SpaceProvider from '~/providers/SpaceProvider'
+import SearchProvider from '~/providers/SearchProvider'
 import eventTypes from '~/utils/eventTypes'
 
 export default {

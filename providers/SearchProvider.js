@@ -1,10 +1,5 @@
-<template>
-  <div><slot /></div>
-</template>
-
-<script>
 import Fuse from 'fuse.js'
-import { ref, provide, onMounted } from '@nuxtjs/composition-api'
+import { h, ref, provide, onMounted } from '@nuxtjs/composition-api'
 
 export default {
   props: {
@@ -20,49 +15,51 @@ export default {
       })
     }
   },
-  setup(props) {
+  setup(props, context) {
     const searchData = ref([])
     const searchOptions = ref(props.defaultSearchOptions)
     const searchWorker = ref(null)
     const results = ref([])
 
     // Worker blobs
-    const catalogWorkerBlob = (origin) => [
-      `
+    function workerFetchCatalog(origin) {
       onmessage = async function () {
-        const response = await fetch('${origin}/data/search.json')
+        const response = await fetch(`${origin}/data/search.json`)
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
         const data = await response.json()
         postMessage(data)
       }
+    }
 
-      `
-    ]
-    const searchWorkerBlob = [
-      `
-      /* eslint-disable no-undef */
-        self.importScripts('https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js')
+    function workerSearch() {
+      self.importScripts(
+        'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js'
+      )
+      let workerSearchData
+      onmessage = function receiver(e) {
+        const { searchData, options, value } = e.data
+        if (searchData) {
+          workerSearchData = searchData
+        } else if (workerSearchData) {
+          const results = new Fuse(workerSearchData, options)
+            .search(String(value))
+            .filter((result) => typeof result.item !== 'undefined')
+            .map((result) => result.item)
 
-        let workerSearchData
-
-        onmessage = function receiver(e) {
-          const { searchData, options, value } = e.data
-
-          if (searchData) {
-            workerSearchData = searchData
-          } else if (workerSearchData) {
-            const results = new Fuse(workerSearchData, options)
-              .search(String(value))
-              .filter((result) => typeof result.item !== 'undefined')
-              .map((result) => result.item)
-
-            postMessage(results)
-          }
+          postMessage(results)
         }
-      `
-    ]
+      }
+    }
+
+    function fnToBlobUrl(fn) {
+      const blobDataObj = `(${fn})();`
+      const blob = new Blob([blobDataObj.replace('"use strict";', '')])
+      return URL.createObjectURL(blob, {
+        type: 'application/javascript; charset=utf-8'
+      })
+    }
 
     // Initial setup for `searchData`
     // Case 1: use passed prop array
@@ -79,8 +76,7 @@ export default {
         .catch((err) => console.error(err))
     } else {
       onMounted(() => {
-        const blob = new Blob(catalogWorkerBlob(window.location.origin))
-        const blobURL = window.URL.createObjectURL(blob)
+        const blobURL = fnToBlobUrl(workerFetchCatalog(window.location.origin))
         const worker = new Worker(blobURL)
         worker.postMessage(null)
         worker.onmessage = (e) => {
@@ -118,8 +114,7 @@ export default {
       }
       if (typeof Worker !== 'undefined') {
         if (!searchWorker.value) {
-          const blob = new Blob(searchWorkerBlob)
-          const blobURL = window.URL.createObjectURL(blob)
+          const blobURL = fnToBlobUrl(workerSearch)
           searchWorker.value = new Worker(blobURL)
           searchWorker.value.postMessage({
             searchData: searchData.value
@@ -147,6 +142,7 @@ export default {
     provide('search', search)
     provide('setSearchOptions', setSearchOptions)
     provide('results', results)
+
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }
-</script>
