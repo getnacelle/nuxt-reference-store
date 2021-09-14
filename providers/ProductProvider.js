@@ -26,7 +26,6 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
-
     const sdk = useSdk({ config })
 
     /**

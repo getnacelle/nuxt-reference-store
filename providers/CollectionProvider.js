@@ -6,15 +6,15 @@ export default {
   props: {
     config: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     collection: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     collectionHandle: {
       type: String,
-      default: null
+      default: ''
     },
     productsPerFetch: {
       type: Number,
@@ -28,8 +28,8 @@ export default {
     const productsPerFetch = ref(props.productsPerFetch)
     let isFetching = ref(false)
 
-    const config = props.config || null
-    const { sdk } = useSdk({ config })
+    const config = props.config
+    const sdk = useSdk({ config })
 
     /**
      * Set collection provider should track
@@ -39,34 +39,39 @@ export default {
      * @returns {void}
      */
     const setCollection = async ({ collection, handle }) => {
-      if (!collection && !handle) {
-        console.warn(
-          "[nacelle] CollectionProvider's `setCollection` method requires a `collection` or `handle` parameter."
-        )
-        return
-      }
-      let collectionObject = {}
-      if (collection) collectionObject = collection
-      else if (handle) {
-        isFetching = true
-        // Jest does not wait for this
-        const data = await Promise.all([
-          sdk.data.collection({ handle }),
-          sdk.data.collectionPage({
-            handle,
-            paginate: true,
-            itemsPerPage: productsPerFetch || 12
-          })
-        ])
-        if (data) {
-          collectionObject = { ...data[0], products: data[1] }
+      try {
+        if (!collection && !handle) {
+          console.warn(
+            "[nacelle] CollectionProvider's `setCollection` method requires a `collection` or `handle` parameter."
+          )
+          return
         }
+        let collectionObject = {}
+        if (collection && Object.keys(collection).length)
+          collectionObject = collection
+        else if (handle) {
+          isFetching = true
+          const data = await Promise.all([
+            sdk.data.collection({ handle }),
+            sdk.data.collectionPage({
+              handle,
+              paginate: true,
+              itemsPerPage: productsPerFetch || 12
+            })
+          ])
+          if (data) {
+            collectionObject = { ...data[0], products: data[1] }
+          }
+          isFetching = false
+        }
+        if (collectionObject && Object.keys(collectionObject).length) {
+          collectionProvided.value = {
+            ...collectionObject
+          }
+        }
+      } catch (err) {
+        console.warn(`Error: ${err}`)
         isFetching = false
-      }
-      if (collectionObject) {
-        collectionProvided.value = {
-          ...collectionObject
-        }
       }
     }
 
@@ -78,33 +83,39 @@ export default {
      * @returns {void}
      */
     const loadProducts = async ({ count, offset }) => {
-      if (collectionProvided) {
-        const productHandles = collectionProvided.value.productLists[0]?.handles
-        const totalProducts = productHandles?.length || 0
-        const indexedProducts = collectionProvided.value.products?.length || 0
-        if (totalProducts > indexedProducts) {
-          const startIndex = offset || indexedProducts
-          const endIndex = count ? startIndex + count : startIndex + 12
-          if (totalProducts >= startIndex) {
-            const handlesToFetch = productHandles.slice(startIndex, endIndex)
-            if (handlesToFetch.length) {
-              const products = await sdk.data.products({
-                handles: handlesToFetch
-              })
-              collectionProvided.value = {
-                ...collectionProvided.value,
-                products: [...collectionProvided.value.products, ...products]
+      try {
+        if (collectionProvided) {
+          const productHandles =
+            collectionProvided.value.productLists[0]?.handles
+          const totalProducts = productHandles?.length || 0
+          const indexedProducts = collectionProvided.value.products?.length || 0
+          if (totalProducts > indexedProducts) {
+            const startIndex = offset || indexedProducts
+            const endIndex = count ? startIndex + count : startIndex + 12
+            if (totalProducts >= startIndex) {
+              const handlesToFetch = productHandles.slice(startIndex, endIndex)
+              if (handlesToFetch.length) {
+                const products = await sdk.data.products({
+                  handles: handlesToFetch
+                })
+                collectionProvided.value = {
+                  ...collectionProvided.value,
+                  products: [...collectionProvided.value.products, ...products]
+                }
               }
             }
           }
         }
+      } catch (err) {
+        console.warn(`Error: ${err}`)
+        isFetching = false
       }
     }
 
     /**
      Initialize provider with collection or collectionHandle props
      */
-    if (props.collection) {
+    if (props.collection && Object.keys(props.collection).length) {
       setCollection({ collection: props.collection })
     } else if (props.collectionHandle) {
       setCollection({ handle: props.collectionHandle })
