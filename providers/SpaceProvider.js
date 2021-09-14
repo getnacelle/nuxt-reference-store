@@ -1,6 +1,7 @@
 import { h, ref, provide } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'SpaceProvider',
   props: {
     space: {
       type: Object,

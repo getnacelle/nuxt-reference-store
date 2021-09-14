@@ -2,6 +2,7 @@ import Fuse from 'fuse.js'
 import { h, ref, provide, onMounted } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'SearchProvider',
   props: {
     searchData: {
       type: [Array, Function],
