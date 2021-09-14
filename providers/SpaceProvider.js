@@ -5,7 +5,7 @@ export default {
   props: {
     config: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     space: {
       type: Object,
@@ -23,7 +23,7 @@ export default {
     const metafields = ref(props.space.metafields || [])
     const linklists = ref(props.space.linklists || [])
 
-    const config = props.config || null
+    const config = props.config
     const sdk = useSdk({ config })
 
     /**
