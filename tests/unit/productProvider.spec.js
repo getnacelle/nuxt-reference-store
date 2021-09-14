@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
-import sdk from '@nacelle/client-js-sdk'
+import nacelleSdk from '@nacelle/client-js-sdk'
+import SpaceProvider from '~/providers/SpaceProvider'
 import ProductProvider from '~/providers/ProductProvider'
 import productData from '~/tests/mocks/product'
 
@@ -20,7 +21,10 @@ const InjectedComponent = () => {
 }
 
 const ProductProviderContainer = ({ props } = {}) => ({
-  render: (h) => h(ProductProvider, { props }, [h(InjectedComponent())])
+  render: (h) =>
+    h(SpaceProvider, {}, [
+      h(ProductProvider, { props }, [h(InjectedComponent())])
+    ])
 })
 
 describe('Product Provider', () => {
@@ -54,7 +58,7 @@ describe('Product Provider', () => {
   })
 
   it('initializes provider with productHandle prop', async () => {
-    sdk.mockImplementation(() => ({
+    nacelleSdk.mockImplementation(() => ({
       data: { product: () => Promise.resolve(productData) }
     }))
     const productProvider = await mount(
@@ -83,7 +87,7 @@ describe('Product Provider', () => {
   })
 
   it('it calls setProduct with a product handle', async () => {
-    sdk.mockImplementation(() => ({
+    nacelleSdk.mockImplementation(() => ({
       data: { product: () => Promise.resolve(productData) }
     }))
     const productProvider = mount(ProductProviderContainer())
