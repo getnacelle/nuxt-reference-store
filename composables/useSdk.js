@@ -1,11 +1,10 @@
-import NacelleClient from '@nacelle/client-js-sdk/dist/client-js-sdk.esm'
+import NacelleClient from '@nacelle/client-js-sdk'
 
-export default (config) => {
-  const sdk = new NacelleClient({
-    id: config.nacelleId || process.env.NACELLE_SPACE_ID,
-    token: config.nacelleToken || process.env.NACELLE_GRAPHQL_TOKEN,
-    nacelleEndpoint: config.nacelleEndpoint || process.env.NACELLE_ENDPOINT,
+export default function useSdk({ config }) {
+  return new NacelleClient({
+    id: config?.nacelleId,
+    token: config?.nacelleToken,
+    nacelleEndpoint: config?.nacelleEndpoint,
     useStatic: false
   })
-  return { sdk }
 }

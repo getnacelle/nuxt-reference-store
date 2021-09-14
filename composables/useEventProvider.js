@@ -1,6 +1,6 @@
 import { inject } from '@vue/composition-api'
 
-export default function useEventBus() {
+export default function useEventProvider() {
   const addEvent = inject('addEvent')
   const onEvent = inject('onEvent')
 

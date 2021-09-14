@@ -2,13 +2,13 @@
   <lazy-hydrate when-idle class="app nacelle">
     <space-provider :space="initialSpace" :locale="locale.locale">
       <search-provider>
-        <event-bus :event-handlers="eventHandlers">
+        <event-provider :event-handlers="eventHandlers">
           <global-header />
           <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
           <site-footer />
           <error-modal />
           <cart-watch />
-        </event-bus>
+        </event-provider>
       </search-provider>
     </space-provider>
   </lazy-hydrate>
@@ -19,13 +19,13 @@ import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
 import { ref, inject, provide } from '@nuxtjs/composition-api'
-import EventBus from '~/providers/EventBus.vue'
+import EventProvider from '~/providers/EventProvider.vue'
 import SpaceProvider from '~/providers/SpaceProvider.vue'
 import SearchProvider from '~/providers/SearchProvider.vue'
 import eventTypes from '~/utils/eventTypes'
 
 export default {
-  components: { EventBus, LazyHydrate, SpaceProvider, SearchProvider },
+  components: { EventProvider, LazyHydrate, SpaceProvider, SearchProvider },
   setup() {
     const initialSpace = inject('initialSpace')
     const getMetatag = inject('getMetatag')
