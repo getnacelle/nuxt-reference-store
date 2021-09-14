@@ -26,6 +26,10 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6558f1e0590c3a5cc23f4a14504e728f4344de7e
     const sdk = useSdk({ config })
 
     /**
@@ -143,17 +147,6 @@ export default {
     watch(productHandle, (value) => {
       setProduct({ handle: value })
     })
-
-    /**
-     Emit product on change
-     */
-    watch(
-      productProvided,
-      (value) => {
-        context.emit('input', value)
-      },
-      { immediate: true }
-    )
 
     /**
      Provide values
