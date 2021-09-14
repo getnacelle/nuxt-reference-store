@@ -17,7 +17,7 @@ const InjectedWithSpaceData = () => {
       'id',
       'metafields',
       'linklists',
-      'sdk',
+      'nacelleSdk',
       'getMetafieldsObj',
       'getMetafield',
       'getLocalizedLinks'

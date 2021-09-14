@@ -24,7 +24,7 @@ export default {
     const linklists = ref(props.space.linklists || [])
 
     const config = props.config
-    const sdk = useSdk({ config })
+    const nacelleSdk = useSdk({ config })
 
     /**
      * Finds menu by handle in linklists array
@@ -126,7 +126,7 @@ export default {
     provide('domain', domain)
     provide('metafields', metafields)
     provide('linklists', linklists)
-    provide('sdk', sdk)
+    provide('nacelleSdk', nacelleSdk)
     provide('getLocalizedLinks', getLocalizedLinks)
     provide('getMetatag', getMetatag)
     provide('getMetafieldsObj', getMetafieldsObj)

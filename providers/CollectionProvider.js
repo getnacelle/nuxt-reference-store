@@ -34,9 +34,9 @@ export default {
     /**
      Use sdk from injection or config prop
      */
-    let { sdk } = useSpaceProvider('sdk')
-    if (!sdk || Object.keys(config).length) {
-      sdk = useSdk({ config })
+    let { nacelleSdk } = useSpaceProvider()
+    if (!nacelleSdk || Object.keys(config).length) {
+      nacelleSdk = useSdk({ config })
     }
 
     /**
@@ -60,8 +60,8 @@ export default {
         else if (handle) {
           isFetching = true
           const data = await Promise.all([
-            sdk.data.collection({ handle }),
-            sdk.data.collectionPage({
+            nacelleSdk.data.collection({ handle }),
+            nacelleSdk.data.collectionPage({
               handle,
               paginate: true,
               itemsPerPage: productsPerFetch || 12
@@ -103,7 +103,7 @@ export default {
             if (totalProducts >= startIndex) {
               const handlesToFetch = productHandles.slice(startIndex, endIndex)
               if (handlesToFetch.length) {
-                const products = await sdk.data.products({
+                const products = await nacelleSdk.data.products({
                   handles: handlesToFetch
                 })
                 collectionProvided.value = {

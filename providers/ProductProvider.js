@@ -31,9 +31,9 @@ export default {
     /**
      Use sdk from injection or config prop
      */
-    let { sdk } = useSpaceProvider()
-    if (!sdk || Object.keys(config).length) {
-      sdk = useSdk({ config })
+    let { nacelleSdk } = useSpaceProvider()
+    if (!nacelleSdk || Object.keys(config).length) {
+      nacelleSdk = useSdk({ config })
     }
 
     /**
@@ -55,7 +55,7 @@ export default {
         if (product && Object.keys(product).length) productObject = product
         else if (handle) {
           isFetching = true
-          productObject = await sdk.data.product({ handle })
+          productObject = await nacelleSdk.data.product({ handle })
           isFetching = false
         }
         if (productObject && Object.keys(productObject).length) {

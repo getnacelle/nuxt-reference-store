@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import sdk from '@nacelle/client-js-sdk'
+import nacelleSdk from '@nacelle/client-js-sdk'
 import SpaceProvider from '~/providers/SpaceProvider'
 import CollectionProvider from '~/providers/CollectionProvider'
 import collectionData from '~/tests/mocks/collection'
@@ -51,7 +51,7 @@ describe('Collection Provider', () => {
   })
 
   it('initializes provider with collectionHandle prop', async () => {
-    sdk.mockImplementation(() => ({
+    nacelleSdk.mockImplementation(() => ({
       data: {
         collection: () => Promise.resolve({ ...collectionData, products: [] }),
         collectionPage: () => Promise.resolve(collectionData.products)
@@ -87,7 +87,7 @@ describe('Collection Provider', () => {
   })
 
   it('it calls setCollection with a collection handle', async () => {
-    sdk.mockImplementation(() => ({
+    nacelleSdk.mockImplementation(() => ({
       data: {
         collection: () => Promise.resolve({ ...collectionData, products: [] }),
         collectionPage: () => Promise.resolve(collectionData.products)
@@ -110,7 +110,7 @@ describe('Collection Provider', () => {
   })
 
   it('it calls loadProducts with empty parameters', async () => {
-    sdk.mockImplementation(() => ({
+    nacelleSdk.mockImplementation(() => ({
       data: {
         products: () => Promise.resolve(collectionData.products)
       }
