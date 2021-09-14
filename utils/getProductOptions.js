@@ -1,7 +1,7 @@
 /**
  * Util for getting product options
  * @param {Object} product
- * @returns {Object}
+ * @returns {Array}
  */
 
 export default ({ product }) => {

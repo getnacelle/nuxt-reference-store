@@ -2,7 +2,7 @@
  * Util for checking product option availability
  * @param {Object} product
  * @param {Object} option
- * @returns {Object}
+ * @returns {Boolean}
  */
 
 export default ({ product, option }) => {
