@@ -26,10 +26,6 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
-<<<<<<< HEAD
-=======
-
->>>>>>> 6558f1e0590c3a5cc23f4a14504e728f4344de7e
     const sdk = useSdk({ config })
 
     /**
