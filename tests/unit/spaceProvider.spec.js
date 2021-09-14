@@ -1,9 +1,6 @@
 import { mount } from '@vue/test-utils'
-import sdk from '@nacelle/client-js-sdk'
 import { linklists, mainMenu } from '../mocks/linklists'
 import SpaceProvider from '~/providers/SpaceProvider'
-
-require('dotenv').config()
 
 const config = {
   nacelleId: process.env.NACELLE_SPACE_ID,
