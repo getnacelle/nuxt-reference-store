@@ -1,4 +1,5 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -8,17 +9,6 @@ export default {
   props: {
     config: {
       type: Object,
-<<<<<<< HEAD
-      default: null
-    },
-    product: {
-      type: Object,
-      default: null
-    },
-    productHandle: {
-      type: String,
-      default: null
-=======
       default: () => ({})
     },
     product: {
@@ -28,7 +18,6 @@ export default {
     productHandle: {
       type: String,
       default: ''
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
     }
   },
   setup(props, context) {
@@ -37,13 +26,15 @@ export default {
     const productProvided = ref(null)
     let isFetching = ref(false)
 
-<<<<<<< HEAD
-    const config = props.config || null
-    const { sdk } = useSdk({ config })
-=======
     const config = props.config
-    const sdk = useSdk({ config })
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
+
+    /**
+     Use sdk from injection or config prop
+     */
+    let { sdk } = useSpaceProvider()
+    if (!sdk || Object.keys(config).length) {
+      sdk = useSdk({ config })
+    }
 
     /**
      * Set product provider should track
@@ -53,28 +44,6 @@ export default {
      * @returns {void}
      */
     const setProduct = async ({ product, handle }) => {
-<<<<<<< HEAD
-      if (!product && !handle) {
-        console.warn(
-          "[nacelle] ProductProvider's `setProduct` method requires a `product` or `handle` parameter."
-        )
-        return
-      }
-      let productObject = {}
-      if (product) productObject = product
-      else if (handle) {
-        isFetching = true
-        productObject = await sdk.data.product({ handle })
-        isFetching = false
-      }
-      if (productObject) {
-        productProvided.value = {
-          selectedOptions: null,
-          selectedVariant: null,
-          options: getProductOptions({ productObject }),
-          ...productObject
-        }
-=======
       try {
         if (!product && !handle) {
           console.warn(
@@ -100,7 +69,6 @@ export default {
       } catch (err) {
         console.warn(`Error: ${err}`)
         isFetching = false
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
       }
     }
 
@@ -110,18 +78,11 @@ export default {
      * @returns {Array}
      */
     const setSelectedOptions = ({ options }) => {
-<<<<<<< HEAD
-      if (!options) {
-        console.warn(
-          "[nacelle] ProductProvider's `setSelectedOptions` method requires a `options` parameter."
-        )
-=======
       if (Array.isArray(options) && !options.length) {
         console.warn(
           "[nacelle] ProductProvider's `setSelectedOptions` method requires a `options` parameter."
         )
         return
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
       }
       productProvided.value = {
         ...productProvided.value,
@@ -137,20 +98,13 @@ export default {
      * Set selected variant of product
      * @param {Object} variant Variant object selected
      * @param {String} id Variant id selected
-<<<<<<< HEAD
-     * @returns {Array}
-=======
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
      */
     const setSelectedVariant = ({ variant, id }) => {
       if (!variant && !id) {
         console.warn(
           "[nacelle] ProductProvider's `setSelectedVariant` method requires a `variant` or `id` parameter."
         )
-<<<<<<< HEAD
-=======
         return
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
       }
       let selectedVariant = null
       if (variant) selectedVariant = variant
@@ -171,11 +125,7 @@ export default {
     /**
      Initialize provider with product or productHandle props
      */
-<<<<<<< HEAD
-    if (props.product) {
-=======
     if (props.product && Object.keys(props.product).length) {
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
       setProduct({ product: props.product })
     } else if (props.productHandle) {
       setProduct({ handle: props.productHandle })

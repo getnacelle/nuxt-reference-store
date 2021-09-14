@@ -1,8 +1,5 @@
 import { h, ref, provide } from '@nuxtjs/composition-api'
-<<<<<<< HEAD:providers/SpaceProvider.js
 import useSdk from '~/composables/useSdk'
-=======
->>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215:providers/SpaceProvider.vue
 
 export default {
   props: {
@@ -27,7 +24,7 @@ export default {
     const linklists = ref(props.space.linklists || [])
 
     const config = props.config || null
-    const { sdk } = useSdk({ config })
+    const sdk = useSdk({ config })
 
     /**
      * Finds menu by handle in linklists array

@@ -1,4 +1,5 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 import useSdk from '~/composables/useSdk'
 
 export default {
@@ -29,7 +30,14 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
-    const sdk = useSdk({ config })
+
+    /**
+     USet sdk from injection or config prop
+     */
+    let { sdk } = useSpaceProvider('sdk')
+    if (!sdk || Object.keys(config).length) {
+      sdk = useSdk({ config })
+    }
 
     /**
      * Set collection provider should track

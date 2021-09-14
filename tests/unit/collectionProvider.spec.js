@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import sdk from '@nacelle/client-js-sdk'
+import SpaceProvider from '~/providers/SpaceProvider'
 import CollectionProvider from '~/providers/CollectionProvider'
 import collectionData from '~/tests/mocks/collection'
 
@@ -14,7 +15,10 @@ const InjectedComponent = () => {
 }
 
 const CollectionProviderContainer = ({ props } = {}) => ({
-  render: (h) => h(CollectionProvider, { props }, [h(InjectedComponent())])
+  render: (h) =>
+    h(SpaceProvider, {}, [
+      h(CollectionProvider, { props }, [h(InjectedComponent())])
+    ])
 })
 
 describe('Collection Provider', () => {

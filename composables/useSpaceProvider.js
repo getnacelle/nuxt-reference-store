@@ -19,6 +19,7 @@ export default function useSpaceProvider() {
     domain,
     metafields,
     linklists,
+    sdk,
     getLocalizedLinks,
     getMetatag,
     getMetafieldsObj,
