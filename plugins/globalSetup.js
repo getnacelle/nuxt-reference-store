@@ -9,7 +9,7 @@ import useSdk from '~/composables/useSdk'
 export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext()
-    const { sdk } = useSdk({ config: $config })
+    const sdk = useSdk({ config: $config })
     const initialSpace = useAsync(() => sdk.data.space())
 
     /**
