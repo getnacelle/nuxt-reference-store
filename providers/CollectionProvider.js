@@ -32,7 +32,7 @@ export default {
     const config = props.config
 
     /**
-     USet sdk from injection or config prop
+     Use sdk from injection or config prop
      */
     let { sdk } = useSpaceProvider('sdk')
     if (!sdk || Object.keys(config).length) {
