@@ -8,15 +8,15 @@ export default {
   props: {
     config: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     product: {
       type: Object,
-      default: null
+      default: () => ({})
     },
     productHandle: {
       type: String,
-      default: null
+      default: ''
     }
   },
   setup(props, context) {
@@ -25,8 +25,9 @@ export default {
     const productProvided = ref(null)
     let isFetching = ref(false)
 
-    const config = props.config || null
-    const { sdk } = useSdk({ config })
+    const config = props.config
+
+    const sdk = useSdk({ config })
 
     /**
      * Set product provider should track
@@ -36,26 +37,31 @@ export default {
      * @returns {void}
      */
     const setProduct = async ({ product, handle }) => {
-      if (!product && !handle) {
-        console.warn(
-          "[nacelle] ProductProvider's `setProduct` method requires a `product` or `handle` parameter."
-        )
-        return
-      }
-      let productObject = {}
-      if (product) productObject = product
-      else if (handle) {
-        isFetching = true
-        productObject = await sdk?.data?.product({ handle })
-        isFetching = false
-      }
-      if (productObject) {
-        productProvided.value = {
-          selectedOptions: null,
-          selectedVariant: null,
-          options: getProductOptions({ productObject }),
-          ...productObject
+      try {
+        if (!product && !handle) {
+          console.warn(
+            "[nacelle] ProductProvider's `setProduct` method requires a `product` or `handle` parameter."
+          )
+          return
         }
+        let productObject = {}
+        if (product && Object.keys(product).length) productObject = product
+        else if (handle) {
+          isFetching = true
+          productObject = await sdk.data.product({ handle })
+          isFetching = false
+        }
+        if (productObject && Object.keys(productObject).length) {
+          productProvided.value = {
+            selectedOptions: null,
+            selectedVariant: null,
+            options: getProductOptions({ productObject }),
+            ...productObject
+          }
+        }
+      } catch (err) {
+        console.warn(`Error: ${err}`)
+        isFetching = false
       }
     }
 
@@ -65,10 +71,11 @@ export default {
      * @returns {Array}
      */
     const setSelectedOptions = ({ options }) => {
-      if (!options) {
+      if (Array.isArray(options) && !options.length) {
         console.warn(
           "[nacelle] ProductProvider's `setSelectedOptions` method requires a `options` parameter."
         )
+        return
       }
       productProvided.value = {
         ...productProvided.value,
@@ -84,13 +91,13 @@ export default {
      * Set selected variant of product
      * @param {Object} variant Variant object selected
      * @param {String} id Variant id selected
-     * @returns {Array}
      */
     const setSelectedVariant = ({ variant, id }) => {
       if (!variant && !id) {
         console.warn(
           "[nacelle] ProductProvider's `setSelectedVariant` method requires a `variant` or `id` parameter."
         )
+        return
       }
       let selectedVariant = null
       if (variant) selectedVariant = variant
@@ -111,11 +118,22 @@ export default {
     /**
      Initialize provider with product or productHandle props
      */
-    if (props.product) {
+    if (props.product && Object.keys(props.product).length) {
       setProduct({ product: props.product })
     } else if (props.productHandle) {
       setProduct({ handle: props.productHandle })
     }
+
+    /**
+     Emit product to parent for v-model use
+     */
+    watch(
+      productProvided,
+      (value) => {
+        context.emit('input', value)
+      },
+      { immediate: true }
+    )
 
     /**
      Update provider with product or productHandle props
