@@ -1,5 +1,6 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
+<<<<<<< HEAD
     <space-provider
       :space="initialSpace"
       :locale="locale.locale"
@@ -12,6 +13,18 @@
         <error-modal />
         <cart-watch />
       </event-provider>
+=======
+    <space-provider :space="initialSpace" :locale="locale.locale">
+      <search-provider>
+        <event-provider :event-handlers="eventHandlers">
+          <global-header />
+          <nuxt keep-alive :keep-alive-props="{ max: 2 }" />
+          <site-footer />
+          <error-modal />
+          <cart-watch />
+        </event-provider>
+      </search-provider>
+>>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
     </space-provider>
   </lazy-hydrate>
 </template>
@@ -20,6 +33,7 @@
 import { mapMutations, mapActions, mapState } from 'vuex'
 import queryString from 'query-string'
 import LazyHydrate from 'vue-lazy-hydration'
+<<<<<<< HEAD
 import { ref, inject, provide } from '@vue/composition-api'
 import EventProvider from '~/providers/EventProvider'
 import SpaceProvider from '~/providers/SpaceProvider'
@@ -27,6 +41,16 @@ import eventTypes from '~/utils/eventTypes'
 
 export default {
   components: { EventProvider, LazyHydrate, SpaceProvider },
+=======
+import { ref, inject, provide } from '@nuxtjs/composition-api'
+import EventProvider from '~/providers/EventProvider'
+import SpaceProvider from '~/providers/SpaceProvider'
+import SearchProvider from '~/providers/SearchProvider'
+import eventTypes from '~/utils/eventTypes'
+
+export default {
+  components: { EventProvider, LazyHydrate, SpaceProvider, SearchProvider },
+>>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215
   setup() {
     const initialSpace = inject('initialSpace')
     const getMetatag = inject('getMetatag')

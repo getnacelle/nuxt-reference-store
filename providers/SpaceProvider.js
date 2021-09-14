@@ -1,5 +1,8 @@
 import { h, ref, provide } from '@nuxtjs/composition-api'
+<<<<<<< HEAD:providers/SpaceProvider.js
 import useSdk from '~/composables/useSdk'
+=======
+>>>>>>> 3717ac2c0e60caf5a31b4417954a7aa09bc56215:providers/SpaceProvider.vue
 
 export default {
   props: {
