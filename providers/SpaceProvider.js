@@ -1,9 +1,4 @@
-<template>
-  <div><slot /></div>
-</template>
-
-<script>
-import { ref, provide } from '@nuxtjs/composition-api'
+import { h, ref, provide } from '@nuxtjs/composition-api'
 
 export default {
   props: {
@@ -16,7 +11,7 @@ export default {
       default: ''
     }
   },
-  setup(props) {
+  setup(props, context) {
     const id = ref(props.space.id || '')
     const name = ref(props.space.name || '')
     const domain = ref(props.space.domain || '')
@@ -128,6 +123,7 @@ export default {
     provide('getMetafieldsObj', getMetafieldsObj)
     provide('getMetafieldsByNamespace', getMetafieldsByNamespace)
     provide('getMetafield', getMetafield)
+
+    return () => h('div', context.slots.default())
   }
 }
-</script>
