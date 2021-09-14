@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { set, get } from 'idb-keyval'
 import CartProvider from '~/providers/CartProvider'
 
 const product = {
@@ -34,7 +35,14 @@ const CartProviderContainer = ({ props = {} } = {}) => ({
   render: (h) => h(CartProvider, { props }, [h(InjectedComponent())])
 })
 
+jest.mock('idb-keyval')
+
 describe('Cart Provider', () => {
+  beforeEach(() => {
+    set.mockClear()
+    get.mockClear()
+  })
+
   it('provides `cart`, `addItem`, `removeItem`, `updateItem`, `incrementItem`, `decrementItem`, `clearCart` to children', () => {
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
@@ -50,6 +58,16 @@ describe('Cart Provider', () => {
     expect(typeof injectedComponent.vm.clearCart).toEqual('function')
   })
 
+  it('gets cached cart from IndexedDB when mounted', () => {
+    const cartProvider = mount(CartProviderContainer())
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(get).toHaveBeenCalledTimes(1)
+    expect(get).toHaveBeenCalledWith('cart')
+  })
+
   it('adds item to cart with `addItem`', () => {
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
@@ -60,6 +78,27 @@ describe('Cart Provider', () => {
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
     expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(set).toHaveBeenCalledTimes(1)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+  })
+
+  it('adds item to cart with a custom cache key with `addItem`', () => {
+    const cartProvider = mount(
+      CartProviderContainer({ props: { cacheKey: 'custom-cart' } })
+    )
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    injectedComponent.vm.addItem({ ...product })
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(set).toHaveBeenCalledTimes(1)
+    expect(set).toHaveBeenCalledWith(
+      'custom-cart',
+      injectedComponent.vm.cart.value
+    )
   })
 
   it('increases quantity with `addItem` if item is already in cart', () => {
@@ -78,6 +117,9 @@ describe('Cart Provider', () => {
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
     expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
+
+    expect(set).toHaveBeenCalledTimes(2)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
   })
 
   it('removes item from cart with `removeItem`', () => {
@@ -95,6 +137,9 @@ describe('Cart Provider', () => {
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(0)
+
+    expect(set).toHaveBeenCalledTimes(2)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
   })
 
   it('updates item in cart with `updateItem`', () => {
@@ -103,9 +148,13 @@ describe('Cart Provider', () => {
       name: 'InjectedComponent'
     })
     injectedComponent.vm.addItem({ ...product })
+    injectedComponent.vm.addItem({
+      ...product,
+      variant: { ...product.variant, id: 12345 }
+    })
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value.length).toBe(2)
 
     const cart = injectedComponent.vm.cart.value
     const updatedProduct = {
@@ -116,8 +165,12 @@ describe('Cart Provider', () => {
     injectedComponent.vm.updateItem(updatedProduct)
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value.length).toBe(2)
     expect(injectedComponent.vm.cart.value[0]).toMatchObject(updatedProduct)
+    expect(injectedComponent.vm.cart.value[1].id).toContain(12345)
+
+    expect(set).toHaveBeenCalledTimes(3)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
   })
 
   it('increases item quantity by 1 with `incrementItem`', () => {
@@ -137,9 +190,12 @@ describe('Cart Provider', () => {
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
     expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
+
+    expect(set).toHaveBeenCalledTimes(2)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
   })
 
-  it('decreases item quantity by 1 or removes item at 0 quantity with `decrementItem`', () => {
+  it('decreases item quantity by 1 with `decrementItem`', () => {
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
@@ -156,11 +212,27 @@ describe('Cart Provider', () => {
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(1)
     expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+  })
 
+  it('removes item at 0 quantity with `decrementItem`', () => {
+    const cartProvider = mount(CartProviderContainer())
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    injectedComponent.vm.addItem({ ...product, quantity: 1 })
+
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+
+    const cart = injectedComponent.vm.cart.value
     injectedComponent.vm.decrementItem(cart[0].id)
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(0)
+
+    expect(set).toHaveBeenCalledTimes(2)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
   })
 
   it('clears the cart with `clearCart`', () => {
@@ -184,5 +256,36 @@ describe('Cart Provider', () => {
 
     expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
     expect(injectedComponent.vm.cart.value.length).toBe(0)
+
+    expect(set).toHaveBeenCalledTimes(3)
+    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+  })
+
+  it('does not `get` from IndexedDB when mounted if `persistence` is false', () => {
+    const cartProvider = mount(
+      CartProviderContainer({ props: { persistence: false } })
+    )
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(0)
+    expect(get).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not `set` to IndexedDB if `persistence` is false', () => {
+    const cartProvider = mount(
+      CartProviderContainer({ props: { persistence: false } })
+    )
+    const injectedComponent = cartProvider.findComponent({
+      name: 'InjectedComponent'
+    })
+    injectedComponent.vm.addItem({
+      ...product
+    })
+    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(set).toHaveBeenCalledTimes(0)
   })
 })

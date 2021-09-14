@@ -12,6 +12,10 @@ export default {
     cacheKey: {
       type: String,
       default: 'cart'
+    },
+    persistence: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props) {
@@ -22,8 +26,12 @@ export default {
      * @returns {void}
      */
     const initCart = async () => {
-      const cachedCart = await get(props.cacheKey)
-      cart.value = cachedCart || []
+      if (props.persistence) {
+        const cachedCart = await get(props.cacheKey)
+        cart.value = cachedCart || []
+      } else {
+        cart.value = []
+      }
     }
 
     /**
@@ -31,7 +39,8 @@ export default {
      * @returns {void}
      */
     const cacheCart = () => {
-      set(props.cacheKey, cart)
+      if (!props.persistence) return
+      set(props.cacheKey, cart.value)
     }
 
     /**
