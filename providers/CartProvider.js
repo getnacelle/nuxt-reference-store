@@ -1,13 +1,9 @@
-<template>
-  <div><slot /></div>
-</template>
-
-<script>
 import { get, set } from 'idb-keyval'
-import { ref, provide, readonly, onMounted } from '@nuxtjs/composition-api'
+import { h, ref, provide, readonly, onMounted } from '@nuxtjs/composition-api'
 import { v4 as uuid } from 'uuid'
 
 export default {
+  name: 'CartProvider',
   props: {
     cacheKey: {
       type: String,
@@ -18,7 +14,7 @@ export default {
       default: true
     }
   },
-  setup(props) {
+  setup(props, context) {
     const cart = ref([])
 
     /**
@@ -147,6 +143,7 @@ export default {
     provide('incrementItem', incrementItem)
     provide('decrementItem', decrementItem)
     provide('clearCart', clearCart)
+
+    return () => h('div', context.slots.default())
   }
 }
-</script>
