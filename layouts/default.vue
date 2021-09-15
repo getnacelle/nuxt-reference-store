@@ -1,7 +1,7 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
     <space-provider
-      :config="$config"
+      :config="$config.nacelle"
       :space="initialSpace"
       :locale="locale.locale"
     >
