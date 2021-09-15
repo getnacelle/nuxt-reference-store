@@ -92,6 +92,6 @@ export default {
     provide('addEvent', addEvent)
     provide('onEvent', onEvent)
 
-    return () => h('div', context.slots.default())
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }
