@@ -130,7 +130,7 @@ export default {
           return results
         }
       } else {
-        // Fallback in case  missing Worker
+        // Fallback in case of missing Worker
         const optionParam = options || searchOptions.value
         results.value = new Fuse(searchData.value, optionParam)
           .search(String(query))

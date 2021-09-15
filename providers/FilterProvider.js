@@ -159,15 +159,61 @@ export default {
      Uses `sortBy` & `activePriceRange` to sort data
      */
     const computeSortedData = () => {
-      const blobURL = fnToBlobUrl(sortWorkerBlob)
-      sortWorker.value = sortWorker.value || new Worker(blobURL)
-      sortWorker.value.postMessage({
-        filteredData: filteredData.value,
-        activePriceRange: props.activePriceRange,
-        sortBy: sortBy.value
-      })
-      sortWorker.value.onmessage = function (e) {
-        filteredData.value = e.data
+      if (typeof Worker !== 'undefined') {
+        const blobURL = fnToBlobUrl(sortWorkerBlob)
+        sortWorker.value = sortWorker.value || new Worker(blobURL)
+        sortWorker.value.postMessage({
+          filteredData: filteredData.value,
+          activePriceRange: props.activePriceRange,
+          sortBy: sortBy.value
+        })
+        sortWorker.value.onmessage = function (e) {
+          filteredData.value = e.data
+        }
+      } else {
+        // Fallback in case of missing Worker
+        filteredData.value = filteredData.value.filter(({ minPrice }) => {
+          if (activePriceRange.value) {
+            const min = activePriceRange.value.range[0]
+            const max = activePriceRange.value.range[1]
+            if (min === 0) {
+              return minPrice < max
+            } else if (max === 0) {
+              return minPrice > min
+            } else {
+              return minPrice > min && parseFloat(minPrice) < max
+            }
+          } else {
+            return true
+          }
+        })
+        switch (sortBy.value) {
+          case 'hi-low':
+            filteredData.value.sort((a, b) => {
+              if (a.priceRange.min < b.priceRange.min) {
+                return 1
+              }
+              if (a.priceRange.min > b.priceRange.min) {
+                return -1
+              }
+
+              return 0
+            })
+
+            break
+          case 'low-hi':
+            filteredData.value.sort((a, b) => {
+              if (a.priceRange.min < b.priceRange.min) {
+                return -1
+              }
+              if (a.priceRange.min > b.priceRange.min) {
+                return 1
+              }
+
+              return 0
+            })
+            break
+        }
       }
     }
 
@@ -175,15 +221,44 @@ export default {
      Uses `activeFilters` to filter data
      */
     const computeFilteredData = () => {
-      const blobURL = fnToBlobUrl(filterWorkerBlob)
-      filterWorker.value = filterWorker.value || new Worker(blobURL)
-      filterWorker.value.postMessage({
-        activeFilters: props.activeFilters,
-        inputData: props.inputData
-      })
-      filterWorker.value.onmessage = function (e) {
-        filteredData.value = e.data
-        computeSortedData()
+      if (typeof Worker !== 'undefined') {
+        const blobURL = fnToBlobUrl(filterWorkerBlob)
+        filterWorker.value = filterWorker.value || new Worker(blobURL)
+        filterWorker.value.postMessage({
+          activeFilters: props.activeFilters,
+          inputData: props.inputData
+        })
+        filterWorker.value.onmessage = function (e) {
+          filteredData.value = e.data
+          computeSortedData()
+        }
+      } else if (props.inputData && activeFilters.value) {
+        // Fallback in case of missing Worker
+        filteredData.value = props.inputData.filter((item) => {
+          const filterChecks = activeFilters.value.map((filter) => {
+            if (
+              filter.values.some((filterCheck) => {
+                const value = item.facets.find((facet) => {
+                  return facet.value === filterCheck
+                })
+                if (value) {
+                  return true
+                }
+                return false
+              })
+            ) {
+              return true
+            }
+            return false
+          })
+
+          const itemShouldPass = filterChecks.every((filterCheck) => {
+            return filterCheck === true
+          })
+          return itemShouldPass
+        })
+      } else {
+        filteredData.value = props.inputData
       }
     }
 
@@ -252,7 +327,18 @@ export default {
     /**
      lifecycle hooks
      */
-    onMounted(() => setupFilters)
+    onMounted(() => {
+      setupFilters()
+      if (activeFilters.value && activeFilters.value.length) {
+        computeFilteredData()
+      }
+      if (
+        activePriceRange.value ||
+        (sortBy.value && sortBy.value !== 'Sort By')
+      ) {
+        computeSortedData()
+      }
+    })
     onUnmounted(() => {
       if (filterWorker && filterWorker.value) {
         filterWorker.value.terminate()
@@ -300,9 +386,11 @@ export default {
      Provide values
     */
     provide('filters', filters)
+    provide('setupFilters', setupFilters)
+    provide('activeFilters', activeFilters)
+    provide('filteredData', filteredData)
     provide('computeSortedData', computeSortedData)
     provide('computeFilteredData', computeFilteredData)
-    provide('setupFilters', setupFilters)
     provide('clearFilters', clearFilters)
 
     /**
