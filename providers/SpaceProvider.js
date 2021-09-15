@@ -133,6 +133,6 @@ export default {
     provide('getMetafieldsByNamespace', getMetafieldsByNamespace)
     provide('getMetafield', getMetafield)
 
-    return () => h('div', context.slots.default())
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }
