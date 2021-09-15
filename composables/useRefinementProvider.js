@@ -1,6 +1,6 @@
 import { inject } from '@vue/composition-api'
 
-export default function useSearchProvider() {
+export default function useRefinementProvider() {
   const filters = inject('filters')
   const setupFilters = inject('setupFilters')
   const activeFilters = inject('activeFilters')

@@ -113,7 +113,7 @@ export default {
         })
 
         switch (sortBy) {
-          case 'hi-low':
+          case 'price-desc':
             postMessage(
               output.sort((a, b) => {
                 if (a.priceRange.min < b.priceRange.min) {
@@ -127,7 +127,7 @@ export default {
               })
             )
             break
-          case 'low-hi':
+          case 'price-asc':
             postMessage(
               output.sort((a, b) => {
                 if (a.priceRange.min < b.priceRange.min) {
