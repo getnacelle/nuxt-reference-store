@@ -144,6 +144,6 @@ export default {
     provide('decrementItem', decrementItem)
     provide('clearCart', clearCart)
 
-    return () => h('div', context.slots.default())
+    return () => h('div', context.slots.default && context.slots.default())
   }
 }
