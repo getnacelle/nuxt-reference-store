@@ -1,37 +1,21 @@
-import { mount } from '@vue/test-utils'
-import SearchProvider from '~/providers/SearchProvider'
+import Fuse from 'fuse.js'
 
-const InjectedWithSearches = () => {
-  return {
-    inject: ['search', 'setSearchOptions', 'results'],
-    name: 'InjectedWithSearches',
-    template: `<div></div>`
-  }
-}
-
-const SearchProviderContainer = ({ props }) => ({
-  render: (h) => h(SearchProvider, { props }, [h(InjectedWithSearches())])
-})
-
-describe('Search Provider', () => {
-  const searchProvider = mount(
-    SearchProviderContainer({
-      props: {
-        searchData: [
-          { id: 1, title: 'one' },
-          { id: 2, title: 'two' },
-          { id: 3, title: 'onetwo' }
-        ]
-      }
-    })
-  )
-  const injectedSearchComponent = searchProvider.findComponent({
-    name: 'InjectedWithSearches'
-  })
-
+describe('Simulate & test what the search provider does', () => {
   it('searches through searchData', () => {
-    global.URL.createObjectURL = jest.fn()
-    expect(injectedSearchComponent.vm.search({ query: 'one' })).toEqual([
+    const searchData = [
+      { id: 1, title: 'one' },
+      { id: 2, title: 'two' },
+      { id: 3, title: 'onetwo' }
+    ]
+    const searchOptions = {
+      relevanceThreshold: 0.5,
+      keys: ['title']
+    }
+    const results = new Fuse(searchData, searchOptions)
+      .search(String('one'))
+      .filter((result) => typeof result.item !== 'undefined')
+      .map((result) => result.item)
+    expect(results).toEqual([
       { id: 1, title: 'one' },
       { id: 3, title: 'onetwo' }
     ])

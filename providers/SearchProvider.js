@@ -1,7 +1,7 @@
-import Fuse from 'fuse.js'
 import { h, ref, provide, onMounted } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'SearchProvider',
   props: {
     searchData: {
       type: [Array, Function],
@@ -112,30 +112,20 @@ export default {
         console.warn('Search Data is loading')
         return { message: 'Search Data is loading' }
       }
-      if (typeof Worker !== 'undefined') {
-        if (!searchWorker.value) {
-          const blobURL = fnToBlobUrl(workerSearch)
-          searchWorker.value = new Worker(blobURL)
-          searchWorker.value.postMessage({
-            searchData: searchData.value
-          })
-        }
+      if (!searchWorker.value) {
+        const blobURL = fnToBlobUrl(workerSearch)
+        searchWorker.value = new Worker(blobURL)
         searchWorker.value.postMessage({
-          options: options || searchOptions.value,
-          value: query
+          searchData: searchData.value
         })
-        searchWorker.value.onmessage = (e) => {
-          results.value = e.data
-          return results
-        }
-      } else {
-        // Fallback in case  missing Worker
-        const optionParam = options || searchOptions.value
-        results.value = new Fuse(searchData.value, optionParam)
-          .search(String(query))
-          .filter((result) => typeof result.item !== 'undefined')
-          .map((result) => result.item)
-        return results.value
+      }
+      searchWorker.value.postMessage({
+        options: options || searchOptions.value,
+        value: query
+      })
+      searchWorker.value.onmessage = (e) => {
+        results.value = e.data
+        return results
       }
     }
 
