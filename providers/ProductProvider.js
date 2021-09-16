@@ -1,8 +1,8 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
 import useSpaceProvider from '~/composables/useSpaceProvider'
 import useSdk from '~/composables/useSdk'
-import getProductOptions from '~/utils/getProductOptions'
-import getSelectedVariant from '~/utils/getSelectedVariant'
+import productOptions from '~/utils/productOptions'
+import productSelectedVariant from '~/utils/productSelectedVariant'
 
 export default {
   name: 'ProductProvider',
@@ -62,7 +62,7 @@ export default {
           productProvided.value = {
             selectedOptions: null,
             selectedVariant: null,
-            options: getProductOptions({ productObject }),
+            options: productOptions({ productObject }),
             ...productObject
           }
         }
@@ -87,7 +87,7 @@ export default {
       productProvided.value = {
         ...productProvided.value,
         selectedOptions: options,
-        selectedVariant: getSelectedVariant({
+        selectedVariant: productSelectedVariant({
           product: productProvided.value,
           options
         })

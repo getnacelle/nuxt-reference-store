@@ -24,7 +24,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import getPriceForCurrency from '~/utils/getPriceForCurrency'
+import productPriceForCurrency from '~/utils/productPriceForCurrency'
 
 export default {
   props: {
@@ -48,7 +48,7 @@ export default {
     },
     displayPrice() {
       if (this.selectedVariant) {
-        return getPriceForCurrency({
+        return productPriceForCurrency({
           product: this.product,
           fallbackPrice: this.selectedVariant.price,
           locale: this.locale
