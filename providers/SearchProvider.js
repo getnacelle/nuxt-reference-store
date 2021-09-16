@@ -1,7 +1,7 @@
-import Fuse from 'fuse.js'
 import { h, ref, provide, onMounted } from '@nuxtjs/composition-api'
 
 export default {
+  name: 'SearchProvider',
   props: {
     searchData: {
       type: [Array, Function],
@@ -34,22 +34,18 @@ export default {
     }
 
     function workerSearch() {
+      /* eslint-disable no-undef */
       self.importScripts(
         'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js'
       )
-      let workerSearchData
       onmessage = function receiver(e) {
         const { searchData, options, value } = e.data
-        if (searchData) {
-          workerSearchData = searchData
-        } else if (workerSearchData) {
-          const results = new Fuse(workerSearchData, options)
-            .search(String(value))
-            .filter((result) => typeof result.item !== 'undefined')
-            .map((result) => result.item)
+        const results = new Fuse(searchData, options)
+          .search(String(value))
+          .filter((result) => typeof result.item !== 'undefined')
+          .map((result) => result.item)
 
-          postMessage(results)
-        }
+        postMessage(results)
       }
     }
 
@@ -112,30 +108,18 @@ export default {
         console.warn('Search Data is loading')
         return { message: 'Search Data is loading' }
       }
-      if (typeof Worker !== 'undefined') {
-        if (!searchWorker.value) {
-          const blobURL = fnToBlobUrl(workerSearch)
-          searchWorker.value = new Worker(blobURL)
-          searchWorker.value.postMessage({
-            searchData: searchData.value
-          })
-        }
-        searchWorker.value.postMessage({
-          options: options || searchOptions.value,
-          value: query
-        })
-        searchWorker.value.onmessage = (e) => {
-          results.value = e.data
-          return results
-        }
-      } else {
-        // Fallback in case  missing Worker
-        const optionParam = options || searchOptions.value
-        results.value = new Fuse(searchData.value, optionParam)
-          .search(String(query))
-          .filter((result) => typeof result.item !== 'undefined')
-          .map((result) => result.item)
-        return results.value
+      if (!searchWorker.value) {
+        const blobURL = fnToBlobUrl(workerSearch)
+        searchWorker.value = new Worker(blobURL)
+      }
+      searchWorker.value.postMessage({
+        searchData: searchData.value,
+        options: options || searchOptions.value,
+        value: query
+      })
+      searchWorker.value.onmessage = (e) => {
+        results.value = e.data
+        return results
       }
     }
 
