@@ -38,19 +38,14 @@ export default {
       self.importScripts(
         'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js'
       )
-      let workerSearchData
       onmessage = function receiver(e) {
         const { searchData, options, value } = e.data
-        if (searchData) {
-          workerSearchData = searchData
-        } else if (workerSearchData) {
-          const results = new Fuse(workerSearchData, options)
-            .search(String(value))
-            .filter((result) => typeof result.item !== 'undefined')
-            .map((result) => result.item)
+        const results = new Fuse(searchData, options)
+          .search(String(value))
+          .filter((result) => typeof result.item !== 'undefined')
+          .map((result) => result.item)
 
-          postMessage(results)
-        }
+        postMessage(results)
       }
     }
 
@@ -116,11 +111,9 @@ export default {
       if (!searchWorker.value) {
         const blobURL = fnToBlobUrl(workerSearch)
         searchWorker.value = new Worker(blobURL)
-        searchWorker.value.postMessage({
-          searchData: searchData.value
-        })
       }
       searchWorker.value.postMessage({
+        searchData: searchData.value,
         options: options || searchOptions.value,
         value: query
       })
