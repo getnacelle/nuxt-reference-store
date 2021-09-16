@@ -58,14 +58,24 @@ describe('Cart Provider', () => {
     expect(typeof injectedComponent.vm.clearCart).toEqual('function')
   })
 
-  it('gets cached cart from IndexedDB when mounted', () => {
+  it('gets cached cart from IndexedDB when mounted', (done) => {
+    get.mockResolvedValue([{ ...product }])
     const cartProvider = mount(CartProviderContainer())
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
-    expect(get).toHaveBeenCalledTimes(1)
-    expect(get).toHaveBeenCalledWith('cart')
+    setTimeout(() => {
+      try {
+        expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+        expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+        expect(injectedComponent.vm.cart.lineItems[0]).toMatchObject(product)
+        expect(get).toHaveBeenCalledTimes(1)
+        expect(get).toHaveBeenCalledWith('cart')
+        done()
+      } catch (error) {
+        done(error)
+      }
+    }, 10)
   })
 
   it('adds item to cart with `addItem`', () => {
