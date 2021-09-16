@@ -34,6 +34,7 @@ export default {
     }
 
     function workerSearch() {
+      /* eslint-disable no-undef */
       self.importScripts(
         'https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js'
       )
