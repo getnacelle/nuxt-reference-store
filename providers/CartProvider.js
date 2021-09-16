@@ -1,5 +1,11 @@
 import { get, set } from 'idb-keyval'
-import { h, ref, provide, readonly, onMounted } from '@nuxtjs/composition-api'
+import {
+  h,
+  reactive,
+  provide,
+  readonly,
+  onMounted
+} from '@nuxtjs/composition-api'
 import { v4 as uuid } from 'uuid'
 
 export default {
@@ -15,7 +21,9 @@ export default {
     }
   },
   setup(props, context) {
-    const cart = ref([])
+    const cart = reactive({
+      lineItems: []
+    })
 
     /**
      * Builds cart from cache, if available.
@@ -24,9 +32,9 @@ export default {
     const initCart = async () => {
       if (props.persistence) {
         const cachedCart = await get(props.cacheKey)
-        cart.value = cachedCart || []
+        cart.lineItems = cachedCart || []
       } else {
-        cart.value = []
+        cart.lineItems = []
       }
     }
 
@@ -36,7 +44,7 @@ export default {
      */
     const cacheCart = () => {
       if (!props.persistence) return
-      set(props.cacheKey, cart.value)
+      set(props.cacheKey, cart.lineItems)
     }
 
     /**
@@ -45,7 +53,7 @@ export default {
      * @returns {void}
      */
     const addItem = (payload) => {
-      const index = cart.value.findIndex((item) => {
+      const index = cart.lineItems.findIndex((item) => {
         if (item.variant.id === payload.variant.id) {
           return (
             JSON.stringify(payload.metafields) ===
@@ -57,9 +65,9 @@ export default {
 
       if (index === -1) {
         payload.id = `${payload.variant.id}::${uuid()}`
-        cart.value.push(payload)
+        cart.lineItems.push(payload)
       } else {
-        cart.value[index].quantity += payload.quantity
+        cart.lineItems[index].quantity += payload.quantity
       }
 
       cacheCart()
@@ -71,8 +79,8 @@ export default {
      * @returns {void}
      */
     const removeItem = (payload) => {
-      const index = cart.value.findIndex((item) => item.id === payload)
-      cart.value.splice(index, 1)
+      const index = cart.lineItems.findIndex((item) => item.id === payload)
+      cart.lineItems.splice(index, 1)
       cacheCart()
     }
 
@@ -83,12 +91,12 @@ export default {
      */
     const updateItem = (payload) => {
       // find matching item in cart
-      const index = cart.value.findIndex((item) => item.id === payload.id)
+      const index = cart.lineItems.findIndex((item) => item.id === payload.id)
       // loop through keys in the payload to update
-      Object.keys(cart.value[index]).forEach((key) => {
+      Object.keys(cart.lineItems[index]).forEach((key) => {
         const value = payload[key]
-        if (key !== 'id' && cart.value[index][key] !== value) {
-          cart.value[index][key] = value
+        if (key !== 'id' && cart.lineItems[index][key] !== value) {
+          cart.lineItems[index][key] = value
         }
       })
       cacheCart()
@@ -100,9 +108,9 @@ export default {
      * @returns {void}
      */
     const incrementItem = (payload) => {
-      const index = cart.value.findIndex((item) => item.id === payload)
+      const index = cart.lineItems.findIndex((item) => item.id === payload)
       if (index !== -1) {
-        cart.value[index].quantity++
+        cart.lineItems[index].quantity++
       }
       cacheCart()
     }
@@ -113,11 +121,11 @@ export default {
      * @returns {void}
      */
     const decrementItem = (payload) => {
-      const index = cart.value.findIndex((item) => item.id === payload)
-      if (index !== -1 && cart.value[index].quantity >= 1) {
-        cart.value[index].quantity--
-        if (cart.value[index].quantity === 0) {
-          cart.value.splice(index, 1)
+      const index = cart.lineItems.findIndex((item) => item.id === payload)
+      if (index !== -1 && cart.lineItems[index].quantity >= 1) {
+        cart.lineItems[index].quantity--
+        if (cart.lineItems[index].quantity === 0) {
+          cart.lineItems.splice(index, 1)
         }
       }
       cacheCart()
@@ -128,7 +136,7 @@ export default {
      * @returns {void}
      */
     const clearCart = () => {
-      cart.value = []
+      cart.lineItems = []
       cacheCart()
     }
 

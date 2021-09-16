@@ -49,7 +49,7 @@ describe('Cart Provider', () => {
       name: 'InjectedComponent'
     })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
     expect(typeof injectedComponent.vm.addItem).toEqual('function')
     expect(typeof injectedComponent.vm.removeItem).toEqual('function')
     expect(typeof injectedComponent.vm.updateItem).toEqual('function')
@@ -63,7 +63,7 @@ describe('Cart Provider', () => {
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
     expect(get).toHaveBeenCalledTimes(1)
     expect(get).toHaveBeenCalledWith('cart')
   })
@@ -75,11 +75,16 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].id).toContain(
+      product.variant.id
+    )
     expect(set).toHaveBeenCalledTimes(1)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('adds item to cart with a custom cache key with `addItem`', () => {
@@ -91,13 +96,15 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].id).toContain(
+      product.variant.id
+    )
     expect(set).toHaveBeenCalledTimes(1)
     expect(set).toHaveBeenCalledWith(
       'custom-cart',
-      injectedComponent.vm.cart.value
+      injectedComponent.vm.cart.lineItems
     )
   })
 
@@ -108,18 +115,21 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(1)
 
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(2)
 
     expect(set).toHaveBeenCalledTimes(2)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('removes item from cart with `removeItem`', () => {
@@ -129,17 +139,20 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
 
-    const cart = injectedComponent.vm.cart.value
+    const cart = injectedComponent.vm.cart.lineItems
     injectedComponent.vm.removeItem(cart[0].id)
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(0)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(0)
 
     expect(set).toHaveBeenCalledTimes(2)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('updates item in cart with `updateItem`', () => {
@@ -153,10 +166,10 @@ describe('Cart Provider', () => {
       variant: { ...product.variant, id: 12345 }
     })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(2)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(2)
 
-    const cart = injectedComponent.vm.cart.value
+    const cart = injectedComponent.vm.cart.lineItems
     const updatedProduct = {
       ...product,
       id: cart[0].id,
@@ -164,13 +177,16 @@ describe('Cart Provider', () => {
     }
     injectedComponent.vm.updateItem(updatedProduct)
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(2)
-    expect(injectedComponent.vm.cart.value[0]).toMatchObject(updatedProduct)
-    expect(injectedComponent.vm.cart.value[1].id).toContain(12345)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(2)
+    expect(injectedComponent.vm.cart.lineItems[0]).toMatchObject(updatedProduct)
+    expect(injectedComponent.vm.cart.lineItems[1].id).toContain(12345)
 
     expect(set).toHaveBeenCalledTimes(3)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('increases item quantity by 1 with `incrementItem`', () => {
@@ -180,19 +196,22 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(1)
 
-    const cart = injectedComponent.vm.cart.value
+    const cart = injectedComponent.vm.cart.lineItems
     injectedComponent.vm.incrementItem(cart[0].id)
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(2)
 
     expect(set).toHaveBeenCalledTimes(2)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('decreases item quantity by 1 with `decrementItem`', () => {
@@ -202,16 +221,16 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product, quantity: 2 })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(2)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(2)
 
-    const cart = injectedComponent.vm.cart.value
+    const cart = injectedComponent.vm.cart.lineItems
     injectedComponent.vm.decrementItem(cart[0].id)
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(1)
   })
 
   it('removes item at 0 quantity with `decrementItem`', () => {
@@ -221,18 +240,21 @@ describe('Cart Provider', () => {
     })
     injectedComponent.vm.addItem({ ...product, quantity: 1 })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].quantity).toBe(1)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].quantity).toBe(1)
 
-    const cart = injectedComponent.vm.cart.value
+    const cart = injectedComponent.vm.cart.lineItems
     injectedComponent.vm.decrementItem(cart[0].id)
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(0)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(0)
 
     expect(set).toHaveBeenCalledTimes(2)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('clears the cart with `clearCart`', () => {
@@ -249,16 +271,19 @@ describe('Cart Provider', () => {
       variant: { ...product.variant, id: 67890 }
     })
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(2)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(2)
 
     injectedComponent.vm.clearCart()
 
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(0)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(0)
 
     expect(set).toHaveBeenCalledTimes(3)
-    expect(set).toHaveBeenCalledWith('cart', injectedComponent.vm.cart.value)
+    expect(set).toHaveBeenCalledWith(
+      'cart',
+      injectedComponent.vm.cart.lineItems
+    )
   })
 
   it('does not `get` from IndexedDB when mounted if `persistence` is false', () => {
@@ -268,8 +293,8 @@ describe('Cart Provider', () => {
     const injectedComponent = cartProvider.findComponent({
       name: 'InjectedComponent'
     })
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(0)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(0)
     expect(get).toHaveBeenCalledTimes(0)
   })
 
@@ -283,9 +308,11 @@ describe('Cart Provider', () => {
     injectedComponent.vm.addItem({
       ...product
     })
-    expect(Array.isArray(injectedComponent.vm.cart.value)).toBe(true)
-    expect(injectedComponent.vm.cart.value.length).toBe(1)
-    expect(injectedComponent.vm.cart.value[0].id).toContain(product.variant.id)
+    expect(Array.isArray(injectedComponent.vm.cart.lineItems)).toBe(true)
+    expect(injectedComponent.vm.cart.lineItems.length).toBe(1)
+    expect(injectedComponent.vm.cart.lineItems[0].id).toContain(
+      product.variant.id
+    )
     expect(set).toHaveBeenCalledTimes(0)
   })
 })
