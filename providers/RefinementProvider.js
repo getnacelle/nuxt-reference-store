@@ -188,7 +188,7 @@ export default {
           }
         })
         switch (sortBy.value) {
-          case 'hi-low':
+          case 'price-desc':
             filteredData.value.sort((a, b) => {
               if (a.priceRange.min < b.priceRange.min) {
                 return 1
@@ -201,7 +201,7 @@ export default {
             })
 
             break
-          case 'low-hi':
+          case 'price-asc':
             filteredData.value.sort((a, b) => {
               if (a.priceRange.min < b.priceRange.min) {
                 return -1
