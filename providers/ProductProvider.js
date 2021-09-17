@@ -1,4 +1,5 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 import useSdk from '~/composables/useSdk'
 import getProductOptions from '~/utils/getProductOptions'
 import getSelectedVariant from '~/utils/getSelectedVariant'
@@ -26,7 +27,14 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
-    const sdk = useSdk({ config })
+
+    /**
+     Use sdk from injection or config prop
+     */
+    let { nacelleSdk } = useSpaceProvider()
+    if (!nacelleSdk || Object.keys(config).length) {
+      nacelleSdk = useSdk({ config })
+    }
 
     /**
      * Set product provider should track
@@ -47,7 +55,7 @@ export default {
         if (product && Object.keys(product).length) productObject = product
         else if (handle) {
           isFetching = true
-          productObject = await sdk.data.product({ handle })
+          productObject = await nacelleSdk.data.product({ handle })
           isFetching = false
         }
         if (productObject && Object.keys(productObject).length) {

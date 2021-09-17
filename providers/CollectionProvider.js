@@ -1,4 +1,5 @@
 import { h, provide, ref, watch } from '@nuxtjs/composition-api'
+import useSpaceProvider from '~/composables/useSpaceProvider'
 import useSdk from '~/composables/useSdk'
 
 export default {
@@ -29,7 +30,14 @@ export default {
     let isFetching = ref(false)
 
     const config = props.config
-    const sdk = useSdk({ config })
+
+    /**
+     Use sdk from injection or config prop
+     */
+    let { nacelleSdk } = useSpaceProvider()
+    if (!nacelleSdk || Object.keys(config).length) {
+      nacelleSdk = useSdk({ config })
+    }
 
     /**
      * Set collection provider should track
@@ -52,8 +60,8 @@ export default {
         else if (handle) {
           isFetching = true
           const data = await Promise.all([
-            sdk.data.collection({ handle }),
-            sdk.data.collectionPage({
+            nacelleSdk.data.collection({ handle }),
+            nacelleSdk.data.collectionPage({
               handle,
               paginate: true,
               itemsPerPage: productsPerFetch || 12
@@ -95,7 +103,7 @@ export default {
             if (totalProducts >= startIndex) {
               const handlesToFetch = productHandles.slice(startIndex, endIndex)
               if (handlesToFetch.length) {
-                const products = await sdk.data.products({
+                const products = await nacelleSdk.data.products({
                   handles: handlesToFetch
                 })
                 collectionProvided.value = {

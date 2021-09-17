@@ -1,6 +1,10 @@
 <template>
   <lazy-hydrate when-idle class="app nacelle">
-    <space-provider :space="initialSpace" :locale="locale.locale">
+    <space-provider
+      :config="$config.nacelle"
+      :space="initialSpace"
+      :locale="locale.locale"
+    >
       <search-provider>
         <event-provider :event-handlers="eventHandlers">
           <global-header />

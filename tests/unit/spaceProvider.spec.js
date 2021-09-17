@@ -2,6 +2,14 @@ import { mount } from '@vue/test-utils'
 import { linklists, mainMenu } from '../mocks/linklists'
 import SpaceProvider from '~/providers/SpaceProvider'
 
+const config = {
+  nacelleId: process.env.NACELLE_SPACE_ID,
+  nacelleToken: process.env.NACELLE_GRAPHQL_TOKEN,
+  nacelleEndpoint: process.env.NACELLE_ENDPOINT
+}
+
+jest.mock('@nacelle/client-js-sdk')
+
 const InjectedWithSpaceData = () => {
   return {
     name: 'InjectedWithSpaceData',
@@ -9,6 +17,7 @@ const InjectedWithSpaceData = () => {
       'id',
       'metafields',
       'linklists',
+      'nacelleSdk',
       'getMetafieldsObj',
       'getMetafield',
       'getLocalizedLinks'
@@ -18,7 +27,10 @@ const InjectedWithSpaceData = () => {
 }
 
 const SpaceProviderContainer = ({ props }) => ({
-  render: (h) => h(SpaceProvider, { props }, [h(InjectedWithSpaceData())])
+  render: (h) =>
+    h(SpaceProvider, { props: { ...props, config } }, [
+      h(InjectedWithSpaceData())
+    ])
 })
 
 describe('Space Provider', () => {

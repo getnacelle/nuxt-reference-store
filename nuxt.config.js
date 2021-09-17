@@ -36,7 +36,12 @@ export default {
     myshopifyDomain: process.env.MYSHOPIFY_DOMAIN,
     shopifyToken: process.env.SHOPIFY_GRAPHQL_TOKEN,
     recommendationsEndpoint: process.env.RECOMMENDATIONS_ENDPOINT,
-    wishlistEndpoint: process.env.NACELLE_WISHLIST_ENDPOINT
+    wishlistEndpoint: process.env.NACELLE_WISHLIST_ENDPOINT,
+    nacelle: {
+      id: process.env.NACELLE_SPACE_ID,
+      token: process.env.NACELLE_GRAPHQL_TOKEN,
+      nacelleEndpoint: process.env.NACELLE_ENDPOINT
+    }
   },
   privateRuntimeConfig: {},
 

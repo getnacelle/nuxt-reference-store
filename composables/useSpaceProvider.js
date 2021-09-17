@@ -6,6 +6,7 @@ export default function useSpaceProvider() {
   const domain = inject('domain')
   const metafields = inject('metafields')
   const linklists = inject('linklists')
+  const nacelleSdk = inject('nacelleSdk')
   const getLocalizedLinks = inject('getLocalizedLinks')
   const getMetatag = inject('getMetatag')
   const getMetafieldsObj = inject('getMetafieldsObj')
@@ -18,6 +19,7 @@ export default function useSpaceProvider() {
     domain,
     metafields,
     linklists,
+    nacelleSdk,
     getLocalizedLinks,
     getMetatag,
     getMetafieldsObj,
