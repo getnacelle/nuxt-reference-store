@@ -2,6 +2,7 @@ import { h, ref, provide } from '@nuxtjs/composition-api'
 import useSdk from '~/composables/useSdk'
 
 export default {
+  name: 'SpaceProvider',
   props: {
     config: {
       type: Object,
