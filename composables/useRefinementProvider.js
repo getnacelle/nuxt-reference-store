@@ -5,8 +5,6 @@ export default function useRefinementProvider() {
   const setupFilters = inject('setupFilters')
   const activeFilters = inject('activeFilters')
   const filteredData = inject('filteredData')
-  const computeSortedData = inject('computeSortedData')
-  const computeFilteredData = inject('computeFilteredData')
   const clearFilters = inject('clearFilters')
 
   return {
@@ -14,8 +12,6 @@ export default function useRefinementProvider() {
     setupFilters,
     activeFilters,
     filteredData,
-    computeSortedData,
-    computeFilteredData,
     clearFilters
   }
 }

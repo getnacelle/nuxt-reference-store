@@ -30,7 +30,7 @@ export default {
       default: () => []
     },
     /**
-     * { label: string, range: [number] }
+     * { label: string, range: [number, number] }
      */
     activePriceRange: {
       type: Object,
@@ -158,7 +158,7 @@ export default {
     /**
      Uses `sortBy` & `activePriceRange` to sort data
      */
-    const computeSortedData = () => {
+    const sortInputData = () => {
       if (typeof Worker !== 'undefined') {
         const blobURL = fnToBlobUrl(sortWorkerBlob)
         sortWorker.value = sortWorker.value || new Worker(blobURL)
@@ -220,7 +220,7 @@ export default {
     /**
      Uses `activeFilters` to filter data
      */
-    const computeFilteredData = () => {
+    const sortFilteredData = () => {
       if (typeof Worker !== 'undefined') {
         const blobURL = fnToBlobUrl(filterWorkerBlob)
         filterWorker.value = filterWorker.value || new Worker(blobURL)
@@ -230,7 +230,7 @@ export default {
         })
         filterWorker.value.onmessage = function (e) {
           filteredData.value = e.data
-          computeSortedData()
+          sortInputData()
         }
       } else if (props.inputData && activeFilters.value) {
         // Fallback in case of missing Worker
@@ -330,13 +330,13 @@ export default {
     onMounted(() => {
       setupFilters()
       if (activeFilters.value && activeFilters.value.length) {
-        computeFilteredData()
+        sortFilteredData()
       }
       if (
         activePriceRange.value ||
         (sortBy.value && sortBy.value !== 'Sort By')
       ) {
-        computeSortedData()
+        sortInputData()
       }
     })
     onUnmounted(() => {
@@ -363,22 +363,22 @@ export default {
      Update filtered data 
     */
     watch(activeFilters, () => {
-      computeFilteredData()
+      sortFilteredData()
     })
 
     watch(activePriceRange, (value) => {
       if (value) {
-        computeSortedData()
+        sortInputData()
       } else {
-        computeFilteredData()
+        sortFilteredData()
       }
     })
 
     watch(sortBy, (value) => {
       if (value) {
-        computeSortedData()
+        sortInputData()
       } else {
-        computeFilteredData()
+        sortFilteredData()
       }
     })
 
@@ -389,8 +389,6 @@ export default {
     provide('setupFilters', setupFilters)
     provide('activeFilters', activeFilters)
     provide('filteredData', filteredData)
-    provide('computeSortedData', computeSortedData)
-    provide('computeFilteredData', computeFilteredData)
     provide('clearFilters', clearFilters)
 
     /**
