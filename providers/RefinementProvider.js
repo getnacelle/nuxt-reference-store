@@ -159,61 +159,15 @@ export default {
      Uses `sortBy` & `activePriceRange` to sort data
      */
     const sortInputData = () => {
-      if (typeof Worker !== 'undefined') {
-        const blobURL = fnToBlobUrl(sortWorkerBlob)
-        sortWorker.value = sortWorker.value || new Worker(blobURL)
-        sortWorker.value.postMessage({
-          filteredData: filteredData.value,
-          activePriceRange: props.activePriceRange,
-          sortBy: sortBy.value
-        })
-        sortWorker.value.onmessage = function (e) {
-          filteredData.value = e.data
-        }
-      } else {
-        // Fallback in case of missing Worker
-        filteredData.value = filteredData.value.filter(({ minPrice }) => {
-          if (activePriceRange.value) {
-            const min = activePriceRange.value.range[0]
-            const max = activePriceRange.value.range[1]
-            if (min === 0) {
-              return minPrice < max
-            } else if (max === 0) {
-              return minPrice > min
-            } else {
-              return minPrice > min && parseFloat(minPrice) < max
-            }
-          } else {
-            return true
-          }
-        })
-        switch (sortBy.value) {
-          case 'price-desc':
-            filteredData.value.sort((a, b) => {
-              if (a.priceRange.min < b.priceRange.min) {
-                return 1
-              }
-              if (a.priceRange.min > b.priceRange.min) {
-                return -1
-              }
-
-              return 0
-            })
-
-            break
-          case 'price-asc':
-            filteredData.value.sort((a, b) => {
-              if (a.priceRange.min < b.priceRange.min) {
-                return -1
-              }
-              if (a.priceRange.min > b.priceRange.min) {
-                return 1
-              }
-
-              return 0
-            })
-            break
-        }
+      const blobURL = fnToBlobUrl(sortWorkerBlob)
+      sortWorker.value = sortWorker.value || new Worker(blobURL)
+      sortWorker.value.postMessage({
+        filteredData: filteredData.value,
+        activePriceRange: props.activePriceRange,
+        sortBy: sortBy.value
+      })
+      sortWorker.value.onmessage = function (e) {
+        filteredData.value = e.data
       }
     }
 
@@ -221,44 +175,15 @@ export default {
      Uses `activeFilters` to filter data
      */
     const sortFilteredData = () => {
-      if (typeof Worker !== 'undefined') {
-        const blobURL = fnToBlobUrl(filterWorkerBlob)
-        filterWorker.value = filterWorker.value || new Worker(blobURL)
-        filterWorker.value.postMessage({
-          activeFilters: props.activeFilters,
-          inputData: props.inputData
-        })
-        filterWorker.value.onmessage = function (e) {
-          filteredData.value = e.data
-          sortInputData()
-        }
-      } else if (props.inputData && activeFilters.value) {
-        // Fallback in case of missing Worker
-        filteredData.value = props.inputData.filter((item) => {
-          const filterChecks = activeFilters.value.map((filter) => {
-            if (
-              filter.values.some((filterCheck) => {
-                const value = item.facets.find((facet) => {
-                  return facet.value === filterCheck
-                })
-                if (value) {
-                  return true
-                }
-                return false
-              })
-            ) {
-              return true
-            }
-            return false
-          })
-
-          const itemShouldPass = filterChecks.every((filterCheck) => {
-            return filterCheck === true
-          })
-          return itemShouldPass
-        })
-      } else {
-        filteredData.value = props.inputData
+      const blobURL = fnToBlobUrl(filterWorkerBlob)
+      filterWorker.value = filterWorker.value || new Worker(blobURL)
+      filterWorker.value.postMessage({
+        activeFilters: props.activeFilters,
+        inputData: props.inputData
+      })
+      filterWorker.value.onmessage = function (e) {
+        filteredData.value = e.data
+        sortInputData()
       }
     }
 
