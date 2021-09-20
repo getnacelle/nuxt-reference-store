@@ -34,7 +34,7 @@ export default {
      */
     activePriceRange: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     sortBy: {
       type: String,
