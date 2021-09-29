@@ -33,6 +33,11 @@ export default {
       token: process.env.NACELLE_GRAPHQL_TOKEN,
       nacelleEndpoint: process.env.NACELLE_ENDPOINT,
       locale: process.env.NACELLE_LOCALE || "en-us"
+    },
+    shopify: {
+      storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
+      myshopifyDomain: process.env.SHOPIFY_STOREFRONT_DOMAIN,
+      storefrontApiVersion: process.env.SHOPIFY_STOREFRONT_VERSION
     }
   },
 
