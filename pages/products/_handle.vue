@@ -1,7 +1,8 @@
 <template>
-  <div>Blog</div>
+  <div>Product</div>
 </template>
 
 <script>
-export default {};
+export default {
+};
 </script>

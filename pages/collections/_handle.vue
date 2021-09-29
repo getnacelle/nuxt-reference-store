@@ -1,5 +1,5 @@
 <template>
-  <div>Blog</div>
+  <div>Collection</div>
 </template>
 
 <script>
