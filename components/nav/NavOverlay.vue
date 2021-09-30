@@ -1,6 +1,7 @@
 <template>
   <transition name="fade">
     <div
+      v-show="navOpen"
       class="fixed inset-0 bg-black bg-opacity-25 transition-opacity ease-linear duration-300"
       aria-hidden="true"
       @click="setNavOpen(false)"
