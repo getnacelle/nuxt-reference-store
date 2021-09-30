@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute left-50 flex lg:ml-4 lg:ml-0 lg:relative">
+  <div class="absolute flex lg:relative">
     <a href="/">
       <span class="sr-only">Workflow</span>
       <img

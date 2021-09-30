@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="ml-4 lg:ml-6 bg-white p-2 rounded-md text-gray-400 group -m-2 p-2 flex items-center"
+    class="ml-0 md:ml-2 lg:ml-4 bg-white p-2 rounded-md text-gray-400 group p-2 flex items-center"
     @click="setCartOpen(!cartOpen)"
   >
     <svg
