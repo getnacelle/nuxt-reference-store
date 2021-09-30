@@ -9,6 +9,7 @@
       <cart-provider>
         <site-header />
         <nuxt />
+        <site-nav />
       </cart-provider>
     </event-provider>
   </space-provider>
@@ -24,13 +25,15 @@ import {
 } from "@nuxtjs/composition-api";
 import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
+import SiteNav from "~/components/nav/Nav.vue";
 
 export default {
   components: {
     SpaceProvider,
     EventProvider,
     CartProvider,
-    SiteHeader
+    SiteHeader,
+    SiteNav
   },
   setup() {
     const cartOpen = ref(false);
