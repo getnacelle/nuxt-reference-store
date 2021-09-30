@@ -72,7 +72,7 @@
         </p>
         <ul
           role="list"
-          aria-labelledby="women-clothing-heading-mobile"
+          :aria-labelledby="`${menu.text}-heading-mobile`"
           class="mt-6 flex flex-col space-y-6"
         >
           <li
