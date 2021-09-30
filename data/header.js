@@ -40,7 +40,28 @@ export default {
             ]
           }
         ],
-        callouts: []
+        callouts: [
+          {
+            image: {
+              src:
+                "https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg",
+              alt:
+                "Models sitting back to back, wearing Basic Tee in black and bone."
+            },
+            text: "New Arrivals",
+            url: "/"
+          },
+          {
+            image: {
+              src:
+                "https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg",
+              alt:
+                "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees."
+            },
+            text: "Basic Tees",
+            url: "/"
+          }
+        ]
       }
     },
     {
@@ -80,10 +101,31 @@ export default {
             ]
           }
         ],
-        callouts: []
+        callouts: [
+          {
+            image: {
+              src:
+                "https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg",
+              alt:
+                "Drawstring top with elastic loop closure and textured interior padding."
+            },
+            text: "New Arrivals",
+            url: "/"
+          },
+          {
+            image: {
+              src:
+                "https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg",
+              alt:
+                "Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt."
+            },
+            text: "Artwork Tees",
+            url: "/"
+          }
+        ]
       }
     },
-    { text: "Company", url: null },
-    { text: "Stores", url: null }
+    { text: "Company", url: "/" },
+    { text: "Stores", url: "/" }
   ]
 };

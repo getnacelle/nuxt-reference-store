@@ -29,6 +29,7 @@
         </button>
       </div>
       <nav-tabs />
+      <nav-menu />
     </div>
   </transition>
 </template>
@@ -36,9 +37,10 @@
 <script>
 import { inject } from "@nuxtjs/composition-api";
 import NavTabs from "./NavTabs.vue";
+import NavMenu from "./NavMenu.vue";
 
 export default {
-  components: { NavTabs },
+  components: { NavTabs, NavMenu },
   setup() {
     const navOpen = inject("navOpen");
     const setNavOpen = inject("setNavOpen");
