@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+  <div class="grid grid-cols-2 gap-8 md:grid-cols-4 mb-16">
     <div v-for="(menu, index) in navigation" :key="index" class="mt-10">
       <div>
         <h3
