@@ -43,6 +43,7 @@ export default {
 
   buildModules: [
     "@nuxt/image",
+    "@nuxtjs/svg",
     "@nuxtjs/composition-api/module",
     "@nuxtjs/pwa",
     "@nuxtjs/tailwindcss"
