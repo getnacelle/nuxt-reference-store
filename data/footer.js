@@ -1,0 +1,57 @@
+export default {
+  navigation: [
+    {
+      text: "Women",
+      links: [
+        { text: "Tops", url: "/" },
+        { text: "Dresses", url: "/" },
+        { text: "Pants", url: "/" },
+        { text: "Browse All", url: "/" }
+      ]
+    },
+    {
+      text: "Men",
+      links: [
+        { text: "Tops", url: "/" },
+        { text: "Pants", url: "/" },
+        { text: "Sweaters", url: "/" },
+        { text: "Browse All", url: "/" }
+      ]
+    },
+    {
+      text: "Info",
+      links: [
+        { text: "Company", url: "/" },
+        { text: "Stores", url: "/" },
+        { text: "Contact", url: "/" }
+      ]
+    },
+    {
+      text: "Legal",
+      links: [
+        { text: "Terms", url: "/" },
+        { text: "Privacy", url: "/" },
+        { text: "Shipping", url: "/" }
+      ]
+    }
+  ],
+  social: [
+    {
+      name: "facebook",
+      url: "https://facebook.com"
+    },
+    {
+      name: "instagram",
+      url: "https://instagram.com"
+    },
+    {
+      name: "twitter",
+      url: "https://twitter.com"
+    },
+    {
+      name: "github",
+      url: "https://github.com"
+    }
+  ],
+  copyright: "Workflow, Inc. All rights reserved."
+};
