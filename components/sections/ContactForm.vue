@@ -1,5 +1,5 @@
 <template>
-  <section class="py-12 sm:py-16 lg:py-20">
+  <section class="py-12 px-4 sm:py-16 lg:py-20">
     <div class="max-w-3xl mx-auto">
       <div
         v-if="success"
