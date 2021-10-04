@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Hero from "~/components/content/Hero.vue";
+import Hero from "~/components/sections/Hero.vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
 // import { useSpaceProvider } from "@nacelle/vue";
 
