@@ -126,6 +126,7 @@ export default {
       }
     },
     { text: "About", url: "/pages/about" },
-    { text: "Contact", url: "/pages/contact" }
+    { text: "Contact", url: "/pages/contact" },
+    { text: "Blog", url: "/blog" }
   ]
 };
