@@ -9,13 +9,17 @@
 </template>
 
 <script>
+import { useContext } from "@nuxtjs/composition-api";
 import SiteSection from "~/components/core/Section.vue";
 import content from "~/data/content";
 
 export default {
   components: { SiteSection },
   setup() {
-    return { page: content };
+    const { params } = useContext();
+    const handle = params.value?.handle;
+
+    return { page: content[handle] };
   }
 };
 </script>
