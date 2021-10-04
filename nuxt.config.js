@@ -24,7 +24,7 @@ export default {
   components: true,
 
   image: {
-    domains: ["https://cdn.shopify.com", "tailwindui.com"]
+    domains: ["cdn.shopify.com", "images.unsplash.com", "tailwindui.com"]
   },
 
   publicRuntimeConfig: {
