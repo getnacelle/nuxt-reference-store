@@ -4,7 +4,7 @@
       class="bg-red-50 max-w-3xl mx-auto border-4 border-red-300 border-dashed rounded-lg p-12 text-center"
     >
       <span
-        class="flex mx-auto text-red-600 mb-4 h-12 w-12 text-gray-400"
+        class="flex mx-auto text-red-500 mb-4 h-12 w-12"
         v-html="require(`~/assets/svgs/empty.svg?raw`)"
       />
       <h1
