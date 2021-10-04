@@ -20,7 +20,7 @@ export default {
   props: {
     section: {
       type: Object,
-      default: (() => {})
+      default: () => ({})
     }
   }
 }
