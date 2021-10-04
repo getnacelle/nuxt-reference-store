@@ -9,6 +9,7 @@
 <script>
 import Hero from "~/components/sections/Hero.vue";
 import SideBySide from "~/components/sections/SideBySide.vue";
+import Newsletter from "~/components/sections/Newsletter.vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
 // import { useSpaceProvider } from "@nacelle/vue";
 
@@ -58,6 +59,16 @@ const content = {
           url: "/",
         },
       },
+      {
+        type: "newsletter",
+        heading: "Sign up for our newsletter",
+        text: "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui Lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat.",
+        label: "Email address",
+        placeholder: "Enter your email",
+        cta: {
+          label: "Notify me"
+        }
+      },
     ]
   }
 };
@@ -65,7 +76,8 @@ const content = {
 export default {
   components: {
     Hero,
-    SideBySide
+    SideBySide,
+    Newsletter
   },
   setup() {
     // const { nacelleSdk } = useSpaceProvider();
