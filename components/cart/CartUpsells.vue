@@ -1,7 +1,7 @@
 <template>
   <div class="mt-12">
-    <h2 class="text-lg font-medium text-gray-900">
-      You May Also Like
+    <h2 v-if="content.heading" class="text-lg font-medium text-gray-900">
+      {{ content.heading }}
     </h2>
     <ul>
       <li v-for="item in upsells" :key="item.id" class="py-6 flex">
@@ -24,7 +24,7 @@
           </div>
           <div class="flex-1 flex items-end text-sm">
             <div class="flex w-full">
-              <button type="button" @click="addProduct(item)" class="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200 w-full">Add to bag<span class="sr-only">, {{ item.title }}</span></button>
+              <button type="button" @click="addProduct(item)" class="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200 w-full">{{ content.add }}<span class="sr-only">, {{ item.title }}</span></button>
             </div>
           </div>
         </div>
@@ -36,6 +36,11 @@
 <script>
 import { useSpaceProvider, useCartProvider } from "@nacelle/vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
+
+const content = {
+  heading: "You May Also Like",
+  add: "Add to bag"
+}
 
 export default {
   setup() {
@@ -53,7 +58,7 @@ export default {
       }
     });
 
-    return { addItem, upsells, fetchState };
+    return { content, addItem, upsells, fetchState };
   },
   methods: {
     addProduct(product) {

@@ -22,11 +22,11 @@
       </div>
       <div class="flex-1 flex items-end justify-between text-sm">
         <p class="text-gray-500">
-          Qty {{ item.quantity }}
+          {{ content.quantity }} {{ item.quantity }}
         </p>
 
         <div class="flex">
-          <button type="button" @click="removeItem(item.id)" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+          <button type="button" @click="removeItem(item.id)" class="font-medium text-indigo-600 hover:text-indigo-500">{{ content.remove }}</button>
         </div>
       </div>
     </div>
@@ -35,6 +35,11 @@
 
 <script>
 import { useCartProvider } from "@nacelle/vue";
+
+const content = {
+  quantity: "Qty",
+  remove: "Remove"
+}
 
 export default {
   props: {
@@ -45,7 +50,7 @@ export default {
   },
   setup() {
     const { removeItem } = useCartProvider();
-    return { removeItem };
+    return { content, removeItem };
   },
   methods: {
     formatPrice(price) {

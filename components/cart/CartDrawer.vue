@@ -7,7 +7,7 @@
 
             <div class="flex items-start justify-between">
               <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
-                Shopping cart
+                {{ content.heading }}
               </h2>
               <div class="ml-3 h-7 flex items-center">
                 <button type="button" @click="setCartOpen(false)" class="-m-2 p-2 text-gray-400 hover:text-gray-500">
@@ -22,15 +22,15 @@
 
             <div class="mt-8">
               <div class="flow-root">
-                <ul v-if="cart.lineItems.length" role="list" class="-my-6 divide-y divide-gray-200">
-                  <cart-item v-for="item in cart.lineItems" :key="item.id" :item="item" />
-                </ul>
-                <p v-else class="text-gray-400 text-center">Cart is empty.</p>
+                <div v-if="cart.lineItems.length">
+                  <ul role="list" class="-my-6 divide-y divide-gray-200">
+                    <cart-item v-for="item in cart.lineItems" :key="item.id" :item="item" />
+                  </ul>
+                  <cart-upsells />
+                </div>
+                <p v-else class="text-gray-400 text-center">{{ content.empty }}</p>
               </div>
             </div>
-
-            <cart-upsells />
-
           </div>
           <cart-total v-if="cart.lineItems.length" />
         </div>
@@ -46,6 +46,11 @@ import CartItem from "./CartItem.vue";
 import CartUpsells from "./CartUpsells.vue";
 import CartTotal from "./CartTotal.vue";
 
+const content = {
+  heading: "Shopping Cart",
+  empty: "Cart is empty."
+}
+
 export default {
   components: {
     CartItem,
@@ -56,7 +61,7 @@ export default {
     const { cart } = useCartProvider();
     const cartOpen = inject("cartOpen");
     const setCartOpen = inject("setCartOpen");
-    return { cart, cartOpen, setCartOpen };
+    return { content, cart, cartOpen, setCartOpen };
   }
 }
 </script>

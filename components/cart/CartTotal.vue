@@ -1,16 +1,16 @@
 <template>
   <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
     <div class="flex justify-between text-base font-medium text-gray-900">
-      <p>Subtotal</p>
+      <p>{{ content.subtotal }}</p>
       <p>{{ subtotal }}</p>
     </div>
-    <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+    <p class="mt-0.5 text-sm text-gray-500">{{ content.message }}</p>
     <div class="mt-6">
-      <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Checkout</a>
+      <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">{{ content.checkout }}</a>
     </div>
     <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
       <p>
-        or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500">Continue Shopping<span aria-hidden="true"> &rarr;</span></button>
+        or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500">{{ content.continue }}<span aria-hidden="true"> &rarr;</span></button>
       </p>
     </div>
   </div>
@@ -19,10 +19,17 @@
 <script>
 import { useCartProvider } from "@nacelle/vue";
 
+const content = {
+  subtotal: "Subtotal",
+  message: "Shipping and taxes calculated at checkout.",
+  checkout: "Checkout",
+  continue: "Continue Shopping"
+}
+
 export default {
   setup() {
     const { cart } = useCartProvider();
-    return { cart };
+    return { content, cart };
   },
   computed: {
     subtotal() {
