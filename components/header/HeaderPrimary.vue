@@ -8,6 +8,7 @@
       >
         <div class="relative flex">
           <button
+            v-if="navigationItem.mega"
             type="button"
             class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
             aria-expanded="false"
@@ -15,6 +16,13 @@
           >
             {{ navigationItem.text }}
           </button>
+          <nuxt-link
+            v-else-if="navigationItem.url"
+            :to="navigationItem.url"
+            class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
+          >
+            {{ navigationItem.text }}
+          </nuxt-link>
         </div>
         <header-mega
           v-if="navigationItem.mega"
@@ -44,7 +52,10 @@ export default {
     let activeIndex = ref(null);
     const { route } = useContext();
 
-    const setActiveIndex = value => (activeIndex.value = value);
+    const setActiveIndex = value => {
+      if (activeIndex.value === value) activeIndex.value = null;
+      else activeIndex.value = value;
+    };
     const handleBodyClick = () => setActiveIndex(null);
 
     onMounted(() => {
@@ -56,7 +67,7 @@ export default {
     });
 
     watch(route, () => {
-      activeIndex = null;
+      activeIndex.value = null;
     });
 
     return {
