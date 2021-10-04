@@ -60,6 +60,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app {
+  min-height: 100vh;
+}
 .app::v-deep * {
   box-sizing: border-box;
 }

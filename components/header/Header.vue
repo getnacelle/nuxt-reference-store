@@ -1,10 +1,7 @@
 <template>
-  <header class="relative bg-white">
+  <header class="relative bg-white border-b border-gray-200">
     <header-promo />
-    <nav
-      aria-label="Top"
-      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gray-200"
-    >
+    <nav aria-label="Top" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="h-16 flex items-center justify-around">
         <header-menu />
         <header-logo />
