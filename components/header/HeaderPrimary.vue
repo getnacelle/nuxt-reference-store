@@ -40,7 +40,7 @@ import HeaderMega from "./HeaderMega.vue";
 export default {
   components: { HeaderMega },
   setup() {
-    const activeIndex = ref(null);
+    let activeIndex = ref(null);
     const { route } = useContext();
 
     const setActiveIndex = value => (activeIndex.value = value);
