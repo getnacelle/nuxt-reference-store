@@ -1,6 +1,6 @@
 <template>
   <section v-if="content" class="bg-gray-50">
-    <div class="mx-auto py-12 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-24">
+    <div class="mx-auto py-24 px-4 max-w-7xl sm:px-6 lg:px-8 lg:py-32">
       <div class="space-y-12">
         <h2
           v-if="content.heading"
