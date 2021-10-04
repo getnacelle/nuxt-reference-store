@@ -1,3 +1,21 @@
 <template>
-  <div>Page</div>
+  <div v-if="page">
+    <site-section
+      v-for="(section, index) in page.sections"
+      :key="index"
+      :content="section"
+    />
+  </div>
 </template>
+
+<script>
+import SiteSection from "~/components/core/Section.vue";
+import content from "~/data/content";
+
+export default {
+  components: { SiteSection },
+  setup() {
+    return { page: content };
+  }
+};
+</script>

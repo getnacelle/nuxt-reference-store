@@ -38,6 +38,7 @@ import headerData from "~/data/header";
 import HeaderMega from "./HeaderMega.vue";
 
 export default {
+  name: "HeaderPrimary",
   components: { HeaderMega },
   setup() {
     const activeIndex = ref(null);

@@ -27,6 +27,7 @@ import HeaderSearch from "./HeaderSearch.vue";
 import HeaderCart from "./HeaderCart.vue";
 
 export default {
+  name: "Header",
   components: {
     HeaderPromo,
     HeaderMenu,

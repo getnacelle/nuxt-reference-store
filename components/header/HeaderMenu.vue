@@ -27,6 +27,7 @@
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "HeaderMenu",
   setup() {
     const navOpen = inject("navOpen");
     const setNavOpen = inject("setNavOpen");
