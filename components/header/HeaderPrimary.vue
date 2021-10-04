@@ -43,7 +43,10 @@ export default {
     let activeIndex = ref(null);
     const { route } = useContext();
 
-    const setActiveIndex = value => (activeIndex.value = value);
+    const setActiveIndex = value => {
+      if (activeIndex.value === value) activeIndex.value = null;
+      else activeIndex.value = value;
+    };
     const handleBodyClick = () => setActiveIndex(null);
 
     onMounted(() => {
