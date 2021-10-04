@@ -125,7 +125,7 @@ export default {
         ]
       }
     },
-    { text: "Company", url: "/" },
-    { text: "Stores", url: "/" }
+    { text: "About", url: "/pages/about" },
+    { text: "Contact", url: "/pages/contact" }
   ]
 };
