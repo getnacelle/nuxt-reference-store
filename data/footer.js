@@ -19,11 +19,11 @@ export default {
       ]
     },
     {
-      text: "Info",
+      text: "Company",
       links: [
-        { text: "Company", url: "/" },
-        { text: "Stores", url: "/" },
-        { text: "Contact", url: "/" }
+        { text: "About", url: "/pages/about" },
+        { text: "Contact", url: "/pages/contact" },
+        { text: "Blog", url: "/blog" }
       ]
     },
     {
