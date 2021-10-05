@@ -9,6 +9,7 @@
       <cart-provider>
         <site-header />
         <nuxt />
+        <site-newsletter />
         <site-footer />
         <site-nav />
       </cart-provider>
@@ -26,8 +27,9 @@ import {
 } from "@nuxtjs/composition-api";
 import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
-import SiteNav from "~/components/nav/Nav.vue";
+import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
 import SiteFooter from "~/components/footer/Footer.vue";
+import SiteNav from "~/components/nav/Nav.vue";
 
 export default {
   components: {
@@ -35,8 +37,9 @@ export default {
     EventProvider,
     CartProvider,
     SiteHeader,
+    SiteNewsletter,
+    SiteFooter,
     SiteNav
-    SiteFooter
   },
   setup() {
     const cartOpen = ref(false);
