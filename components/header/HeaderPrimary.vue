@@ -1,12 +1,12 @@
 <template>
   <div
-    v-if="navigation"
+    v-if="content"
     class="hidden lg:ml-8 lg:block lg:self-stretch"
     @click.stop
   >
     <div class="h-full flex space-x-8">
       <div
-        v-for="(navigationItem, index) in navigation"
+        v-for="(navigationItem, index) in content.navigation"
         :key="index"
         class="flex"
       >
@@ -42,6 +42,7 @@
 import {
   ref,
   watch,
+  inject,
   onMounted,
   onBeforeUnmount,
   useContext
@@ -50,12 +51,6 @@ import HeaderMega from "./HeaderMega.vue";
 
 export default {
   components: { HeaderMega },
-  props: {
-    navigation: {
-      type: Array,
-      required: true
-    }
-  },
   setup() {
     let activeIndex = ref(null);
     const { route } = useContext();
@@ -79,6 +74,7 @@ export default {
     });
 
     return {
+      content: inject("primary"),
       activeIndex,
       setActiveIndex
     };

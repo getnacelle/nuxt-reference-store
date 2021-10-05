@@ -7,13 +7,13 @@
       aria-modal="true"
     >
       <nav-overlay />
-      <nav-drawer :content="content" />
+      <nav-drawer />
     </div>
   </div>
 </template>
 
 <script>
-import { ref, inject, watch } from "@nuxtjs/composition-api";
+import { ref, inject, provide, watch } from "@nuxtjs/composition-api";
 import NavOverlay from "./NavOverlay.vue";
 
 import headerData from "~/data/header";
@@ -33,7 +33,12 @@ export default {
       }
     });
 
-    return { content: headerData, showNav };
+    provide("primary", headerData?.primary);
+
+    return {
+      content: headerData,
+      showNav
+    };
   }
 };
 </script>
