@@ -19,6 +19,7 @@ import NavOverlay from "./NavOverlay.vue";
 import headerData from "~/data/header";
 
 export default {
+  name: "Nav",
   components: { NavOverlay },
   setup() {
     const showNav = ref(false);

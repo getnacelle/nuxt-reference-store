@@ -40,6 +40,7 @@ import NavTabs from "./NavTabs.vue";
 import NavMenu from "./NavMenu.vue";
 
 export default {
+  name: "NavDrawer",
   components: { NavTabs, NavMenu },
   setup() {
     const navOpen = inject("navOpen");

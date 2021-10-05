@@ -94,6 +94,7 @@
 import { ref, computed, inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "NavTabs",
   setup() {
     const activeIndex = ref(0);
     const primary = inject("primary");

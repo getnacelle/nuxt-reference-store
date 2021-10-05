@@ -11,6 +11,7 @@
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "HeaderPromo",
   setup() {
     return {
       content: inject("promo")

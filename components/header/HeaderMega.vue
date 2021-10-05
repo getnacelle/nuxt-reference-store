@@ -65,6 +65,7 @@
 
 <script>
 export default {
+  name: "HeaderMega",
   props: {
     mega: {
       type: Object,

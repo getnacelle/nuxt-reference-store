@@ -31,6 +31,7 @@
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "HeaderCart",
   setup() {
     const cartOpen = inject("cartOpen");
     const setCartOpen = inject("setCartOpen");

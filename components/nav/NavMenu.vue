@@ -15,6 +15,7 @@
 import { computed, inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "NavMenu",
   setup() {
     const primary = inject("primary");
 

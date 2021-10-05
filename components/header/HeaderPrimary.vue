@@ -50,6 +50,7 @@ import {
 import HeaderMega from "./HeaderMega.vue";
 
 export default {
+  name: "HeaderPrimary",
   components: { HeaderMega },
   setup() {
     let activeIndex = ref(null);
