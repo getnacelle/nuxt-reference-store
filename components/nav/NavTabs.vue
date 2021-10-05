@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div v-if="navigation && tabs" class="mt-2">
     <div class="border-b border-gray-200">
       <div
         class="-mb-px flex px-4 space-x-8"
@@ -92,14 +92,19 @@
 
 <script>
 import { ref, computed } from "@nuxtjs/composition-api";
-import headerData from "~/data/header";
 
 export default {
-  setup() {
+  props: {
+    navigation: {
+      type: Array,
+      required: true
+    }
+  },
+  setup(props) {
     const activeIndex = ref(0);
 
     const tabs = computed(() => {
-      return headerData.navigation.filter(navigationItem => {
+      return props.navigation.filter(navigationItem => {
         return navigationItem.mega;
       });
     });

@@ -1,4 +1,5 @@
 export default {
+  promo: "Get free delivery on orders over $100",
   navigation: [
     {
       text: "Women",

@@ -1,5 +1,8 @@
 <template>
-  <div class="border-t border-gray-200 py-6 px-4 space-y-6">
+  <div
+    v-if="navigation && links"
+    class="border-t border-gray-200 py-6 px-4 space-y-6"
+  >
     <div v-for="(link, index) in links" :key="index" class="flow-root">
       <nuxt-link
         :to="link.url"
@@ -13,12 +16,17 @@
 
 <script>
 import { computed } from "@nuxtjs/composition-api";
-import headerData from "~/data/header";
 
 export default {
-  setup() {
+  props: {
+    navigation: {
+      type: Array,
+      required: true
+    }
+  },
+  setup(props) {
     const links = computed(() => {
-      return headerData.navigation.filter(navigationItem => {
+      return props.navigation.filter(navigationItem => {
         return navigationItem.url;
       });
     });

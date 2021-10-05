@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div v-if="content" class="bg-white">
     <div
       v-show="showNav"
       class="fixed inset-0 flex z-40 lg:hidden"
@@ -7,7 +7,7 @@
       aria-modal="true"
     >
       <nav-overlay />
-      <nav-drawer />
+      <nav-drawer :content="content" />
     </div>
   </div>
 </template>
@@ -15,6 +15,8 @@
 <script>
 import { ref, inject, watch } from "@nuxtjs/composition-api";
 import NavOverlay from "./NavOverlay.vue";
+
+import headerData from "~/data/header";
 
 export default {
   components: { NavOverlay },
@@ -31,7 +33,7 @@ export default {
       }
     });
 
-    return { showNav };
+    return { content: headerData, showNav };
   }
 };
 </script>

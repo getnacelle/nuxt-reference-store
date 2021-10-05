@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide">
+  <transition v-if="content" name="slide">
     <div
       v-show="navOpen"
       class="relative max-w-xs w-full bg-white shadow-xl pb-12 flex flex-col overflow-y-auto transition ease-in-out duration-300 transform"
@@ -28,8 +28,8 @@
           </svg>
         </button>
       </div>
-      <nav-tabs />
-      <nav-menu />
+      <nav-tabs v-if="content.navigation" :navigation="content.navigation" />
+      <nav-menu v-if="content.navigation" :navigation="content.navigation" />
     </div>
   </transition>
 </template>
@@ -41,6 +41,12 @@ import NavMenu from "./NavMenu.vue";
 
 export default {
   components: { NavTabs, NavMenu },
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
   setup() {
     const navOpen = inject("navOpen");
     const setNavOpen = inject("setNavOpen");

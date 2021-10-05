@@ -1,5 +1,9 @@
 <template>
-  <div class="hidden lg:ml-8 lg:block lg:self-stretch" @click.stop>
+  <div
+    v-if="navigation"
+    class="hidden lg:ml-8 lg:block lg:self-stretch"
+    @click.stop
+  >
     <div class="h-full flex space-x-8">
       <div
         v-for="(navigationItem, index) in navigation"
@@ -42,11 +46,16 @@ import {
   onBeforeUnmount,
   useContext
 } from "@nuxtjs/composition-api";
-import headerData from "~/data/header";
 import HeaderMega from "./HeaderMega.vue";
 
 export default {
   components: { HeaderMega },
+  props: {
+    navigation: {
+      type: Array,
+      required: true
+    }
+  },
   setup() {
     let activeIndex = ref(null);
     const { route } = useContext();
@@ -70,7 +79,6 @@ export default {
     });
 
     return {
-      navigation: headerData.navigation,
       activeIndex,
       setActiveIndex
     };
