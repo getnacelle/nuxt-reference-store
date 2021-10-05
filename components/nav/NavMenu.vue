@@ -1,5 +1,5 @@
 <template>
-  <div class="border-t border-gray-200 py-6 px-4 space-y-6">
+  <div v-if="links" class="border-t border-gray-200 py-6 px-4 space-y-6">
     <div v-for="(link, index) in links" :key="index" class="flow-root">
       <nuxt-link
         :to="link.url"
@@ -12,14 +12,16 @@
 </template>
 
 <script>
-import { computed } from "@nuxtjs/composition-api";
-import headerData from "~/data/header";
+import { computed, inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "NavMenu",
   setup() {
+    const primary = inject("primary");
+
     const links = computed(() => {
-      return headerData.navigation.filter(navigationItem => {
-        return navigationItem.url;
+      return primary.navigation.filter(navigationItem => {
+        return navigationItem._type === "link";
       });
     });
 
