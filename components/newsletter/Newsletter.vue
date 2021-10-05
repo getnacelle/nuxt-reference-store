@@ -20,13 +20,13 @@
       <div class="mt-8 lg:mt-0 lg:ml-8">
         <div
           v-if="success"
-          class="flex bg-green-50 mx-auto py-5 px-5 border border-2 border-green-300 rounded-lg sm:px-6 lg:px-7"
+          class="flex bg-green-50 mx-auto py-4 px-4 border border-2 border-green-300 rounded-lg sm:px-5 lg:px-6"
         >
           <span
             class="text-green-500 mr-4 h-6 w-6"
             v-html="require(`~/assets/svgs/success.svg?raw`)"
           />
-          {{ text.success }}
+          {{ content.success }}
         </div>
         <form v-if="!success" class="sm:flex" @submit.prevent="handleSubmit">
           <label for="email-address" class="sr-only">{{ content.input }}</label>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { ref } from "@nuxtjs/composition-api";
+import { ref, watch, useContext } from "@nuxtjs/composition-api";
 import newsletterData from "~/data/newsletter";
 
 export default {
@@ -60,9 +60,14 @@ export default {
     const formModel = ref({
       email: ""
     });
-    const success = ref(false);
+    const success = ref(true);
+    const { route } = useContext();
 
     const handleSubmit = () => (success.value = true);
+
+    watch(route, () => {
+      success.value = false;
+    });
 
     return {
       content: newsletterData,
