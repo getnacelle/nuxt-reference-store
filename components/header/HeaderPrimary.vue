@@ -1,14 +1,18 @@
 <template>
-  <div class="hidden lg:ml-8 lg:block lg:self-stretch" @click.stop>
+  <div
+    v-if="content"
+    class="hidden lg:ml-8 lg:block lg:self-stretch"
+    @click.stop
+  >
     <div class="h-full flex space-x-8">
       <div
-        v-for="(navigationItem, index) in navigation"
+        v-for="(navigationItem, index) in content.navigation"
         :key="index"
         class="flex"
       >
         <div class="relative flex">
           <button
-            v-if="navigationItem.mega"
+            v-if="navigationItem._type === 'mega'"
             type="button"
             class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
             aria-expanded="false"
@@ -17,7 +21,7 @@
             {{ navigationItem.text }}
           </button>
           <nuxt-link
-            v-else-if="navigationItem.url"
+            v-else-if="navigationItem._type === 'link'"
             :to="navigationItem.url"
             class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
           >
@@ -25,8 +29,8 @@
           </nuxt-link>
         </div>
         <header-mega
-          v-if="navigationItem.mega"
-          :mega="navigationItem.mega"
+          v-if="navigationItem._type === 'mega'"
+          :content="navigationItem"
           :active="activeIndex === index"
         />
       </div>
@@ -38,11 +42,11 @@
 import {
   ref,
   watch,
+  inject,
   onMounted,
   onBeforeUnmount,
   useContext
 } from "@nuxtjs/composition-api";
-import headerData from "~/data/header";
 import HeaderMega from "./HeaderMega.vue";
 
 export default {
@@ -71,7 +75,7 @@ export default {
     });
 
     return {
-      navigation: headerData.navigation,
+      content: inject("primary"),
       activeIndex,
       setActiveIndex
     };

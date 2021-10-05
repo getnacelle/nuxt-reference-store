@@ -3,8 +3,8 @@ import {
   useContext,
   provide,
   useAsync
-} from '@nuxtjs/composition-api';
-import { useSdk } from '@nacelle/vue';
+} from "@nuxtjs/composition-api";
+import { useSdk } from "@nacelle/vue";
 
 export default () => {
   onGlobalSetup(() => {
@@ -17,15 +17,16 @@ export default () => {
      * @param {String} tag
      * @returns {Object|null}
      */
-    const getMetatag = (tag) => {
+    const getMetatag = tag => {
       if (initialSpace.metafields) {
         return initialSpace.metafields.find(
-          (field) => field.namespace === 'metatag' && field.key === tag
+          field => field.namespace === "metatag" && field.key === tag
         );
       }
       return null;
     };
-    provide('initialSpace', initialSpace);
-    provide('getMetatag', getMetatag);
+    provide("sdk", sdk);
+    provide("initialSpace", initialSpace);
+    provide("getMetatag", getMetatag);
   });
 };

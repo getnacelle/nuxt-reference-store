@@ -13,6 +13,7 @@
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "NavOverlay",
   setup() {
     const navOpen = inject("navOpen");
     const setNavOpen = inject("setNavOpen");

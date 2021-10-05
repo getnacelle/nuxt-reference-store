@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div v-if="content" class="bg-white">
     <div
       v-show="showNav"
       class="fixed inset-0 flex z-40 lg:hidden"
@@ -13,12 +13,19 @@
 </template>
 
 <script>
-import { ref, inject, watch } from "@nuxtjs/composition-api";
+import { ref, inject, provide, watch } from "@nuxtjs/composition-api";
 import NavOverlay from "./NavOverlay.vue";
 
 export default {
+  name: "Nav",
   components: { NavOverlay },
-  setup() {
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
     const showNav = ref(false);
     const navOpen = inject("navOpen");
 
@@ -31,7 +38,11 @@ export default {
       }
     });
 
-    return { showNav };
+    provide("primary", props?.content?.fields?.primary);
+
+    return {
+      showNav
+    };
   }
 };
 </script>

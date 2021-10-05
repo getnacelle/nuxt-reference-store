@@ -1,5 +1,5 @@
 <template>
-  <header class="relative bg-white border-b border-gray-200">
+  <header v-if="content" class="relative bg-white border-b border-gray-200">
     <header-promo />
     <nav aria-label="Top" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="h-16 flex items-center justify-around">
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { provide } from "@nuxtjs/composition-api";
+
 import HeaderPromo from "./HeaderPromo.vue";
 import HeaderMenu from "./HeaderMenu.vue";
 import HeaderPrimary from "./HeaderPrimary.vue";
@@ -31,6 +33,16 @@ export default {
     HeaderPrimary,
     HeaderSearch,
     HeaderCart
+  },
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    provide("promo", props?.content?.fields?.promo);
+    provide("primary", props?.content?.fields?.primary);
   }
 };
 </script>
