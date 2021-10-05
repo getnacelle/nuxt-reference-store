@@ -1,25 +1,33 @@
 <template>
   <div v-if="page">
     <site-section
-      v-for="(section, index) in page.sections"
-      :key="index"
+      v-for="section in page.sections"
+      :key="section._key"
       :content="section"
     />
   </div>
 </template>
 
 <script>
-import { useContext } from "@nuxtjs/composition-api";
+import { ref, inject, useContext, useFetch } from "@nuxtjs/composition-api";
 import SiteSection from "~/components/core/Section.vue";
-import content from "~/data/content";
 
 export default {
   components: { SiteSection },
   setup() {
+    const page = ref(null);
+    const sdk = inject("sdk");
     const { params } = useContext();
     const handle = params.value?.handle;
 
-    return { page: content[handle] };
+    useFetch(async () => {
+      page.value = await sdk.data.content({
+        handle: `page-${handle}`,
+        type: "pageSections"
+      });
+    });
+
+    return { page };
   }
 };
 </script>

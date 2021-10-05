@@ -8,10 +8,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-export default {
-  name: "HeaderPromo"
-=======
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
@@ -21,6 +17,5 @@ export default {
       content: inject("promo")
     };
   }
->>>>>>> 271501e68c75ed249fca3f138003b75745c55dcf
 };
 </script>

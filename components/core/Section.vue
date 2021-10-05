@@ -1,5 +1,10 @@
 <template>
-  <component :is="component" :content="content" :section="section" />
+  <component
+    v-if="content"
+    :is="component"
+    :content="content"
+    :section="section"
+  />
 </template>
 
 <script>
@@ -11,12 +16,12 @@ export default {
   props: {
     content: {
       type: Object,
-      default: () => ({})
+      required: true
     }
   },
   setup(props) {
     let component = ref(null);
-    let section = pascalCase(props?.content?.type);
+    let section = pascalCase(props?.content?._type).replace("Section", "");
     try {
       component.value = require(`~/components/sections/${section}.vue`).default;
     } catch {
