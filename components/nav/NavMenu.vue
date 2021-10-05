@@ -21,7 +21,7 @@ export default {
 
     const links = computed(() => {
       return primary.navigation.filter(navigationItem => {
-        return navigationItem.url;
+        return navigationItem._type === "link";
       });
     });
 

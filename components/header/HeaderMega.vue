@@ -1,5 +1,5 @@
 <template>
-  <transition name="fade">
+  <transition v-if="content" name="fade">
     <div
       v-show="active"
       class="absolute top-full inset-x-0 border-t border-gray-200 text-sm text-gray-500 transition ease-out duration-200"
@@ -13,16 +13,17 @@
           <div class="grid grid-cols-2 gap-y-10 gap-x-8 py-16">
             <div class="col-start-2 grid grid-cols-2 gap-x-8">
               <nuxt-link
-                v-for="(callout, index1) in mega.callouts"
+                v-for="(callout, index1) in content.callouts"
                 :key="index1"
                 :to="callout.url"
                 class="group relative text-base sm:text-sm"
               >
                 <div
+                  v-if="callout.image"
                   class="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75"
                 >
                   <nuxt-img
-                    :src="callout.image.src"
+                    :src="callout.image.file.asset.url"
                     :alt="callout.image.alt"
                     class="object-center object-cover"
                   />
@@ -35,7 +36,7 @@
               </nuxt-link>
             </div>
             <div class="row-start-1 grid grid-cols-3 gap-y-10 gap-x-8 text-sm">
-              <div v-for="(menu, index) in mega.menus" :key="index">
+              <div v-for="(menu, index) in content.menus" :key="index">
                 <p class="font-medium text-gray-900">
                   {{ menu.text }}
                 </p>
@@ -45,12 +46,12 @@
                   class="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                 >
                   <li
-                    v-for="(item, index1) in menu.items"
+                    v-for="(link, index1) in menu.links"
                     :key="index1"
                     class="flex"
                   >
-                    <nuxt-link :to="item.url" class="hover:text-gray-800">
-                      {{ item.text }}
+                    <nuxt-link :to="link.url" class="hover:text-gray-800">
+                      {{ link.text }}
                     </nuxt-link>
                   </li>
                 </ul>
@@ -67,9 +68,9 @@
 export default {
   name: "HeaderMega",
   props: {
-    mega: {
+    content: {
       type: Object,
-      default: () => ({})
+      required: true
     },
     active: {
       type: Boolean,

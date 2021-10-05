@@ -25,8 +25,6 @@ import HeaderPrimary from "./HeaderPrimary.vue";
 import HeaderSearch from "./HeaderSearch.vue";
 import HeaderCart from "./HeaderCart.vue";
 
-import headerData from "~/data/header";
-
 export default {
   name: "Header",
   components: {
@@ -36,10 +34,15 @@ export default {
     HeaderSearch,
     HeaderCart
   },
-  setup() {
-    provide("promo", headerData?.promo);
-    provide("primary", headerData?.primary);
-    return { content: headerData };
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    provide("promo", props?.content?.fields?.promo);
+    provide("primary", props?.content?.fields?.primary);
   }
 };
 </script>

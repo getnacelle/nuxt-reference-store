@@ -16,12 +16,16 @@
 import { ref, inject, provide, watch } from "@nuxtjs/composition-api";
 import NavOverlay from "./NavOverlay.vue";
 
-import headerData from "~/data/header";
-
 export default {
   name: "Nav",
   components: { NavOverlay },
-  setup() {
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
     const showNav = ref(false);
     const navOpen = inject("navOpen");
 
@@ -34,10 +38,9 @@ export default {
       }
     });
 
-    provide("primary", headerData?.primary);
+    provide("primary", props?.content?.fields?.primary);
 
     return {
-      content: headerData,
       showNav
     };
   }

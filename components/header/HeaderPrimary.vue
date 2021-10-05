@@ -12,7 +12,7 @@
       >
         <div class="relative flex">
           <button
-            v-if="navigationItem.mega"
+            v-if="navigationItem._type === 'mega'"
             type="button"
             class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
             aria-expanded="false"
@@ -21,7 +21,7 @@
             {{ navigationItem.text }}
           </button>
           <nuxt-link
-            v-else-if="navigationItem.url"
+            v-else-if="navigationItem._type === 'link'"
             :to="navigationItem.url"
             class="border-transparent text-gray-700 hover:text-gray-800 relative z-10 flex items-center transition-colors ease-out duration-200 text-sm font-medium border-b-2 -mb-px pt-px"
           >
@@ -29,8 +29,8 @@
           </nuxt-link>
         </div>
         <header-mega
-          v-if="navigationItem.mega"
-          :mega="navigationItem.mega"
+          v-if="navigationItem._type === 'mega'"
+          :content="navigationItem"
           :active="activeIndex === index"
         />
       </div>

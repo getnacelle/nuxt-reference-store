@@ -35,7 +35,7 @@
     >
       <div class="grid grid-cols-2 gap-x-4">
         <nuxt-link
-          v-for="(callout, index1) in tab.mega.callouts"
+          v-for="(callout, index1) in tab.callouts"
           :key="index1"
           :to="callout.url"
           class="group relative text-sm"
@@ -44,7 +44,7 @@
             class="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75"
           >
             <nuxt-img
-              :src="callout.image.src"
+              :src="callout.image.file.asset.url"
               :alt="callout.image.alt"
               class="object-center object-cover"
             />
@@ -66,7 +66,7 @@
       role="tabpanel"
       :tabindex="index"
     >
-      <div v-for="(menu, index1) in tab.mega.menus" :key="index1">
+      <div v-for="(menu, index1) in tab.menus" :key="index1">
         <p class="font-medium text-gray-900">
           {{ menu.text }}
         </p>
@@ -76,12 +76,12 @@
           class="mt-6 flex flex-col space-y-6"
         >
           <li
-            v-for="(item, index2) in menu.items"
+            v-for="(link, index2) in menu.links"
             :key="index2"
             class="flow-root"
           >
-            <nuxt-link :to="item.url" class="-m-2 p-2 block text-gray-500">
-              {{ item.text }}
+            <nuxt-link :to="link.url" class="-m-2 p-2 block text-gray-500">
+              {{ link.text }}
             </nuxt-link>
           </li>
         </ul>
@@ -101,7 +101,7 @@ export default {
 
     const tabs = computed(() => {
       return primary.navigation.filter(navigationItem => {
-        return navigationItem.mega;
+        return navigationItem._type === "mega";
       });
     });
 
