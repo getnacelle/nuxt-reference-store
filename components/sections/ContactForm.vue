@@ -9,7 +9,7 @@
           class="text-green-500 mr-4 h-6 w-6"
           v-html="require(`~/assets/svgs/success.svg?raw`)"
         />
-        {{ text.success }}
+        {{ content.success }}
       </div>
       <form
         v-if="!success"
@@ -17,7 +17,7 @@
         @submit.prevent="handleSubmit"
       >
         <div>
-          <label for="full-name" class="sr-only">{{ text.name }}</label>
+          <label for="full-name" class="sr-only">{{ content.name }}</label>
           <input
             v-model="formModel.name"
             type="text"
@@ -26,11 +26,11 @@
             autocomplete="name"
             required
             class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md"
-            :placeholder="`${text.name}*`"
+            :placeholder="`${content.name}*`"
           />
         </div>
         <div>
-          <label for="email" class="sr-only">{{ text.email }}</label>
+          <label for="email" class="sr-only">{{ content.email }}</label>
           <input
             v-model="formModel.email"
             id="email"
@@ -39,11 +39,11 @@
             autocomplete="email"
             required
             class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md"
-            :placeholder="`${text.email}*`"
+            :placeholder="`${content.email}*`"
           />
         </div>
         <div>
-          <label for="phone" class="sr-only">{{ text.phone }}</label>
+          <label for="phone" class="sr-only">{{ content.phone }}</label>
           <input
             v-model="formModel.phone"
             type="text"
@@ -52,11 +52,11 @@
             autocomplete="tel"
             required
             class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md"
-            :placeholder="`${text.phone}*`"
+            :placeholder="`${content.phone}*`"
           />
         </div>
         <div>
-          <label for="message" class="sr-only">{{ text.message }}</label>
+          <label for="message" class="sr-only">{{ content.message }}</label>
           <textarea
             v-model="formModel.message"
             id="message"
@@ -64,7 +64,7 @@
             rows="4"
             required
             class="block w-full shadow-sm py-3 px-4 placeholder-gray-500 focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md"
-            :placeholder="`${text.message}*`"
+            :placeholder="`${content.message}*`"
           ></textarea>
         </div>
         <div>
@@ -72,7 +72,7 @@
             type="submit"
             class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            {{ text.button }}
+            {{ content.button }}
           </button>
         </div>
       </form>
@@ -88,10 +88,10 @@ export default {
   props: {
     content: {
       type: Object,
-      default: () => ({})
+      required: true
     }
   },
-  setup(props) {
+  setup() {
     const formModel = ref({
       name: "",
       email: "",
@@ -100,20 +100,9 @@ export default {
     });
     const success = ref(false);
 
-    const text = computed(() => ({
-      name: props?.content?.name || "Full Name",
-      email: props?.content?.email || "Full Name",
-      phone: props?.content?.phone || "Full Name",
-      message: props?.content?.message || "Full Name",
-      button: props?.content?.button || "Submit",
-      success:
-        props?.content?.success ||
-        "Thanks for contacting us! We will be in touch shortly."
-    }));
-
     const handleSubmit = () => (success.value = true);
 
-    return { formModel, success, text, handleSubmit };
+    return { formModel, success, handleSubmit };
   }
 };
 </script>

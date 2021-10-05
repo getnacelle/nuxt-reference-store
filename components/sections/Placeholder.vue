@@ -1,5 +1,5 @@
 <template>
-  <section class="relative block bg-white px-4 py-16">
+  <section v-if="section" class="relative block bg-white px-4 py-16">
     <div
       class="bg-red-50 max-w-3xl mx-auto border-4 border-red-300 border-dashed rounded-lg p-12 text-center"
     >
@@ -27,13 +27,9 @@
 export default {
   name: "Placeholder",
   props: {
-    content: {
-      type: Object,
-      default: () => ({})
-    },
     section: {
       type: String,
-      default: () => "Unknown"
+      required: true
     }
   }
 };
