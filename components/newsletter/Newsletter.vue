@@ -5,16 +5,16 @@
     >
       <div class="lg:w-0 lg:flex-1">
         <h2
-          v-if="content.heading"
+          v-if="content.fields.heading"
           class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
         >
-          {{ content.heading }}
+          {{ content.fields.heading }}
         </h2>
         <p
-          v-if="content.text"
+          v-if="content.fields.text"
           class="mt-3 max-w-3xl text-lg leading-6 text-gray-300"
         >
-          {{ content.text }}
+          {{ content.fields.text }}
         </p>
       </div>
       <div class="mt-8 lg:mt-0 lg:ml-8">
@@ -26,7 +26,7 @@
             class="text-green-500 mr-4 h-6 w-6"
             v-html="require(`~/assets/svgs/success.svg?raw`)"
           />
-          {{ content.success }}
+          {{ content.fields.success }}
         </div>
         <form v-if="!success" class="sm:flex" @submit.prevent="handleSubmit">
           <label for="email-address" class="sr-only">{{ content.input }}</label>
@@ -35,14 +35,14 @@
             autocomplete="email"
             required
             class="w-full px-5 py-3 border border-transparent placeholder-gray-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white focus:border-white sm:max-w-xs rounded-md"
-            :placeholder="content.input"
+            :placeholder="content.fields.input"
           />
           <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
             <button
               type="submit"
               class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500"
             >
-              {{ content.button }}
+              {{ content.fields.button }}
             </button>
           </div>
         </form>
@@ -53,14 +53,19 @@
 
 <script>
 import { ref, watch, useContext } from "@nuxtjs/composition-api";
-import newsletterData from "~/data/newsletter";
 
 export default {
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
   setup() {
     const formModel = ref({
       email: ""
     });
-    const success = ref(true);
+    const success = ref(false);
     const { route } = useContext();
 
     const handleSubmit = () => (success.value = true);
@@ -70,7 +75,6 @@ export default {
     });
 
     return {
-      content: newsletterData,
       formModel,
       success,
       handleSubmit

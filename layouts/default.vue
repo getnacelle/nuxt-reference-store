@@ -10,8 +10,8 @@
       <cart-provider>
         <site-header :content="content.header" />
         <nuxt />
-        <site-newsletter />
-        <site-footer />
+        <site-newsletter :content="content.newsletter" />
+        <site-footer :content="content.footer" />
         <site-nav :content="content.header" />
       </cart-provider>
     </event-provider>
@@ -27,6 +27,7 @@ import {
   useContext,
   useFetch
 } from "@nuxtjs/composition-api";
+
 import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
 import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
@@ -55,13 +56,21 @@ export default {
     const setNavOpen = val => (navOpen.value = val);
 
     useFetch(async () => {
-      const [header] = await Promise.all([
+      const [header, footer, newsletter] = await Promise.all([
         sdk.data.content({
           handle: "component-header",
           type: "componentHeader"
+        }),
+        sdk.data.content({
+          handle: "component-footer",
+          type: "componentFooter"
+        }),
+        sdk.data.content({
+          handle: "component-newsletter",
+          type: "componentNewsletter"
         })
       ]);
-      content.value = { header };
+      content.value = { header, footer, newsletter };
     });
 
     watch(route, () => {

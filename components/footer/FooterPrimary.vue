@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-2 gap-8 md:grid-cols-4 mb-16">
-    <div v-for="(menu, index) in navigation" :key="index" class="mt-10">
+  <div v-if="content" class="grid grid-cols-2 gap-8 md:grid-cols-4 mb-16">
+    <div v-for="(menu, index) in content.navigation" :key="index" class="mt-10">
       <div>
         <h3
           class="text-sm font-semibold text-gray-400 tracking-wider uppercase"
@@ -23,12 +23,13 @@
 </template>
 
 <script>
-import footerData from "~/data/footer";
+import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "FooterPrimary",
   setup() {
     return {
-      navigation: footerData.navigation
+      content: inject("primary")
     };
   }
 };
