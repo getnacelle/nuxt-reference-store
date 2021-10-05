@@ -18,16 +18,18 @@ import { provide } from "@nuxtjs/composition-api";
 import FooterPrimary from "./FooterPrimary.vue";
 import FooterSecondary from "./FooterSecondary.vue";
 
-import footerData from "~/data/footer";
-
 export default {
   name: "Footer",
   components: { FooterPrimary, FooterSecondary },
-  setup() {
-    provide("primary", footerData?.primary);
-    provide("secondary", footerData?.secondary);
-
-    return { content: footerData };
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
+    provide("primary", props?.content?.fields?.primary);
+    provide("secondary", props?.content?.fields?.secondary);
   }
 };
 </script>
