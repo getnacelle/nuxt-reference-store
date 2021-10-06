@@ -6,15 +6,23 @@
 export default {
   props: {
     price: {
+      type: [String, Number],
+      required: true
+    },
+    currencyCode: {
+      type: String,
+      required: true
+    },
+    locale: {
       type: String,
       required: true
     }
   },
   computed: {
     formattedPrice: function () {
-      return Intl.NumberFormat('en-us', {
+      return Intl.NumberFormat(this.locale, {
         style: 'currency',
-        currency: 'USD'
+        currency: this.currencyCode
       }).format(this.price);
     }
   }

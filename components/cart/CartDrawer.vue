@@ -27,7 +27,7 @@
                   </ul>
                 </div>
                 <p v-else class="text-gray-400 text-center">{{ content.empty }}</p>
-                <cart-upsells />
+                <cart-cross-sells />
               </div>
             </div>
           </div>
@@ -42,14 +42,14 @@
 import { inject } from "@nuxtjs/composition-api";
 import { useCartProvider } from "@nacelle/vue";
 import CartItem from "./CartItem.vue";
-import CartUpsells from "./CartUpsells.vue";
+import CartCrossSells from "./CartCrossSells.vue";
 import CartTotal from "./CartTotal.vue";
 
 export default {
   name: "CartDrawer",
   components: {
     CartItem,
-    CartUpsells,
+    CartCrossSells,
     CartTotal
   },
   setup() {

@@ -2,7 +2,7 @@
   <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
     <div class="flex justify-between text-base font-medium text-gray-900">
       <p>{{ content.subtotal }}</p>
-      <p><price :price="subtotal" /></p>
+      <p><price :price="subtotal" :currencyCode="currencyCode" :locale="locale" /></p>
     </div>
     <p v-if="content.message" class="mt-0.5 text-sm text-gray-500">{{ content.message }}</p>
     <div class="mt-6">
@@ -34,8 +34,14 @@ export default {
       return cart.lineItems.reduce((sum, item) => {
         return sum + item.quantity * item.variant.price;
       }, 0);
-    })
-    return { content, setCartOpen, cart, subtotal };
+    });
+    const currencyCode = computed(() => {
+      return cart.lineItems[0].product.priceRange.currencyCode;
+    });
+    const locale = computed(() => {
+      return cart.lineItems[0].product.locale;
+    });
+    return { content, setCartOpen, cart, subtotal, currencyCode, locale };
   }
 }
 </script>

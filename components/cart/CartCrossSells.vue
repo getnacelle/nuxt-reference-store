@@ -1,10 +1,10 @@
 <template>
-  <div class="mt-12">
+  <div v-if="availableCrossSells.length" class="mt-12">
     <h2 v-if="content.heading" class="text-lg font-medium text-gray-900">
       {{ content.heading }}
     </h2>
     <ul>
-      <li v-for="item in upsells" :key="item.id" class="py-6 flex">
+      <li v-for="item in availableCrossSells" :key="item.id" class="py-6 flex">
         <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
           <nuxt-img :src="item.variants[0].featuredMedia.src" :alt="item.variants[0].featuredMedia.alt" class="w-full h-full object-center object-cover" />
         </div>
@@ -18,7 +18,7 @@
                 </nuxt-link>
               </h3>
               <p class="ml-4">
-                <price :price="item.variants[0].price" />
+                <price :price="item.variants[0].price" :currencyCode="item.priceRange.currencyCode" :locale="item.locale" />
               </p>
             </div>
           </div>
@@ -35,35 +35,42 @@
 
 <script>
 import { useSpaceProvider, useCartProvider } from "@nacelle/vue";
-import { ref, inject, useFetch } from "@nuxtjs/composition-api";
+import { ref, inject, computed, useFetch } from "@nuxtjs/composition-api";
 import Price from "~/components/core/Price.vue";
 
 export default {
-  name: "CartUpsells",
+  name: "CartCrossSells",
   components: {
     Price
   },
   setup() {
     const { nacelleSdk } = useSpaceProvider();
-    const { addItem } = useCartProvider();
-    const upsells = ref([]);
-    const content = inject("upsells");
+    const { cart, addItem } = useCartProvider();
+    const crossSells = ref([]);
+    const content = inject("crosssells");
 
     const addProduct = (product) => {
       addItem({ product, variant: product.variants[0], quantity: 1 });
-    }
+    };
 
-    useFetch(async () => {
-      const products = await nacelleSdk.data.allProducts();
-      while(upsells.value.length < 3) {
-        const index = Math.floor(Math.random() * products.length);
-        const product = products[index];
-        if (upsells.value.some(upsell => upsell.handle === product.handle)) continue;
-        upsells.value.push(product);
-      }
+    const availableCrossSells = computed(() => {
+      return crossSells.value.filter((item) => {
+        return !cart.lineItems.some((lineItem) => {
+          return lineItem.product.id === item.id;
+        })
+      }).slice(0, 3);
     });
 
-    return { content, addProduct, upsells };
+    useFetch(async () => {
+      const products = await nacelleSdk.data.products({
+        handles: content.products
+      });
+      crossSells.value = products.filter((product) => {
+        return product.availableForSale
+      });
+    });
+
+    return { content, addProduct, crossSells, availableCrossSells };
   }
 }
 </script>

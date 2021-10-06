@@ -28,7 +28,7 @@ export default {
     provide("drawer", props.content?.fields?.drawer)
     provide("item", props.content?.fields?.item)
     provide("total", props.content?.fields?.total)
-    provide("upsells", props.content?.fields?.upsells)
+    provide("crosssells", props.content?.fields?.crosssells)
 
     watch(cartOpen, value => {
       if (value) showCart.value = value

@@ -13,7 +13,7 @@
             </nuxt-link>
           </h3>
           <p class="ml-4">
-            <price :price="item.variant.price" />
+            <price :price="item.variant.price" :currencyCode="item.product.priceRange.currencyCode" :locale="item.product.locale" />
           </p>
         </div>
         <p v-if="item.variant.title && item.variant.title.toLowerCase() !== 'default title'" class="mt-1 text-sm text-gray-500">
