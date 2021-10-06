@@ -32,16 +32,16 @@ export default async () => {
   }).then(response => response.json());
 
   return [
-    ...data.products.items.map(item => {
-      return `/products/${item.handle}`;
-    }),
-    ...data.collections.items.map(item => {
-      return `/collections/${item.handle}`;
-    }),
-    ...data.content.items
-      .filter(({ type }) => type === "page" && type !== "article")
-      .map(({ type, handle }) => {
-        return type === "page" ? `/pages/${handle}` : `/blog/${handle}`;
-      })
+    // ...data.products.items.map(item => {
+    //   return `/products/${item.handle}`;
+    // }),
+    // ...data.collections.items.map(item => {
+    //   return `/collections/${item.handle}`;
+    // }),
+    // ...data.content.items
+    //   .filter(({ type }) => type === "page" && type !== "article")
+    //   .map(({ type, handle }) => {
+    //     return type === "page" ? `/pages/${handle}` : `/blog/${handle}`;
+    //   })
   ];
 };
