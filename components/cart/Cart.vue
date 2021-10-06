@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showCart" class="fixed inset-0 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+  <div v-show="showCart" class="fixed inset-0 overflow-hidden z-20" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
     <div class="absolute inset-0 overflow-hidden">
       <cart-overlay />
       <cart-drawer />

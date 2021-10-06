@@ -59,7 +59,7 @@ export default {
     const setNavOpen = val => (navOpen.value = val);
 
     useFetch(async () => {
-      const [header, footer, newsletter] = await Promise.all([
+      const [header, footer, newsletter, cart] = await Promise.all([
         sdk.data.content({
           handle: "component-header",
           type: "componentHeader"
