@@ -25,9 +25,9 @@
                   <ul role="list" class="-my-6 divide-y divide-gray-200">
                     <cart-item v-for="item in cart.lineItems" :key="item.id" :item="item" />
                   </ul>
-                  <cart-upsells />
                 </div>
                 <p v-else class="text-gray-400 text-center">{{ content.empty }}</p>
+                <cart-upsells />
               </div>
             </div>
           </div>
