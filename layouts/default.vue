@@ -9,6 +9,7 @@
     <event-provider>
       <cart-provider>
         <site-header :content="content.header" />
+        <cart />
         <nuxt />
         <site-newsletter :content="content.newsletter" />
         <site-footer :content="content.footer" />
@@ -33,6 +34,7 @@ import SiteHeader from "~/components/header/Header.vue";
 import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
 import SiteFooter from "~/components/footer/Footer.vue";
 import SiteNav from "~/components/nav/Nav.vue";
+import Cart from "~/components/cart/Cart.vue";
 
 export default {
   components: {
@@ -42,7 +44,8 @@ export default {
     SiteHeader,
     SiteNewsletter,
     SiteFooter,
-    SiteNav
+    SiteNav,
+    Cart
   },
   setup() {
     const content = ref(null);
