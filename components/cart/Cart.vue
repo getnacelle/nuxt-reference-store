@@ -8,15 +8,27 @@
 </template>
 
 <script>
-import { inject, ref, watch } from "@nuxtjs/composition-api";
+import { inject, ref, provide, watch } from "@nuxtjs/composition-api";
 import CartOverlay from "./CartOverlay.vue";
 import CartDrawer from "./CartDrawer.vue";
 
 export default {
+  name: "Cart",
   components: { CartOverlay, CartDrawer },
-  setup() {
+  props: {
+    content: {
+      type: Object,
+      required: true
+    }
+  },
+  setup(props) {
     const showCart = ref(false);
     const cartOpen = inject("cartOpen");
+
+    provide("drawer", props.content?.fields?.drawer)
+    provide("item", props.content?.fields?.item)
+    provide("total", props.content?.fields?.total)
+    provide("upsells", props.content?.fields?.upsells)
 
     watch(cartOpen, value => {
       if (value) showCart.value = value

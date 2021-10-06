@@ -13,7 +13,7 @@
             </nuxt-link>
           </h3>
           <p class="ml-4">
-            {{ formatPrice(item.variant.price) }}
+            <price :price="item.variant.price" />
           </p>
         </div>
         <p v-if="item.variant.title && item.variant.title.toLowerCase() !== 'default title'" class="mt-1 text-sm text-gray-500">
@@ -34,14 +34,15 @@
 </template>
 
 <script>
+import { inject } from "@nuxtjs/composition-api";
 import { useCartProvider } from "@nacelle/vue";
-
-const content = {
-  quantity: "Qty",
-  remove: "Remove"
-}
+import Price from "~/components/core/Price.vue";
 
 export default {
+  name: "CartItem",
+  components: {
+    Price
+  },
   props: {
     item: {
       type: Object,
@@ -50,15 +51,8 @@ export default {
   },
   setup() {
     const { removeItem } = useCartProvider();
+    const content = inject("item")
     return { content, removeItem };
-  },
-  methods: {
-    formatPrice(price) {
-      return Intl.NumberFormat('en-us', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(price);
-    }
   }
 }
 </script>

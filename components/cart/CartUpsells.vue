@@ -18,7 +18,7 @@
                 </nuxt-link>
               </h3>
               <p class="ml-4">
-                {{ formatPrice(item.variants[0].price) }}
+                <price :price="item.variants[0].price" />
               </p>
             </div>
           </div>
@@ -35,20 +35,25 @@
 
 <script>
 import { useSpaceProvider, useCartProvider } from "@nacelle/vue";
-import { ref, useFetch } from "@nuxtjs/composition-api";
-
-const content = {
-  heading: "You May Also Like",
-  add: "Add to bag"
-}
+import { ref, inject, useFetch } from "@nuxtjs/composition-api";
+import Price from "~/components/core/Price.vue";
 
 export default {
+  name: "CartUpsells",
+  components: {
+    Price
+  },
   setup() {
     const { nacelleSdk } = useSpaceProvider();
     const { addItem } = useCartProvider();
     const upsells = ref([]);
+    const content = inject("upsells");
 
-    const { fetchState } = useFetch(async () => {
+    const addProduct = (product) => {
+      addItem({ product, variant: product.variants[0], quantity: 1 });
+    }
+
+    useFetch(async () => {
       const products = await nacelleSdk.data.allProducts();
       while(upsells.value.length < 3) {
         const index = Math.floor(Math.random() * products.length);
@@ -58,18 +63,7 @@ export default {
       }
     });
 
-    return { content, addItem, upsells, fetchState };
-  },
-  methods: {
-    addProduct(product) {
-      this.addItem({ product, variant: product.variants[0], quantity: 1 });
-    },
-    formatPrice(price) {
-      return Intl.NumberFormat('en-us', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(price);
-    }
+    return { content, addProduct, upsells };
   }
 }
 </script>

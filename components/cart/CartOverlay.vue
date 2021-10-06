@@ -8,6 +8,7 @@
 import { inject } from "@nuxtjs/composition-api";
 
 export default {
+  name: "CartOverlay",
   setup() {
     const cartOpen = inject("cartOpen");
     const setCartOpen = inject("setCartOpen");

@@ -9,7 +9,7 @@
     <event-provider>
       <cart-provider>
         <site-header :content="content.header" />
-        <cart />
+        <cart :content="content.cart" />
         <nuxt />
         <site-newsletter :content="content.newsletter" />
         <site-footer :content="content.footer" />
@@ -71,9 +71,13 @@ export default {
         sdk.data.content({
           handle: "component-newsletter",
           type: "componentNewsletter"
+        }),
+        sdk.data.content({
+          handle: "component-cart",
+          type: "componentCart"
         })
       ]);
-      content.value = { header, footer, newsletter };
+      content.value = { header, footer, newsletter, cart };
     });
 
     watch(route, () => {
