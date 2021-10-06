@@ -1,9 +1,4 @@
-import {
-  onGlobalSetup,
-  useContext,
-  provide,
-  useAsync
-} from "@nuxtjs/composition-api";
+import { onGlobalSetup, useContext, provide } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
 import LRU from "lru-cache";
 import { delay } from "~/utils";
