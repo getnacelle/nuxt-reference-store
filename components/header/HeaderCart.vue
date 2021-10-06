@@ -21,22 +21,28 @@
     </svg>
     <span
       class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
-      >0</span
+      >{{ count }}</span
     >
     <span class="sr-only">items in cart, view bag</span>
   </button>
 </template>
 
 <script>
-import { inject } from "@nuxtjs/composition-api";
+import { computed, inject } from "@nuxtjs/composition-api";
+import { useCartProvider } from "@nacelle/vue";
 
 export default {
   name: "HeaderCart",
   setup() {
     const cartOpen = inject("cartOpen");
     const setCartOpen = inject("setCartOpen");
+    const { cart } = useCartProvider();
 
-    return { cartOpen, setCartOpen };
+    const count = computed(() => cart.lineItems.reduce((count, item) => {
+      return count + item.quantity
+    }, 0));
+
+    return { cartOpen, setCartOpen, count };
   }
 };
 </script>
