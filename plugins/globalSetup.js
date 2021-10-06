@@ -14,7 +14,7 @@ let routeCount = 0;
 export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext();
-    const sdk = useSdk({ config: $config.nacelle });
+    const nacelleSdk = useSdk({ config: $config.nacelle });
 
     let initialSpace = useAsync(async () => {
       let space = await cache.get("space");
@@ -23,7 +23,7 @@ export default () => {
         await delay(500);
         space = await cache.get("space");
       }
-      if (!space) space = await sdk.data.space();
+      if (!space) space = await nacelleSdk.data.space();
       if (space) await cache.set("space", space);
       return space;
     });
@@ -41,7 +41,7 @@ export default () => {
       }
       return null;
     };
-    provide("sdk", sdk);
+    provide("nacelleSdk", nacelleSdk);
     provide("initialSpace", initialSpace);
     provide("getMetatag", getMetatag);
   });

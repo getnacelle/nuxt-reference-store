@@ -16,12 +16,12 @@ export default {
   components: { SiteSection },
   setup() {
     const page = ref(null);
-    const sdk = inject("sdk");
+    const nacelleSdk = inject("nacelleSdk");
     const { params } = useContext();
     const handle = params.value?.handle;
 
     useFetch(async () => {
-      page.value = await sdk.data.content({
+      page.value = await nacelleSdk.data.content({
         handle: `page-${handle}`,
         type: "pageSections"
       });
