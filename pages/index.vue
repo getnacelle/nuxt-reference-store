@@ -10,74 +10,18 @@
 import Hero from "~/components/sections/Hero.vue";
 import SideBySide from "~/components/sections/SideBySide.vue";
 import Newsletter from "~/components/sections/Newsletter.vue";
+import FeaturedProducts from "~/components/sections/FeaturedProducts.vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
 // import { useSpaceProvider } from "@nacelle/vue";
 
-const content = {
-  homepage: {
-    sections: [
-      {
-        type: "hero",
-        image: {
-          src: "https://tailwindui.com/img/ecommerce-images/home-page-01-hero-full-width.jpg",
-          alt: "hero image"
-        },
-        heading: "New arrivals are here",
-        text: "The new arrivals have, well, newly arrived. Check out the latest options from our summer small-batch release while they're still in stock.",
-        cta: {
-          label: "Shop New Arrivals",
-          url: "/"
-        }
-      },
-      {
-        type: "sideBySide",
-        layout: "image-left",
-        image: {
-          src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
-          alt: "side by side image"
-        },
-        heading: "Our Process",
-        subheading: "Work with us",
-        text: "Semper curabitur ullamcorper posuere nunc sed. Ornare iaculis bibendum malesuada faucibus lacinia porttitor. Pulvinar laoreet sagittis viverra duis. In venenatis sem arcu pretium pharetra at. Lectus viverra dui tellus ornare pharetra.",
-        cta: {
-          label: "Get Started",
-          url: "/",
-        },
-      },
-      {
-        type: "sideBySide",
-        layout: "image-right",
-        image: {
-          src: "https://tailwindui.com/img/ecommerce-images/home-page-01-hero-full-width.jpg",
-          alt: "side by side image"
-        },
-        heading: "New Arrivals Are Here",
-        subheading: "",
-        text: "The new arrivals have, well, newly arrived. Check out the latest options from our summer small-batch release while they're still in stock.",
-        cta: {
-          label: "Shop New Arrvials",
-          url: "/",
-        },
-      },
-      {
-        type: "newsletter",
-        heading: "Sign up for our newsletter",
-        text: "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui Lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat.",
-        label: "Email address",
-        placeholder: "Enter your email",
-        cta: {
-          label: "Notify me"
-        }
-      },
-    ]
-  }
-};
+import content from "~/data/content.js";
 
 export default {
   components: {
     Hero,
     SideBySide,
-    Newsletter
+    Newsletter,
+    FeaturedProducts
   },
   setup() {
     // const { nacelleSdk } = useSpaceProvider();
