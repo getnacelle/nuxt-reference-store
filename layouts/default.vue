@@ -49,7 +49,7 @@ export default {
     const cartOpen = ref(false);
     const navOpen = ref(false);
     const initialSpace = inject("initialSpace");
-    const sdk = inject("sdk");
+    const nacelleSdk = inject("nacelleSdk");
     const { route } = useContext();
 
     const setCartOpen = val => (cartOpen.value = val);
@@ -57,15 +57,15 @@ export default {
 
     useFetch(async () => {
       const [header, footer, newsletter] = await Promise.all([
-        sdk.data.content({
+        nacelleSdk.data.content({
           handle: "component-header",
           type: "componentHeader"
         }),
-        sdk.data.content({
+        nacelleSdk.data.content({
           handle: "component-footer",
           type: "componentFooter"
         }),
-        sdk.data.content({
+        nacelleSdk.data.content({
           handle: "component-newsletter",
           type: "componentNewsletter"
         })
