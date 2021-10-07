@@ -1,36 +1,34 @@
 <template>
-  <main>
-    <div v-for="(section, index) in page.sections" :key="index">
-      <component :is="section.type" :section="section" />
-    </div>
+  <main v-if="page">
+    <site-section
+      v-for="section in page.sections"
+      :key="section._key"
+      :content="section"
+    />
   </main>
 </template>
 
 <script>
-import Hero from "~/components/sections/Hero.vue";
-import HomeSideBySide from "~/components/sections/HomeSideBySide.vue";
-import Newsletter from "~/components/sections/Newsletter.vue";
-import FeaturedProducts from "~/components/sections/FeaturedProducts.vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
-// import { useSpaceProvider } from "@nacelle/vue";
-
-import content from "~/data/content.js";
+import { useSpaceProvider } from "@nacelle/vue";
+import SiteSection from "~/components/core/Section.vue";
 
 export default {
-  components: {
-    Hero,
-    HomeSideBySide,
-    Newsletter,
-    FeaturedProducts
-  },
+  components: { SiteSection },
   setup() {
-    // const { nacelleSdk } = useSpaceProvider();
-    const page = ref({});
-    const { fetchState } = useFetch(async () => {
-      // page.value = await nacelleSdk.data.page({ handle: "homepage" });
-      page.value = content["homepage"];
+    const { nacelleSdk } = useSpaceProvider();
+    const page = ref(null);
+    useFetch(async () => {
+      page.value = await nacelleSdk.data.content({
+        handle: "page-homepage",
+        type: "pageSections"
+      }).catch(() => {
+        console.warn(
+          `No page entry with handle 'page-homepage' found. Please create one in your CMS.`
+        );
+      });
     });
-    return { page, fetchState };
+    return { page };
   }
 }
 </script>
