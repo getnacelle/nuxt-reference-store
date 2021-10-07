@@ -8,7 +8,7 @@
 
 <script>
 import Hero from "~/components/sections/Hero.vue";
-import SideBySide from "~/components/sections/SideBySide.vue";
+import HomeSideBySide from "~/components/sections/HomeSideBySide.vue";
 import Newsletter from "~/components/sections/Newsletter.vue";
 import FeaturedProducts from "~/components/sections/FeaturedProducts.vue";
 import { ref, useFetch } from "@nuxtjs/composition-api";
@@ -19,7 +19,7 @@ import content from "~/data/content.js";
 export default {
   components: {
     Hero,
-    SideBySide,
+    HomeSideBySide,
     Newsletter,
     FeaturedProducts
   },
