@@ -2,7 +2,7 @@
   <div class="bg-white">
     <div class="relative bg-gray-900">
       <div v-if="section.image && section.image.src" aria-hidden="true" class="absolute inset-0 overflow-hidden">
-        <img :src="section.image.src" :alt="section.image.alt" class="w-full h-full object-center object-cover">
+        <nuxt-img :src="section.image.src" :alt="section.image.alt" class="w-full h-full object-center object-cover" />
       </div>
       <div aria-hidden="true" class="absolute inset-0 bg-gray-900 opacity-50"></div>
 
