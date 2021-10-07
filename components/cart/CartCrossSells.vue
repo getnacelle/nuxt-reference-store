@@ -1,10 +1,10 @@
 <template>
-  <div v-if="availableCrossSells.length" class="mt-12">
+  <div v-if="activeCrossSells.length" class="mt-12">
     <h2 v-if="content.heading" class="text-lg font-medium text-gray-900">
       {{ content.heading }}
     </h2>
     <ul>
-      <li v-for="item in availableCrossSells" :key="item.id" class="py-6 flex">
+      <li v-for="item in activeCrossSells" :key="item.id" class="py-6 flex">
         <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
           <nuxt-img :src="item.variants[0].featuredMedia.src" :alt="item.variants[0].featuredMedia.alt" class="w-full h-full object-center object-cover" />
         </div>
@@ -53,24 +53,21 @@ export default {
       addItem({ product, variant: product.variants[0], quantity: 1 });
     };
 
-    const availableCrossSells = computed(() => {
-      return crossSells.value.filter((item) => {
-        return !cart.lineItems.some((lineItem) => {
-          return lineItem.product.id === item.id;
+    const activeCrossSells = computed(() => {
+      return crossSells.value.filter((crossSell) => {
+        return crossSell.availableForSale = !cart.lineItems.some((lineItem) => {
+          return lineItem.product.id === crossSell.id;
         })
       }).slice(0, 3);
     });
 
     useFetch(async () => {
-      const products = await nacelleSdk.data.products({
+      crossSells.value = await nacelleSdk.data.products({
         handles: content.products
-      });
-      crossSells.value = products.filter((product) => {
-        return product.availableForSale
       });
     });
 
-    return { content, addProduct, crossSells, availableCrossSells };
+    return { content, addProduct, crossSells, activeCrossSells };
   }
 }
 </script>
