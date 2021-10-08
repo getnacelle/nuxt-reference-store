@@ -39,9 +39,10 @@ export default async () => {
       return `/collections/${item.handle}`;
     }),
     ...data.content.items
-      .filter(({ type }) => type === "page" && type !== "article")
+      .filter(({ type }) => type.startsWith("page") && type !== "article")
       .map(({ type, handle }) => {
-        return type === "page" ? `/pages/${handle}` : `/blog/${handle}`;
+        if (type === "blog") return `/blog/${handle}`;
+        return `/pages/${handle.replace("page-", "")}`;
       })
   ];
 };
