@@ -11,7 +11,7 @@
       </div>
 
       <div class="mt-6 sm:hidden">
-        <nuxt-link v-if="content.link" :to="content.link.url" class="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">{{ content.link.label }}<span aria-hidden="true"> &rarr;</span></nuxt-link>
+        <nuxt-link v-if="content.link" :to="content.link.url" class="block text-sm font-semibold text-indigo-600 hover:text-indigo-500">{{ content.link.text }}<span aria-hidden="true"> &rarr;</span></nuxt-link>
       </div>
     </div>
   </section>
