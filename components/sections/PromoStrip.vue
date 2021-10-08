@@ -5,7 +5,7 @@
   >
     <div v-if="content.image" class="absolute inset-0 overflow-hidden">
       <nuxt-img
-        :src="content.image.src"
+        :src="content.image.file.asset.url"
         :alt="content.image.alt"
         :width="1200"
         class="w-full h-full object-center object-cover"
