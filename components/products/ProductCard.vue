@@ -1,7 +1,7 @@
 <template>
   <nuxt-link :to="`/products/${product.handle}`" class="group">
     <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-      <nuxt-img :src="product.featuredMedia.src" :alt="product.featuredMedia.alt" class="w-full h-full object-center object-cover group-hover:opacity-75" />
+      <nuxt-picture :src="product.featuredMedia.src" :alt="product.featuredMedia.alt" sizes="sm:100vw lg:50vw xl:280px" class="picture" />
     </div>
     <h3 class="mt-4 text-sm text-gray-700">
       {{ product.title }}
@@ -27,3 +27,9 @@ export default {
   }
 }
 </script>
+
+<style lang="postcss" scoped>
+::v-deep .picture img {
+  @apply w-full h-full object-center object-cover group-hover:opacity-75;
+}
+</style>

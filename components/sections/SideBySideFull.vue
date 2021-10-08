@@ -2,7 +2,7 @@
   <section v-if="content" class="relative bg-white">
     <div class="lg:absolute lg:inset-0">
       <div :class="`lg:absolute lg:inset-y-0 lg:w-1/2 ${content.layout === 'image-left' ? 'lg:left-0' : 'lg:right-0'}`">
-        <nuxt-img v-if="content.image" class="h-56 w-full object-cover lg:absolute lg:h-full" :src="content.image.file.asset.url" :alt="content.image.alt" />
+        <nuxt-picture v-if="content.image" class="picture" :src="content.image.file.asset.url" :alt="content.image.alt" sizes="sm:100vw md:100vw lg:100vw xl:50vw" />
       </div>
     </div>
     <div class="relative pt-12 pb-16 px-4 sm:pt-16 sm:px-6 lg:px-8 lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2">
@@ -30,3 +30,9 @@ export default {
   }
 }
 </script>
+
+<style lang="postcss" scoped>
+::v-deep .picture img {
+  @apply h-56 w-full object-cover lg:absolute lg:h-full;
+}
+</style>
