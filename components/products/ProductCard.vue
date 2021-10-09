@@ -1,7 +1,7 @@
 <template>
   <nuxt-link :to="`/products/${product.handle}`" class="group">
     <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-      <nuxt-picture :src="product.featuredMedia.src" :alt="product.featuredMedia.altText" sizes="sm:100vw lg:50vw xl:280px" class="picture" />
+      <nuxt-picture :src="product.featuredMedia.src" :alt="product.featuredMedia.altText" sizes="xs:100vw sm:100vw md:50vw lg:50vw xl:280px" class="picture" />
     </div>
     <h3 class="mt-4 text-sm text-gray-700">
       {{ product.title }}

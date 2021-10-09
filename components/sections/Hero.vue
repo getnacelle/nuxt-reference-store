@@ -2,7 +2,7 @@
   <section v-if="content" class="bg-white">
     <div class="relative bg-gray-900">
       <div v-if="content.image" aria-hidden="true" class="absolute inset-0 overflow-hidden">
-        <nuxt-picture :src="content.image.file.asset.url" :alt="content.image.alt" sizes="sm:100vw md:100vw lg:100vw xl:100vw" class="picture" />
+        <nuxt-picture :src="content.image.file.asset.url" :alt="content.image.alt" sizes="xs:100vw sm:100vw md:100vw lg:100vw xl:100vw" class="picture" />
       </div>
       <div aria-hidden="true" class="absolute inset-0 bg-gray-900 opacity-50"></div>
 
