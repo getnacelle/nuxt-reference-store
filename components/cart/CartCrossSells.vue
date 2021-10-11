@@ -55,7 +55,7 @@ export default {
 
     const activeCrossSells = computed(() => {
       return crossSells.value.filter((crossSell) => {
-        return crossSell.availableForSale = !cart.lineItems.some((lineItem) => {
+        return crossSell.availableForSale && !cart.lineItems.some((lineItem) => {
           return lineItem.product.id === crossSell.id;
         })
       }).slice(0, 3);
