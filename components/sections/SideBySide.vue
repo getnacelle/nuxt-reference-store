@@ -21,8 +21,9 @@
             class="aspect-w-3 aspect-h-2 bg-gray-100 rounded-lg overflow-hidden"
           >
             <nuxt-img
-              :src="content.image.src"
+              :src="content.image.file.asset.url"
               :alt="content.image.alt"
+              :width="600"
               class="object-center object-cover"
             />
           </div>

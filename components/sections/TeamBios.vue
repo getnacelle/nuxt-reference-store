@@ -22,9 +22,9 @@
               >
                 <nuxt-img
                   class="object-cover shadow-lg rounded-lg"
-                  :src="member.image.src"
+                  :src="member.image.file.asset.url"
+                  :alt="member.image.alt"
                   :width="500"
-                  :alt="member.name"
                 />
               </div>
               <div class="sm:col-span-2">
@@ -36,8 +36,8 @@
                     </p>
                   </div>
                   <div class="text-lg">
-                    <p v-if="member.bio" class="text-gray-500">
-                      {{ member.bio }}
+                    <p v-if="member.text" class="text-gray-500">
+                      {{ member.text }}
                     </p>
                   </div>
                 </div>
