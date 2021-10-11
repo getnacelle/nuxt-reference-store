@@ -110,5 +110,5 @@ export default {
         success: "Thanks for contacting us! We will be in touch shortly."
       }
     ]
-  }
+  },
 };

@@ -1,5 +1,5 @@
 <template>
-  <span>{{ formattedPrice }}</span>
+  <span v-if="formattedPrice">{{ formattedPrice }}</span>
 </template>
 
 <script>
