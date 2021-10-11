@@ -72,7 +72,7 @@ export default {
           handle: "component-newsletter",
           type: "componentNewsletter"
         }),
-        sdk.data.content({
+        nacelleSdk.data.content({
           handle: "component-cart",
           type: "componentCart"
         })
