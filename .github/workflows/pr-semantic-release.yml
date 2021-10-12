@@ -15,12 +15,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-versions: "ltes/*"
+          node-versions: "lts/*"
       - name: Install Dependencies
-        with:
-          node-versions: "ltes/*"
         run: npm ci
-
       - name: Preview Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
