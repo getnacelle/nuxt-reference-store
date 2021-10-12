@@ -10,6 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v1
+        with:
+          node-versions: "14.x"
       - name: 🩺 Perform Pull Request Semantic Release
         run: npm i && npx semantic-release-github-pr
         env:
