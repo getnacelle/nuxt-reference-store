@@ -1,0 +1,19 @@
+name: "Release Version"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    name: "Release"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
+        with:
+          node-versions: "14.x"
+      - run: npx semantic-release dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
