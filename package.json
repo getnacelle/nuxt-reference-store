@@ -2,6 +2,9 @@
   "name": "nuxt-starter",
   "version": "0.0.2",
   "private": true,
+  "engines": {
+    "node": ">=14.7"
+  },
   "scripts": {
     "dev": "nuxt",
     "generate": "nuxt generate",
@@ -23,6 +26,9 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/svg": "^0.3.0",
     "@nuxtjs/tailwindcss": "^4.2.1",
+    "@semantic-release/github": "^8.0.1",
+    "@semantic-release/npm": "^8.0.0",
+    "@semantic-release/release-notes-generator": "^10.0.2",
     "fibers": "^5.0.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^10.2.0",
