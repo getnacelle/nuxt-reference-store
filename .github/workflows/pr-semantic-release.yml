@@ -8,8 +8,6 @@ jobs:
   pull-request-semantic-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
       - name: 🩺 Perform Pull Request Semantic Release
         run: npx semantic-release-github-pr
         env:
