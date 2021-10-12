@@ -8,7 +8,9 @@ jobs:
   pull-request-semantic-release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v1
       - name: 🩺 Perform Pull Request Semantic Release
-        uses: amannn/action-semantic-pull-request@v3.4.2
+        run: npx semantic-release-github-pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
