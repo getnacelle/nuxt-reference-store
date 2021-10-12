@@ -1,7 +1,7 @@
-name: "Release Version"
+name: pull-request-semantic-release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -14,6 +14,6 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-versions: "14.x"
-      - run: npx semantic-release dry-run
+      - run: npx semantic-release-github-pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
