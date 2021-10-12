@@ -1,11 +1,12 @@
-name: pull-request-semantic-preview
+name: semantic-release
 
 on:
-  pull_request:
-    types: [opened, edited, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+      - main
 
 jobs:
-  pull-request-semantic-preview:
+  semantic-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,10 +19,9 @@ jobs:
           node-version: "14.x"
       - name: Install Dependencies
         run: npm ci
-      - name: Semantic Preview
+      - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         with:
-          dry_run: true
           branches: |
             [
               'main'
