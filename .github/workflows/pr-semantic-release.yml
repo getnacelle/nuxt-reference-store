@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-versions: "ltes/*"
+          node-versions: "14.x"
       - name: Install Dependencies
         run: npm ci
       - name: Preview Semantic Release
