@@ -11,6 +11,6 @@ jobs:
       - uses: actions/checkout@master
       - uses: actions/setup-node@v1
       - name: 🩺 Perform Pull Request Semantic Release
-        run: npm ci && npx semantic-release-github-pr
+        run: npm i && npx semantic-release-github-pr
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
