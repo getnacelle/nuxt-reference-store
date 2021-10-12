@@ -21,4 +21,4 @@ jobs:
       - name: Generate Semantic Preview
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release-github-pr
+        run: npx semantic-release -d
