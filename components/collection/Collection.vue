@@ -1,27 +1,26 @@
 <template>
   <div v-if="collection">
-    <product-grid :title="collection.title" :products="collection.products" />
-    <!-- <div
-      class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
+    <refinement-provider
+      :input-data="collection.products"
+      :property-filters="[
+        { field: 'productType', label: 'Category' },
+        { field: 'color', label: 'Color' },
+        { field: 'material', label: 'Material' },
+        { field: 'size', label: 'Size' }
+      ]"
     >
-      <product-provider
-        v-for="(product, index) in collection.products"
-        :key="index"
-        :product="product"
-      >
-        <product-card :product="product" />
-      </product-provider>
-    </div> -->
+      <refinement :title="collection.title" />
+    </refinement-provider>
   </div>
 </template>
 
 <script>
-import { ProductProvider, useCollectionProvider } from "@nacelle/vue";
-import ProductCard from "../products/ProductCard.vue";
-import ProductGrid from "../products/ProductGrid.vue";
+import { useCollectionProvider, RefinementProvider } from "@nacelle/vue";
+import Refinement from "../refinement/Refinement.vue";
 
 export default {
-  components: { ProductProvider, ProductCard, ProductGrid },
+  name: "Collection",
+  components: { Refinement, RefinementProvider },
   setup() {
     const { collection, isFetching } = useCollectionProvider();
     return {
