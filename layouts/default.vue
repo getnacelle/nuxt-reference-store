@@ -8,12 +8,14 @@
   >
     <event-provider>
       <cart-provider>
-        <site-header :content="content.header" />
-        <cart :content="content.cart" />
-        <nuxt />
-        <site-newsletter :content="content.newsletter" />
-        <site-footer :content="content.footer" />
-        <site-nav :content="content.header" />
+        <search-provider>
+          <site-header :content="content.header" />
+          <cart :content="content.cart" />
+          <nuxt />
+          <site-newsletter :content="content.newsletter" />
+          <site-footer :content="content.footer" />
+          <site-nav :content="content.header" />
+        </search-provider>
       </cart-provider>
     </event-provider>
   </space-provider>
@@ -29,7 +31,12 @@ import {
   useFetch
 } from "@nuxtjs/composition-api";
 
-import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
+import {
+  SpaceProvider,
+  EventProvider,
+  CartProvider,
+  SearchProvider
+} from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
 import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
 import SiteFooter from "~/components/footer/Footer.vue";
@@ -41,6 +48,7 @@ export default {
     SpaceProvider,
     EventProvider,
     CartProvider,
+    SearchProvider,
     SiteHeader,
     SiteNewsletter,
     SiteFooter,
