@@ -43,7 +43,6 @@
               </svg>
             </button>
           </div>
-
           <form class="mt-4">
             <div
               v-for="(filter, index) in filters"
