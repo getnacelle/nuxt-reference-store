@@ -1,7 +1,7 @@
 <template>
   <transition name="fade-up">
     <div
-      class="absolute md:right-0 md:w-96  z-50 bg-white overflow-hidden shadow rounded-lg"
+      class="absolute md:right-0 md:w-96 z-50 bg-white overflow-hidden shadow rounded-lg"
     >
       <div class="px-4 py-5 sm:p-6">
         <h2
