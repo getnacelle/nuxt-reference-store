@@ -11,40 +11,26 @@
 <script>
 import { ref, inject, useContext, useFetch } from "@nuxtjs/composition-api";
 import SiteSection from "~/components/core/Section.vue";
+import { buildRobotsTags, buildMetaTags } from "~/utils";
 
 export default {
   components: { SiteSection },
   head() {
     if(this.page) {
-      const properties = {};
-      const meta = [];
-      if (this.page.title || this.page.fields?.meta?.title) {
-        const title = this.page.fields?.meta?.title
-          ? this.page.fields.meta.title
-          : this.page.title;
-        properties.title = title;
-        meta.push({
-          hid: "og:title",
-          property: "og:title",
-          content: title
-        });
-      }
-      if (this.page.fields?.meta?.description) {
-        meta.push({
-          hid: "description",
-          name: "description",
-          content: this.page.fields.meta.description
-        });
-        meta.push({
-          hid: "og:description",
-          property: "og:description",
-          content: this.page.fields.meta.description
-        });
-      }
+      const title = this.page.fields?.meta?.title
+        ? this.page.fields.meta.title
+        : this.page.title;
+      const description = this.page.fields?.meta?.description;
+      const tags = this.page.fields?.meta?.tags;
+      const robots = this.page.fields?.meta?.robots;
+
       return {
-        ...properties,
-        meta
-      }
+        title: title,
+        meta: [
+          ...buildRobotsTags(robots),
+          ...buildMetaTags(title, description, tags)
+        ]
+      };
     }
   },
   setup() {
