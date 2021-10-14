@@ -9,7 +9,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "@nacelle/vue": "^0.0.9",
+    "@nacelle/vue": "^0.0.10",
     "@nuxtjs/composition-api": "^0.29.0",
     "@tailwindcss/aspect-ratio": "^0.2.2",
     "core-js": "^3.17.3",
