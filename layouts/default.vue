@@ -8,7 +8,7 @@
   >
     <event-provider>
       <cart-provider>
-        <search-provider>
+        <search-provider :searchData="searchData">
           <site-header :content="content.header" />
           <cart :content="content.cart" />
           <nuxt />
@@ -65,7 +65,6 @@ export default {
 
     const setCartOpen = val => (cartOpen.value = val);
     const setNavOpen = val => (navOpen.value = val);
-
     useFetch(async () => {
       const [header, footer, newsletter, cart] = await Promise.all([
         nacelleSdk.data.content({
@@ -88,6 +87,10 @@ export default {
       content.value = { header, footer, newsletter, cart };
     });
 
+    function searchData() {
+      return nacelleSdk.data.allProducts();
+    }
+
     watch(route, () => {
       cartOpen.value = false;
       navOpen.value = false;
@@ -98,7 +101,7 @@ export default {
     provide("setCartOpen", setCartOpen);
     provide("setNavOpen", setNavOpen);
 
-    return { initialSpace, content };
+    return { initialSpace, content, nacelleSdk, searchData };
   }
 };
 </script>

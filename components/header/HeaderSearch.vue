@@ -25,9 +25,19 @@
         <input
           id="search"
           name="search"
+          v-model="query"
+          @keyup="globalSearch"
+          @keyup.enter="submitSearch"
+          @focus="handleFocus(true)"
+          @blur="handleFocus(false)"
           class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           placeholder="Search"
           type="search"
+        />
+        <search-autocomplete
+          v-if="query && isFocused"
+          :results="results"
+          :query="query"
         />
       </div>
     </div>
@@ -35,7 +45,37 @@
 </template>
 
 <script>
+import { ref, useRouter } from "@nuxtjs/composition-api";
+import { useSearchProvider } from "@nacelle/vue";
+import SearchAutocomplete from "../search/SearchAutocomplete.vue";
 export default {
-  name: "HeaderSearch"
+  name: "HeaderSearch",
+  components: { SearchAutocomplete },
+  setup() {
+    const query = ref("");
+    const isFocused = ref(false);
+    const router = useRouter();
+    const { search, results } = useSearchProvider();
+    const globalSearch = () => {
+      search({ query: query.value });
+    };
+    const submitSearch = () => {
+      router.push({ path: `/search?q=${query.value}` });
+      search({ query: query.value });
+    };
+
+    const handleFocus = bool => {
+      isFocused.value = bool;
+    };
+
+    return {
+      query,
+      results,
+      globalSearch,
+      submitSearch,
+      handleFocus,
+      isFocused
+    };
+  }
 };
 </script>

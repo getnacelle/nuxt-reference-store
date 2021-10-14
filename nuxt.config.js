@@ -49,7 +49,7 @@ export default {
     "@nuxtjs/tailwindcss"
   ],
 
-  modules: ["~/modules/search"],
+  modules: [],
 
   pwa: {
     manifest: {
