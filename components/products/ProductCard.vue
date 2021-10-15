@@ -13,7 +13,7 @@
         />
       </nuxt-link>
     </div>
-    <div v-if="hover">
+    <div v-show="hover">
       <div v-if="product.variants.length > 1">
         <select
           class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md mt-3"
@@ -28,27 +28,27 @@
         </select>
         <button
           type="button"
-          :disabled="!product.availableForSale"
+          :disabled="!selectedVariant.availableForSale"
           @click="addProduct(product)"
           class="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200 w-full mt-3"
         >
-          <div v-if="product.availableForSale">Add to Cart</div>
+          <div v-if="selectedVariant.availableForSale">Add to Cart</div>
           <div v-else>Out of Stock</div>
         </button>
       </div>
       <div v-else class="flex w-full">
         <button
           type="button"
-          :disabled="!product.availableForSale"
+          :disabled="!selectedVariant.availableForSale"
           @click="addProduct(product)"
           class="relative flex bg-gray-100 border border-transparent rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-200 w-full mt-5"
         >
-          <div v-if="product.availableForSale">Add to Cart</div>
+          <div v-if="selectedVariant.availableForSale">Add to Cart</div>
           <div v-else>Out of Stock</div>
         </button>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!hover">
       <h3 class="mt-4 text-sm text-gray-700">
         {{ product.title }}
       </h3>
@@ -103,7 +103,8 @@ export default {
       hover,
       setHover,
       addProduct,
-      selectVariant
+      selectVariant,
+      selectedVariant
     };
   }
 };
