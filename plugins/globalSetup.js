@@ -6,7 +6,7 @@ import {
 } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
 import LRU from "lru-cache";
-import { delay } from "~/utils";
+import { delay, previews } from "~/utils";
 
 const cache = new LRU({ max: 50, max_age: 3000000 });
 let routeCount = 0;
@@ -14,7 +14,16 @@ let routeCount = 0;
 export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext();
-    const nacelleSdk = useSdk({ config: $config.nacelle });
+    let nacelleSdk = useSdk({ config: $config.nacelle });
+
+    if ($config.app?.contentMode === "preview") {
+      const connector = $config.app?.contentSource;
+      nacelleSdk = previews({
+        sdk: nacelleSdk,
+        config: $config[connector],
+        connector
+      });
+    }
 
     let initialSpace = useAsync(async () => {
       let space = await cache.get("space");

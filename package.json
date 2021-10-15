@@ -9,6 +9,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@nacelle/sanity-preview-connector": "^1.0.1",
     "@nacelle/vue": "^0.0.3",
     "@nuxtjs/composition-api": "^0.29.0",
     "@tailwindcss/aspect-ratio": "^0.2.2",
