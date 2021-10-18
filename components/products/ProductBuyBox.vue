@@ -22,7 +22,7 @@
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <nuxt-picture
                     :src="image.src"
-                    alt=""
+                    :alt="image.alt"
                     class="thumbnail"
                   />
                 </span>

@@ -9,12 +9,31 @@
 <script>
 import { ProductProvider } from "@nacelle/vue";
 import Product from "~/components/products/Product.vue"
+import { buildRobotsTags, buildMetaTags } from "~/utils";
 import { inject, ref, useContext, useFetch } from "@nuxtjs/composition-api";
 
 export default {
   components: {
     ProductProvider,
     Product
+  },
+  head() {
+    if(this.product) {
+      const title = this.product.fields?.meta?.title
+        ? this.product.fields.meta.title
+        : this.product.title;
+      const description = this.product.fields?.meta?.description;
+      const tags = this.product.fields?.meta?.tags;
+      const robots = this.product.fields?.meta?.robots;
+
+      return {
+        title: title,
+        meta: [
+          ...buildRobotsTags(robots),
+          ...buildMetaTags(title, description, tags)
+        ]
+      };
+    }
   },
   setup() {
     const product = ref(null);
