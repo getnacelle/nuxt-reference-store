@@ -1,7 +1,9 @@
 import routes from "./config/routes";
 
+const isPreview = process.env.APP_CONTENT_MODE === "preview";
+
 export default {
-  ssr: true,
+  ssr: !isPreview,
   target: "static",
   head: {
     title: "nuxt-reference-store",

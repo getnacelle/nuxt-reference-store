@@ -1,2 +1,2 @@
 export { delay } from "./_delay";
-export { previews } from "./_previews";
+export { setupPreview } from "./_setupPreview";
