@@ -20,7 +20,11 @@
                   {{ image.alt }}
                 </span>
                 <span class="absolute inset-0 rounded-md overflow-hidden">
-                  <img :src="image.src" alt="" class="w-full h-full object-center object-cover">
+                  <nuxt-picture
+                    :src="image.src"
+                    alt=""
+                    class="thumbnail"
+                  />
                 </span>
                 <span :class="`${ activeImageIndex === index ? 'ring-indigo-500' : 'ring-transparent' } absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none`" aria-hidden="true"></span>
               </button>
@@ -29,7 +33,11 @@
 
           <div class="w-full aspect-w-1 aspect-h-1">
             <div v-for="(image, index) in images" :key="image.id" :id="`tabs-1-panel-${index}`" :aria-labelledby="`tabs-1-panel-${index}`" role="tabpanel" tabindex="0" :class="index !== activeImageIndex ? 'hidden' : ''">
-              <img :src="image.src" :alt="image.alt" class="w-full h-full object-center object-cover sm:rounded-lg">
+              <nuxt-picture
+                :src="image.src"
+                :alt="image.alt"
+                class="picture"
+              />
             </div>
           </div>
         </div>
@@ -167,3 +175,13 @@ export default {
   }
 }
 </script>
+
+<style lang="postcss" scoped>
+::v-deep .thumbnail img {
+  @apply w-full h-full object-center object-cover;
+}
+
+::v-deep .picture img {
+  @apply w-full h-full object-center object-cover sm:rounded-lg;
+}
+</style>
