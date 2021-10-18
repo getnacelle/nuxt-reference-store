@@ -4,7 +4,7 @@
     <main
       class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8"
     >
-      <div class="border-b border-gray-200 pb-10 flex">
+      <div v-if="title" class="border-b border-gray-200 pb-10 flex">
         <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 flex-1">
           {{ title }}
         </h1>
