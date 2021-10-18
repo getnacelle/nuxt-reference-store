@@ -84,7 +84,7 @@ export default {
     const selectedVariant = ref(props.product.variants[0]);
     const selectVariant = event => {
       selectedVariant.value = props.product.variants.find(
-        id => id === event.target.value
+        variant => variant.id === event.target.value
       );
     };
     const addProduct = product => {
