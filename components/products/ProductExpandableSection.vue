@@ -1,9 +1,7 @@
 <template>
-  <div>
+  <div v-if="features">
     <h3>
-      <!-- Expand/collapse question button -->
       <button type="button" @click="expanded = !expanded" class="group relative w-full py-6 flex justify-between items-center text-left" aria-controls="disclosure-1" :aria-expanded="expanded">
-        <!-- Open: "text-indigo-600", Closed: "text-gray-900" -->
         <span :class="`${expanded ? 'text-indigo-600' : 'text-gray-900'} text-sm font-medium`">
           Features
         </span>
@@ -19,28 +17,22 @@
     </h3>
     <div v-show="expanded" class="pb-6 prose prose-sm" id="disclosure-1">
       <ul role="list">
-        <li>Multiple strap configurations</li>
-
-        <li>Spacious interior with top zip</li>
-
-        <li>Leather handle and tabs</li>
-
-        <li>Interior dividers</li>
-
-        <li>Stainless strap loops</li>
-
-        <li>Double stitched construction</li>
-
-        <li>Water-resistant</li>
+        <li v-for="(feature, index) in features" :key="index">{{ feature }}</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref } from '@nuxtjs/composition-api'
 
 export default {
+  props: {
+    features: {
+      type: Array,
+      required: true
+    }
+  },
   setup() {
     const expanded = ref(false);
     return { expanded };

@@ -1,6 +1,6 @@
 <template>
   <product-provider v-if="product" :product="product">
-    <product />
+    <product :content="content" />
   </product-provider>
   <div v-else-if="fetchState.pending">Loading...</div>
   <div v-else-if="fetchState.error">Error</div>
@@ -18,15 +18,23 @@ export default {
   },
   setup() {
     const product = ref(null);
+    const content = ref({});
     const { route } = useContext();
     const nacelleSdk = inject("nacelleSdk");
 
     const handle = route.value.params.handle;
     const { fetchState } = useFetch(async () => {
       product.value = await nacelleSdk.data.product({ handle });
+
+      try {
+        content.value = await nacelleSdk.data.content({
+          handle,
+          type: "productContent"
+        })
+      } catch(error) {}
     });
 
-    return { fetchState, product }
+    return { fetchState, product, content }
   },
 }
 </script>

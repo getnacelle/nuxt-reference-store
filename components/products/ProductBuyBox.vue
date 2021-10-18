@@ -88,7 +88,7 @@
             <h2 id="details-heading" class="sr-only">Additional details</h2>
 
             <div class="border-t divide-y divide-gray-200">
-              <product-expandable-section />
+              <product-expandable-section v-if="features" :features="features" />
             </div>
           </section>
         </div>
@@ -99,7 +99,7 @@
 
 <script>
 import { useProductProvider, useCartProvider } from "@nacelle/vue";
-import { computed, inject, ref } from "@vue/composition-api";
+import { computed, inject, ref } from "@nuxtjs/composition-api";
 import Price from "~/components/core/Price.vue";
 import ProductExpandableSection from './ProductExpandableSection.vue';
 
@@ -113,6 +113,7 @@ export default {
     const { product, setSelectedVariant, setSelectedOptions } = useProductProvider();
     const { addItem } = useCartProvider();
     const cartOpen = inject("cartOpen");
+    const features = inject("features");
     const activeImageIndex = ref(product.value.media.findIndex(media => media.type === "image"));
 
     setSelectedVariant(product.value.variants[0]);
@@ -155,6 +156,7 @@ export default {
 
     return {
       product,
+      features,
       images,
       activeImageIndex,
       selectableOptions,
