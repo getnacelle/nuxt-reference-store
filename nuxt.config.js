@@ -51,6 +51,7 @@ export default {
   modules: [],
 
   pwa: {
+    name: "Nacelle x Nuxt Reference Store",
     manifest: {
       lang: "en"
     },
