@@ -2,6 +2,7 @@ import {
   onGlobalSetup,
   useContext,
   useAsync,
+  useMeta,
   provide
 } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
@@ -34,8 +35,8 @@ export default () => {
      * @returns {Object|null}
      */
     const getMetatag = tag => {
-      if (initialSpace.metafields) {
-        return initialSpace.metafields.find(
+      if (initialSpace.value?.metafields) {
+        return initialSpace.value.metafields.find(
           field => field.namespace === "metatag" && field.key === tag
         );
       }
@@ -44,5 +45,36 @@ export default () => {
     provide("nacelleSdk", nacelleSdk);
     provide("initialSpace", initialSpace);
     provide("getMetatag", getMetatag);
+
+    useMeta(() => {
+      const properties = {};
+      const meta = [];
+      const title = getMetatag("title");
+      const description = getMetatag("description");
+      if (title) {
+        properties.title = title.value
+        meta.push({
+          hid: "og:title",
+          property: "og:title",
+          content: title.value
+        });
+      }
+      if (description) {
+        meta.push({
+          hid: "description",
+          name: "description",
+          content: description.value
+        });
+        meta.push({
+          hid: "og:description",
+          property: "og:description",
+          content: description.value
+        });
+      }
+      return {
+        ...properties,
+        meta
+      };
+     });
   });
 };
