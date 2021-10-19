@@ -51,14 +51,27 @@ export default () => {
       const meta = [];
       const title = getMetatag("title");
       const description = getMetatag("description");
+
       if (title) {
-        properties.title = title.value
+        properties.title = title.value;
         meta.push({
           hid: "og:title",
           property: "og:title",
           content: title.value
         });
+        meta.push({
+          // Control title used in social shares, e.g. Slack link previews
+          hid: "apple-mobile-web-app-title",
+          property: "apple-mobile-web-app-title",
+          content: title.value
+        });
+        meta.push({
+          hid: "og:site_name",
+          property: "og:site_name",
+          content: title.value
+        });
       }
+
       if (description) {
         meta.push({
           hid: "description",
@@ -75,6 +88,6 @@ export default () => {
         ...properties,
         meta
       };
-     });
+    });
   });
 };
