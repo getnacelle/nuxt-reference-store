@@ -11,7 +11,6 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
@@ -54,6 +53,10 @@ export default {
   pwa: {
     manifest: {
       lang: "en"
+    },
+    meta: {
+      name: false, // prevent overriding `useMeta` in `onGlobalSetup`
+      theme_color: "#4f46e5"
     }
   },
 
