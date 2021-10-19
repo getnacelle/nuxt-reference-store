@@ -84,7 +84,6 @@ export default () => {
           content: description.value
         });
       }
-
       return {
         ...properties,
         meta
