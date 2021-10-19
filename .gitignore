@@ -89,5 +89,8 @@ sw.*
 # Vim swap files
 *.swp
 
-#search.json
+# search.json
 static/data
+
+# Vercel CLI outputs
+.vercel*
