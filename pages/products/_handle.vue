@@ -18,13 +18,13 @@ export default {
     Product
   },
   head() {
-    if(this.product) {
-      const title = this.product.fields?.meta?.title
-        ? this.product.fields.meta.title
-        : this.product.title;
-      const description = this.product.fields?.meta?.description;
-      const tags = this.product.fields?.meta?.tags;
-      const robots = this.product.fields?.meta?.robots;
+    if(this.product || this.content) {
+      const title = this.content?.fields?.meta?.title
+        ? this.product?.fields?.meta?.title
+        : this.product?.title;
+      const description = this.content?.fields?.meta?.description;
+      const tags = this.content?.fields?.meta?.tags;
+      const robots = this.content?.fields?.meta?.robots;
 
       return {
         title: title,

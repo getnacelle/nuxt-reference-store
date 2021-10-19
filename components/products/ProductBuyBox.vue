@@ -22,7 +22,7 @@
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <nuxt-picture
                     :src="image.src"
-                    :alt="image.alt"
+                    :alt="image.altText"
                     class="thumbnail"
                   />
                 </span>
@@ -35,7 +35,7 @@
             <div v-for="(image, index) in images" :key="image.id" :id="`tabs-1-panel-${index}`" :aria-labelledby="`tabs-1-panel-${index}`" role="tabpanel" tabindex="0" :class="index !== activeImageIndex ? 'hidden' : ''">
               <nuxt-picture
                 :src="image.src"
-                :alt="image.alt"
+                :alt="image.altText"
                 class="picture"
               />
             </div>
