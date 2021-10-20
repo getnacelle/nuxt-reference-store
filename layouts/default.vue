@@ -23,12 +23,12 @@
 
 <script>
 import {
-  ref,
   inject,
   provide,
-  watch,
+  ref,
   useContext,
-  useFetch
+  useFetch,
+  watch
 } from "@nuxtjs/composition-api";
 
 import {
@@ -65,6 +65,7 @@ export default {
 
     const setCartOpen = val => (cartOpen.value = val);
     const setNavOpen = val => (navOpen.value = val);
+
     useFetch(async () => {
       const [header, footer, newsletter, cart, searchData] = await Promise.all([
         nacelleSdk.data.content({

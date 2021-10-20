@@ -18,7 +18,10 @@ export default {
 
   css: [],
 
-  plugins: [{ src: "~/plugins/globalSetup.js" }],
+  plugins: [
+    { src: "~/plugins/globalSetup.js" },
+    { src: "~/plugins/shopifyCheckout.js", mode: "client" }
+  ],
 
   components: true,
 
@@ -35,7 +38,7 @@ export default {
     },
     shopify: {
       storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
-      myshopifyDomain: process.env.SHOPIFY_STOREFRONT_DOMAIN,
+      myshopifyDomain: process.env.SHOPIFY_SHOP_ID,
       storefrontApiVersion: process.env.SHOPIFY_STOREFRONT_VERSION
     }
   },
