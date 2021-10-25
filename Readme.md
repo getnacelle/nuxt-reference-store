@@ -19,4 +19,5 @@ $ npm run start
 $ npm run generate
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+For detailed explanation on how things work, check out the [Nacelle documentation](https://docs.getnacelle.com/nacellejs/nuxt-starter.html#installation), and the
+ [Nuxt documentation](https://nuxtjs.org).
