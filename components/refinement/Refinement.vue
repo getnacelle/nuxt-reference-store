@@ -48,18 +48,18 @@
                     class="pt-6 space-y-3"
                     v-for="value in filter.values"
                     :key="value"
-                    @click="
-                      toggleActiveFilter({
-                        property: filter.property.field,
-                        value
-                      })
-                    "
                   >
                     <div class="flex items-center">
                       <input
-                        id="color-0"
-                        value="white"
+                        :id="`${value}-${index}`"
+                        :value="value"
                         type="checkbox"
+                        @change="
+                          toggleActiveFilter({
+                            property: filter.property.field,
+                            value
+                          })
+                        "
                         class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                         :checked="
                           activeFilters.some(activeFilter =>
@@ -67,7 +67,10 @@
                           )
                         "
                       />
-                      <label for="color-0" class="ml-3 text-sm text-gray-600">
+                      <label
+                        :for="`${value}-${index}`"
+                        class="ml-3 text-sm text-gray-600"
+                      >
                         {{ value }}
                       </label>
                     </div>
@@ -117,6 +120,7 @@ export default {
     const toggleFilterDrawer = () => {
       filterDrawerOpen.value = !filterDrawerOpen.value;
     };
+
     provide("filterDrawerOpen", filterDrawerOpen);
     provide("toggleFilterDrawer", toggleFilterDrawer);
     return {
