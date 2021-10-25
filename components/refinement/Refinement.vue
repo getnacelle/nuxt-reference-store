@@ -57,7 +57,7 @@
                   >
                     <div class="flex items-center">
                       <input
-                        id="color-0"
+                        :id="`${value}-${index}`"
                         value="white"
                         type="checkbox"
                         class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
@@ -67,7 +67,10 @@
                           )
                         "
                       />
-                      <label for="color-0" class="ml-3 text-sm text-gray-600">
+                      <label
+                        :for="`${value}-${index}`"
+                        class="ml-3 text-sm text-gray-600"
+                      >
                         {{ value }}
                       </label>
                     </div>
