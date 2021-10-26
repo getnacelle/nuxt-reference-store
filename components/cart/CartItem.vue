@@ -1,7 +1,13 @@
 <template>
   <li class="py-6 flex">
-    <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-      <nuxt-img :src="item.variant.featuredMedia.src" :alt="item.variant.featuredMedia.alt" class="w-full h-full object-center object-cover" />
+    <div
+      class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden"
+    >
+      <nuxt-img
+        :src="item.variant.featuredMedia.src"
+        :alt="item.variant.featuredMedia.alt"
+        class="w-full h-full object-center object-cover"
+      />
     </div>
 
     <div class="ml-4 flex-1 flex flex-col">
@@ -13,20 +19,34 @@
             </nuxt-link>
           </h3>
           <p class="ml-4">
-            <price :price="item.variant.price" :currencyCode="item.product.priceRange.currencyCode" :locale="item.product.locale" />
+            <price
+              :price="item.variant.price"
+              :currencyCode="item.product.priceRange.currencyCode"
+              :locale="item.product.locale"
+            />
           </p>
         </div>
-        <p v-if="item.variant.title && item.variant.title.toLowerCase() !== 'default title'" class="mt-1 text-sm text-gray-500">
+        <p
+          v-if="
+            item.variant.title &&
+              item.variant.title.toLowerCase() !== 'default title'
+          "
+          class="mt-1 text-sm text-gray-500"
+        >
           {{ item.variant.title }}
         </p>
       </div>
       <div class="flex-1 flex items-end justify-between text-sm">
-        <p class="text-gray-500">
-          {{ content.quantity }} {{ item.quantity }}
-        </p>
+        <p class="text-gray-500">{{ content.quantity }} {{ item.quantity }}</p>
 
         <div class="flex">
-          <button type="button" @click="removeItem(item.id)" class="font-medium text-indigo-600 hover:text-indigo-500">{{ content.remove }}</button>
+          <button
+            type="button"
+            @click="removeItemFromCart(item.id)"
+            class="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            {{ content.remove }}
+          </button>
         </div>
       </div>
     </div>
@@ -51,8 +71,16 @@ export default {
   },
   setup() {
     const { removeItem } = useCartProvider();
-    const content = inject("item")
-    return { content, removeItem };
+    const content = inject("item");
+    const isCheckingOut = inject("isCheckingOut");
+
+    const removeItemFromCart = cartItemId => {
+      if (!isCheckingOut.value) {
+        removeItem(cartItemId);
+      }
+    };
+
+    return { content, removeItemFromCart, isCheckingOut };
   }
-}
+};
 </script>

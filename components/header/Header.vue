@@ -8,7 +8,7 @@
         <header-primary />
 
         <div class="ml-auto flex items-center">
-          <header-search />
+          <header-search class="hidden lg:block" />
           <header-cart />
         </div>
       </div>

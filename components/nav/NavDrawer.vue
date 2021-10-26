@@ -28,6 +28,7 @@
           </svg>
         </button>
       </div>
+      <header-search />
       <nav-tabs />
       <nav-menu />
     </div>
@@ -38,10 +39,11 @@
 import { inject } from "@nuxtjs/composition-api";
 import NavTabs from "./NavTabs.vue";
 import NavMenu from "./NavMenu.vue";
+import HeaderSearch from "../header/HeaderSearch.vue";
 
 export default {
   name: "NavDrawer",
-  components: { NavTabs, NavMenu },
+  components: { NavTabs, NavMenu, HeaderSearch },
   setup() {
     const navOpen = inject("navOpen");
     const setNavOpen = inject("setNavOpen");

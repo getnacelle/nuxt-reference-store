@@ -13,7 +13,6 @@ export default {
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" },
       { name: "format-detection", content: "telephone=no" }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
@@ -21,7 +20,10 @@ export default {
 
   css: [],
 
-  plugins: [{ src: "~/plugins/globalSetup.js" }],
+  plugins: [
+    { src: "~/plugins/globalSetup.js" },
+    { src: "~/plugins/shopifyCheckout.js", mode: "client" }
+  ],
 
   components: true,
 
@@ -47,7 +49,7 @@ export default {
     },
     shopify: {
       storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
-      myshopifyDomain: process.env.SHOPIFY_STOREFRONT_DOMAIN,
+      myshopifyDomain: process.env.SHOPIFY_SHOP_ID,
       storefrontApiVersion: process.env.SHOPIFY_STOREFRONT_VERSION
     }
   },
@@ -63,8 +65,13 @@ export default {
   modules: [],
 
   pwa: {
+    name: "Nacelle x Nuxt Reference Store",
     manifest: {
       lang: "en"
+    },
+    meta: {
+      name: false, // prevent overriding `useMeta` in `onGlobalSetup`
+      theme_color: "#4f46e5"
     }
   },
 

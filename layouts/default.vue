@@ -8,12 +8,14 @@
   >
     <event-provider>
       <cart-provider>
-        <site-header :content="content.header" />
-        <cart :content="content.cart" />
-        <nuxt />
-        <site-newsletter :content="content.newsletter" />
-        <site-footer :content="content.footer" />
-        <site-nav :content="content.header" />
+        <search-provider :searchData="content.searchData">
+          <site-header :content="content.header" />
+          <cart :content="content.cart" />
+          <nuxt />
+          <site-newsletter :content="content.newsletter" />
+          <site-footer :content="content.footer" />
+          <site-nav :content="content.header" />
+        </search-provider>
       </cart-provider>
     </event-provider>
   </space-provider>
@@ -21,15 +23,20 @@
 
 <script>
 import {
-  ref,
   inject,
   provide,
-  watch,
+  ref,
   useContext,
-  useFetch
+  useFetch,
+  watch
 } from "@nuxtjs/composition-api";
 
-import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
+import {
+  SpaceProvider,
+  EventProvider,
+  CartProvider,
+  SearchProvider
+} from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
 import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
 import SiteFooter from "~/components/footer/Footer.vue";
@@ -41,6 +48,7 @@ export default {
     SpaceProvider,
     EventProvider,
     CartProvider,
+    SearchProvider,
     SiteHeader,
     SiteNewsletter,
     SiteFooter,
@@ -59,7 +67,7 @@ export default {
     const setNavOpen = val => (navOpen.value = val);
 
     useFetch(async () => {
-      const [header, footer, newsletter, cart] = await Promise.all([
+      const [header, footer, newsletter, cart, searchData] = await Promise.all([
         nacelleSdk.data.content({
           handle: "component-header",
           type: "componentHeader"
@@ -75,9 +83,10 @@ export default {
         nacelleSdk.data.content({
           handle: "component-cart",
           type: "componentCart"
-        })
+        }),
+        nacelleSdk.data.allProducts()
       ]);
-      content.value = { header, footer, newsletter, cart };
+      content.value = { header, footer, newsletter, cart, searchData };
     });
 
     watch(route, () => {
@@ -90,7 +99,7 @@ export default {
     provide("setCartOpen", setCartOpen);
     provide("setNavOpen", setNavOpen);
 
-    return { initialSpace, content };
+    return { initialSpace, content, nacelleSdk };
   }
 };
 </script>

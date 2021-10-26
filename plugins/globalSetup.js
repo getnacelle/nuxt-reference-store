@@ -2,6 +2,7 @@ import {
   onGlobalSetup,
   useContext,
   useAsync,
+  useMeta,
   provide
 } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
@@ -43,8 +44,8 @@ export default context => {
      * @returns {Object|null}
      */
     const getMetatag = tag => {
-      if (initialSpace.metafields) {
-        return initialSpace.metafields.find(
+      if (initialSpace.value?.metafields) {
+        return initialSpace.value.metafields.find(
           field => field.namespace === "metatag" && field.key === tag
         );
       }
@@ -53,5 +54,49 @@ export default context => {
     provide("nacelleSdk", nacelleSdk);
     provide("initialSpace", initialSpace);
     provide("getMetatag", getMetatag);
+
+    useMeta(() => {
+      const properties = {};
+      const meta = [];
+      const title = getMetatag("title");
+      const description = getMetatag("description");
+
+      if (title) {
+        properties.title = title.value;
+        meta.push({
+          hid: "og:title",
+          property: "og:title",
+          content: title.value
+        });
+        meta.push({
+          // Control title used in social shares, e.g. Slack link previews
+          hid: "apple-mobile-web-app-title",
+          property: "apple-mobile-web-app-title",
+          content: title.value
+        });
+        meta.push({
+          hid: "og:site_name",
+          property: "og:site_name",
+          content: title.value
+        });
+      }
+
+      if (description) {
+        meta.push({
+          hid: "description",
+          name: "description",
+          content: description.value
+        });
+        meta.push({
+          hid: "og:description",
+          property: "og:description",
+          content: description.value
+        });
+      }
+      return {
+        ...properties,
+        meta
+      };
+    });
   });
 };
