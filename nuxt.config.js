@@ -1,7 +1,9 @@
 import routes from "./config/routes";
 
+const isPreview = process.env.APP_CONTENT_MODE === "preview";
+
 export default {
-  ssr: true,
+  ssr: !isPreview,
   target: "static",
   head: {
     title: "nuxt-reference-store",
@@ -30,11 +32,20 @@ export default {
   },
 
   publicRuntimeConfig: {
+    app: {
+      contentMode: process.env.APP_CONTENT_MODE,
+      contentSource: process.env.APP_CONTENT_SOURCE
+    },
     nacelle: {
       id: process.env.NACELLE_SPACE_ID,
       token: process.env.NACELLE_GRAPHQL_TOKEN,
       nacelleEndpoint: process.env.NACELLE_ENDPOINT,
       locale: process.env.NACELLE_LOCALE || "en-us"
+    },
+    sanity: {
+      projectId: process.env.SANITY_PROJECT_ID,
+      dataset: process.env.SANITY_DATASET,
+      token: process.env.SANITY_TOKEN
     },
     shopify: {
       storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,

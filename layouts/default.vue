@@ -4,6 +4,7 @@
     :config="$config.nacelle"
     :space="initialSpace"
     :locale="$config.nacelle.locale"
+    :sdk="nacelleSdk"
     class="app"
   >
     <event-provider>
