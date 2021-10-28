@@ -3,7 +3,7 @@
     <nuxt-link to="/">
       <span class="sr-only">Workflow</span>
       <img
-        class="h-8 w-auto"
+        class="h-8 w-8"
         src="https://tailwindui.com/img/logos/workflow-mark.svg?color=indigo&shade=600"
         alt=""
       />
