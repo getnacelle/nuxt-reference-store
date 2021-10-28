@@ -1,4 +1,4 @@
-import { createSanityPreviewConnector } from "@nacelle/sanity-preview-connector";
+import { createSanityPreviewConnector } from "../../../preview-connectors/sanity";
 
 export const setupPreview = ({ sdk, config, connector }) => {
   if (sdk && config && connector) {

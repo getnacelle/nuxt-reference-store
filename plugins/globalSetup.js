@@ -12,14 +12,14 @@ import { delay, setupPreview } from "~/utils";
 const cache = new LRU({ max: 50, max_age: 3000000 });
 let routeCount = 0;
 
-export default context => {
+export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext();
     let nacelleSdk = useSdk({ config: $config.nacelle });
 
     if ($config.app?.contentMode === "preview") {
       const connector = $config.app?.contentSource;
-      nacelleSdk = setupPreview({
+      setupPreview({
         sdk: nacelleSdk,
         config: $config[connector],
         connector

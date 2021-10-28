@@ -4,6 +4,7 @@
     :config="$config.nacelle"
     :space="initialSpace"
     :locale="$config.nacelle.locale"
+    :sdk="nacelleSdk"
     class="app"
   >
     <event-provider>
@@ -59,6 +60,7 @@ export default {
     const content = ref(null);
     const cartOpen = ref(false);
     const navOpen = ref(false);
+    const updater = ref(null);
     const initialSpace = inject("initialSpace");
     const nacelleSdk = inject("nacelleSdk");
     const { route } = useContext();
@@ -99,7 +101,7 @@ export default {
     provide("setCartOpen", setCartOpen);
     provide("setNavOpen", setNavOpen);
 
-    return { initialSpace, content, nacelleSdk };
+    return { initialSpace, content, nacelleSdk, updater };
   }
 };
 </script>
