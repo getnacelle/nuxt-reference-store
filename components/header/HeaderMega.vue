@@ -22,10 +22,12 @@
                   v-if="callout.image"
                   class="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden group-hover:opacity-75"
                 >
-                  <nuxt-img
+                  <nuxt-picture
+                    class="picture"
                     :src="callout.image.file.asset.url"
                     :alt="callout.image.alt"
-                    class="object-center object-cover"
+                    quality="80"
+                    sizes="lg:136px xl:25vw"
                   />
                 </div>
                 <div class="mt-6 block font-medium text-gray-900">
@@ -80,7 +82,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss" scoped>
 .fade-enter-active,
 .fade-leave-active {
   opacity: 1;
@@ -88,5 +90,9 @@ export default {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+
+::v-deep .picture img {
+  @apply w-full h-full object-center object-cover sm:rounded-lg;
 }
 </style>

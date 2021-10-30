@@ -57,7 +57,7 @@
                   <button
                     type="button"
                     class="w-full p-2 flex items-center justify-between text-gray-400 hover:text-gray-500"
-                    aria-controls="filter-section-0"
+                    :aria-controls="`filter-section-${index}-${_uid}`"
                     aria-expanded="false"
                   >
                     <span class="text-sm font-medium text-gray-900">
@@ -88,12 +88,12 @@
                 <div
                   v-show="openedProperties.includes(index)"
                   class="pt-4 pb-2 px-4 all transition ease-in-out duration-500"
-                  id="filter-section-0"
+                  :id="`filter-section-${index}-${_uid}`"
                 >
                   <div class="space-y-6">
                     <div
                       class="flex items-center"
-                      v-for="value in filter.values"
+                      v-for="(value, index) in filter.values"
                       :key="value"
                       @click="
                         toggleActiveFilter({
@@ -103,7 +103,7 @@
                       "
                     >
                       <input
-                        id="color-0-mobile"
+                        :id="`${filter.property.field}-${index}-mobile-${_uid}`"
                         value="white"
                         type="checkbox"
                         class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
@@ -114,7 +114,7 @@
                         "
                       />
                       <label
-                        for="color-0-mobile"
+                        :for="`${filter.property.field}-${index}-mobile-${_uid}`"
                         class="ml-3 text-sm text-gray-500"
                       >
                         {{ value }}

@@ -8,7 +8,7 @@
         v-for="(account, index) in content.social"
         :key="index"
         :href="account.url"
-        class="text-gray-400 hover:text-gray-500"
+        class="text-gray-500 hover:text-gray-900"
       >
         <span class="sr-only">{{ account.name }}</span>
         <span
@@ -19,7 +19,7 @@
     </div>
     <p
       v-if="content.copyright"
-      class="mt-8 text-base text-gray-400 md:mt-0 md:order-1"
+      class="mt-8 text-base text-gray-500 md:mt-0 md:order-1"
     >
       &copy; {{ year }} {{ content.copyright }}
     </p>
