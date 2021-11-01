@@ -23,8 +23,8 @@
           </svg>
         </div>
         <input
-          id="search"
-          name="search"
+          :id="`search-${_uid}`"
+          :name="`search-${_uid}`"
           v-model="query"
           @keyup="globalSearch"
           @keyup.enter="submitSearch"

@@ -3,7 +3,7 @@
     <div v-for="(menu, index) in content.navigation" :key="index" class="mt-10">
       <div>
         <h3
-          class="text-sm font-semibold text-gray-400 tracking-wider uppercase"
+          class="text-sm font-semibold text-gray-500 tracking-wider uppercase"
         >
           {{ menu.text }}
         </h3>
