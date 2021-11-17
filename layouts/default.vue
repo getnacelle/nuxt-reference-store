@@ -64,30 +64,54 @@ export default {
     const nacelleSdk = inject("nacelleSdk");
     const { route } = useContext();
 
-    const setCartOpen = val => (cartOpen.value = val);
-    const setNavOpen = val => (navOpen.value = val);
+    const setCartOpen = (val) => (cartOpen.value = val);
+    const setNavOpen = (val) => (navOpen.value = val);
+
 
     useFetch(async () => {
       const [header, footer, newsletter, cart, searchData] = await Promise.all([
         nacelleSdk.data.content({
           handle: "component-header",
-          type: "componentHeader"
+          type: "componentHeader",
         }),
         nacelleSdk.data.content({
           handle: "component-footer",
-          type: "componentFooter"
+          type: "componentFooter",
         }),
         nacelleSdk.data.content({
           handle: "component-newsletter",
-          type: "componentNewsletter"
+          type: "componentNewsletter",
         }),
         nacelleSdk.data.content({
           handle: "component-cart",
-          type: "componentCart"
+          type: "componentCart",
         }),
-        nacelleSdk.data.allProducts()
+        nacelleSdk.data.allProducts(),
       ]);
-      content.value = { header, footer, newsletter, cart, searchData };
+
+      content.value = {
+        header,
+        footer,
+        newsletter,
+        cart,
+        searchData: searchData.map((product) => ({
+          handle: product.handle,
+          title: product.title,
+          featuredMedia: product.featuredMedia,
+          variants: product.variants.map((variant) => ({
+            id: variant.id,
+            title: variant.title,
+            availableForSale: variant.availableForSale,
+            selectedOptions: variant.selectedOptions,
+            featuredMedia: variant.featuredMedia,
+            price: variant.price,
+          })),
+          priceRange: product.priceRange,
+          locale: product.locale,
+          tags: product.tags,
+          productType: product.type,
+        })),
+      };
     });
 
     watch(route, () => {
@@ -101,7 +125,7 @@ export default {
     provide("setNavOpen", setNavOpen);
 
     return { initialSpace, content, nacelleSdk };
-  }
+  },
 };
 </script>
 

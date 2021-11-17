@@ -37,12 +37,29 @@ export default {
     const { nacelleSdk } = useSpaceProvider();
 
     useFetch(async () => {
-      products.value = await nacelleSdk.data.products({
+      const fetchedProducts = await nacelleSdk.data.products({
         handles: props.content.products
       });
+      products.value = fetchedProducts.map(product => ({
+        handle: product.handle,
+        title: product.title,
+        featuredMedia: product.featuredMedia,
+        variants: product.variants.map(variant => ({
+          id: variant.id,
+          title: variant.title,
+          availableForSale: variant.availableForSale,
+          selectedOptions: variant.selectedOptions,
+          featuredMedia: variant.featuredMedia,
+          price: variant.price
+        })),
+        priceRange: product.priceRange,
+        locale: product.locale,
+        tags: product.tags,
+        productType: product.type
+      }));
     });
 
     return { products };
   }
-}
+};
 </script>

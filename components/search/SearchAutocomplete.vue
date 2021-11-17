@@ -10,7 +10,7 @@
           Search Results
         </h2>
         <div v-if="query && results.length">
-          <div v-for="product in results.slice(0, 3)">
+          <div v-for="product in results.slice(0, 3)" :key="product.id">
             <search-autocomplete-item :product="product" />
           </div>
           <button
