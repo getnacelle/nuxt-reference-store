@@ -21,6 +21,7 @@ export default {
   css: [],
 
   plugins: [
+    { src: "~/plugins/nacelleSdk.js" },
     { src: "~/plugins/globalSetup.js" },
     { src: "~/plugins/shopifyCheckout.js", mode: "client" }
   ],

@@ -9,18 +9,17 @@
 </template>
 
 <script>
-import { ref, useFetch } from "@nuxtjs/composition-api";
-import { useSpaceProvider } from "@nacelle/vue";
+import { ref, useContext, useFetch } from "@nuxtjs/composition-api";
 import SiteSection from "~/components/core/Section.vue";
 
 export default {
   components: { SiteSection },
   setup() {
-    const { nacelleSdk } = useSpaceProvider();
+    const { $nacelleSdk } = useContext();
     const page = ref(null);
 
     useFetch(async () => {
-      page.value = await nacelleSdk.data
+      page.value = await $nacelleSdk.data
         .content({
           handle: "page-homepage",
           type: "pageSections"

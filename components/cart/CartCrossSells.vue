@@ -52,8 +52,14 @@
 </template>
 
 <script>
-import { useSpaceProvider, useCartProvider } from "@nacelle/vue";
-import { ref, inject, computed, useFetch } from "@nuxtjs/composition-api";
+import { useCartProvider } from "@nacelle/vue";
+import {
+  ref,
+  inject,
+  computed,
+  useContext,
+  useFetch
+} from "@nuxtjs/composition-api";
 import Price from "~/components/core/Price.vue";
 
 export default {
@@ -62,7 +68,7 @@ export default {
     Price
   },
   setup() {
-    const { nacelleSdk } = useSpaceProvider();
+    const { $nacelleSdk } = useContext();
     const { cart, addItem } = useCartProvider();
     const crossSells = ref([]);
     const content = inject("crosssells");
@@ -88,7 +94,7 @@ export default {
     });
 
     useFetch(async () => {
-      crossSells.value = await nacelleSdk.data.products({
+      crossSells.value = await $nacelleSdk.data.products({
         handles: content.products
       });
     });

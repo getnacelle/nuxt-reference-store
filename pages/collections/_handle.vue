@@ -11,20 +11,19 @@
 </template>
 
 <script>
-import { inject, ref, useContext, useFetch } from "@nuxtjs/composition-api";
+import { ref, useContext, useFetch } from "@nuxtjs/composition-api";
 import { CollectionProvider } from "@nacelle/vue";
 import Collection from "~/components/collection/Collection";
 export default {
   components: { CollectionProvider, Collection },
   setup() {
     const collection = ref({});
-    const { route } = useContext();
-    const nacelleSdk = inject("nacelleSdk");
+    const { route, $nacelleSdk } = useContext();
     const handle = route.value.params.handle;
     const { fetchState } = useFetch(async () => {
       const data = await Promise.all([
-        nacelleSdk.data.collection({ handle }),
-        nacelleSdk.data.collectionPage({
+        $nacelleSdk.data.collection({ handle }),
+        $nacelleSdk.data.collectionPage({
           handle
         })
       ]);

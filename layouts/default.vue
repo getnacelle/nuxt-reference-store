@@ -4,7 +4,7 @@
     :config="$config.nacelle"
     :space="initialSpace"
     :locale="$config.nacelle.locale"
-    :sdk="nacelleSdk"
+    :sdk="$nacelleSdk"
     class="app"
   >
     <event-provider>
@@ -61,31 +61,30 @@ export default {
     const cartOpen = ref(false);
     const navOpen = ref(false);
     const initialSpace = inject("initialSpace");
-    const nacelleSdk = inject("nacelleSdk");
-    const { route } = useContext();
+    const { route, $nacelleSdk } = useContext();
 
     const setCartOpen = val => (cartOpen.value = val);
     const setNavOpen = val => (navOpen.value = val);
 
     useFetch(async () => {
       const [header, footer, newsletter, cart, searchData] = await Promise.all([
-        nacelleSdk.data.content({
+        $nacelleSdk.data.content({
           handle: "component-header",
           type: "componentHeader"
         }),
-        nacelleSdk.data.content({
+        $nacelleSdk.data.content({
           handle: "component-footer",
           type: "componentFooter"
         }),
-        nacelleSdk.data.content({
+        $nacelleSdk.data.content({
           handle: "component-newsletter",
           type: "componentNewsletter"
         }),
-        nacelleSdk.data.content({
+        $nacelleSdk.data.content({
           handle: "component-cart",
           type: "componentCart"
         }),
-        nacelleSdk.data.allProducts()
+        $nacelleSdk.data.allProducts()
       ]);
       content.value = { header, footer, newsletter, cart, searchData };
     });
@@ -100,7 +99,7 @@ export default {
     provide("setCartOpen", setCartOpen);
     provide("setNavOpen", setNavOpen);
 
-    return { initialSpace, content, nacelleSdk };
+    return { initialSpace, content };
   }
 };
 </script>

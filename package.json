@@ -11,15 +11,15 @@
   "dependencies": {
     "@nacelle/sanity-preview-connector": "^1.1.0",
     "@nacelle/shopify-checkout": "^0.0.6",
-    "@nacelle/vue": "^0.0.12",
-    "@nuxtjs/composition-api": "^0.29.0",
+    "@nacelle/vue": "^0.0.13",
+    "@nuxtjs/composition-api": "^0.31.0",
     "@tailwindcss/aspect-ratio": "^0.2.2",
     "@tailwindcss/forms": "^0.3.4",
     "@tailwindcss/typography": "^0.4.1",
     "core-js": "^3.17.3",
     "isomorphic-unfetch": "^3.1.0",
     "lru-cache": "^6.0.0",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.15.8",
     "pascal-case": "^3.1.2"
   },
   "devDependencies": {

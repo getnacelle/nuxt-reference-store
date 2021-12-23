@@ -3,24 +3,24 @@ import {
   useContext,
   useAsync,
   useMeta,
-  provide
+  provide,
+  reactive
 } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
 import LRU from "lru-cache";
-import { delay, setupPreview } from "~/utils";
+import { delay } from "~/utils";
 
 const cache = new LRU({ max: 50, max_age: 3000000 });
 let routeCount = 0;
 
-export default () => {
+export default ({ $nacelleSdk }) => {
   onGlobalSetup(() => {
     const { $config } = useContext();
-    let nacelleSdk = useSdk({ config: $config.nacelle });
 
     if ($config.app?.contentMode === "preview") {
       const connector = $config.app?.contentSource;
       setupPreview({
-        sdk: nacelleSdk,
+        sdk: $nacelleSdk,
         config: $config[connector],
         connector
       });
@@ -33,7 +33,7 @@ export default () => {
         await delay(500);
         space = await cache.get("space");
       }
-      if (!space) space = await nacelleSdk.data.space();
+      if (!space) space = await $nacelleSdk.data.space();
       if (space) await cache.set("space", space);
       return space;
     });
@@ -51,9 +51,6 @@ export default () => {
       }
       return null;
     };
-    provide("nacelleSdk", nacelleSdk);
-    provide("initialSpace", initialSpace);
-    provide("getMetatag", getMetatag);
 
     useMeta(() => {
       const properties = {};
@@ -98,5 +95,8 @@ export default () => {
         meta
       };
     });
+
+    provide("initialSpace", initialSpace);
+    provide("getMetatag", getMetatag);
   });
 };
