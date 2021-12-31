@@ -12,7 +12,14 @@
 </template>
 
 <script>
-import { inject, ref, useFetch } from "@nuxtjs/composition-api";
+import {
+  inject,
+  provide,
+  ref,
+  useContext,
+  useFetch,
+  watch,
+} from "@nuxtjs/composition-api";
 import { SearchProvider } from "@nacelle/vue";
 import SiteHeader from "~/components/header/Header.vue";
 import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
@@ -33,6 +40,18 @@ export default {
   setup() {
     const content = ref(null);
     const nacelleSdk = inject("nacelleSdk");
+    const cartOpen = ref(false);
+    const navOpen = ref(false);
+
+    const { route } = useContext();
+
+    const setCartOpen = (val) => (cartOpen.value = val);
+    const setNavOpen = (val) => (navOpen.value = val);
+
+    watch(route, () => {
+      cartOpen.value = false;
+      navOpen.value = false;
+    });
 
     useFetch(async () => {
       const [header, footer, newsletter, cart, searchData] = await Promise.all([
@@ -56,6 +75,11 @@ export default {
       ]);
       content.value = { header, footer, newsletter, cart, searchData };
     });
+
+    provide("cartOpen", cartOpen);
+    provide("navOpen", navOpen);
+    provide("setCartOpen", setCartOpen);
+    provide("setNavOpen", setNavOpen);
 
     return { content };
   },
