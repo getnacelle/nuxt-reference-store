@@ -9,21 +9,20 @@
 </template>
 
 <script>
-import { ref, useFetch } from "@nuxtjs/composition-api";
-import { useSpaceProvider } from "@nacelle/vue";
+import { inject, ref, useFetch } from "@nuxtjs/composition-api";
 import SiteSection from "~/components/core/Section.vue";
 
 export default {
   components: { SiteSection },
   setup() {
-    const { nacelleSdk } = useSpaceProvider();
+    const nacelleSdk = inject("nacelleSdk");
     const page = ref(null);
 
     useFetch(async () => {
       page.value = await nacelleSdk.data
         .content({
           handle: "page-homepage",
-          type: "pageSections"
+          type: "pageSections",
         })
         .catch(() => {
           console.warn(
@@ -32,6 +31,6 @@ export default {
         });
     });
     return { page };
-  }
+  },
 };
 </script>
