@@ -32,29 +32,15 @@ import {
   provide
 } from "@nuxtjs/composition-api";
 
-import {
-  SpaceProvider,
-  EventProvider,
-  CartProvider,
-  SearchProvider
-} from "@nacelle/vue";
-import SiteHeader from "~/components/header/Header.vue";
-import SiteNewsletter from "~/components/newsletter/Newsletter.vue";
-import SiteFooter from "~/components/footer/Footer.vue";
-import SiteNav from "~/components/nav/Nav.vue";
-import Cart from "~/components/cart/Cart.vue";
+import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
+import SiteContainer from "~/components/core/SiteContainer.vue";
 
 export default defineComponent({
   components: {
     SpaceProvider,
     EventProvider,
     CartProvider,
-    SearchProvider,
-    SiteHeader,
-    SiteNewsletter,
-    SiteFooter,
-    SiteNav,
-    Cart
+    SiteContainer
   },
   head() {
     const properties = {};
