@@ -10,7 +10,7 @@
       <cart-provider>
         <search-provider :searchData="site.searchData">
           <site-header :content="site.header" />
-          <cart :content="site.cart" />
+          <site-cart :content="site.cart" />
           <nuxt />
           <site-newsletter :content="site.newsletter" />
           <site-footer :content="site.footer" />
@@ -32,15 +32,29 @@ import {
   provide
 } from "@nuxtjs/composition-api";
 
-import { SpaceProvider, EventProvider, CartProvider } from "@nacelle/vue";
-import SiteContainer from "~/components/core/SiteContainer.vue";
+import {
+  SpaceProvider,
+  EventProvider,
+  CartProvider,
+  SearchProvider
+} from "@nacelle/vue";
+import SiteHeader from "~/components/header/Header";
+import SiteNewsletter from "~/components/newsletter/Newsletter";
+import SiteFooter from "~/components/footer/Footer";
+import SiteNav from "~/components/Nav/Nav";
+import SiteCart from "~/components/cart/Cart";
 
 export default defineComponent({
   components: {
     SpaceProvider,
     EventProvider,
     CartProvider,
-    SiteContainer
+    SearchProvider,
+    SiteHeader,
+    SiteNewsletter,
+    SiteFooter,
+    SiteNav,
+    SiteCart
   },
   head() {
     const properties = {};

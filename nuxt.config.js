@@ -22,8 +22,6 @@ export default {
 
   plugins: [{ src: "~/plugins/shopifyCheckout.js", mode: "client" }],
 
-  components: true,
-
   image: {
     domains: ["https://cdn.shopify.com", "cdn.sanity.io"]
   },
@@ -84,7 +82,6 @@ export default {
   generate: {
     crawler: false,
     concurrency: 25,
-    interval: 2000,
     fallback: true,
     routes: () => routes()
   }
