@@ -28,7 +28,6 @@ import {
   ref,
   useContext,
   useAsync,
-  useMeta,
   watch,
   provide
 } from "@nuxtjs/composition-api";
@@ -57,7 +56,53 @@ export default defineComponent({
     SiteNav,
     Cart
   },
-  head: {},
+  head() {
+    const properties = {};
+    const meta = [];
+    const space = this.site?.space;
+    const metaTitle = space?.metafields?.find(
+      field => field.namespace === "metatag" && field.key === "title"
+    );
+    const metaDescription = space?.metafields?.find(
+      field => field.namespace === "metatag" && field.key === "description"
+    );
+
+    if (metaTitle) {
+      properties.title = metaTitle.value;
+      meta.push({
+        hid: "og:title",
+        property: "og:title",
+        content: metaTitle
+      });
+      meta.push({
+        // Control title used in social shares, e.g. Slack link previews
+        hid: "apple-mobile-web-app-title",
+        property: "apple-mobile-web-app-title",
+        content: metaTitle
+      });
+      meta.push({
+        hid: "og:site_name",
+        property: "og:site_name",
+        content: metaTitle
+      });
+    }
+    if (metaDescription) {
+      meta.push({
+        hid: "description",
+        name: "description",
+        content: metaDescription
+      });
+      meta.push({
+        hid: "og:description",
+        property: "og:description",
+        content: metaDescription
+      });
+    }
+    return {
+      ...properties,
+      meta
+    };
+  },
   setup() {
     const cartOpen = ref(false);
     const navOpen = ref(false);
@@ -106,53 +151,6 @@ export default defineComponent({
         newsletter,
         cart,
         searchData
-      };
-    });
-
-    useMeta(() => {
-      const properties = {};
-      const meta = [];
-      const metaTitle = site.value?.space?.metafields?.find(
-        field => field.namespace === "metatag" && field.key === "title"
-      );
-      const metaDescription = site.value?.space?.metafields?.find(
-        field => field.namespace === "metatag" && field.key === "description"
-      );
-
-      if (metaTitle) {
-        properties.title = metaTitle;
-        meta.push({
-          hid: "og:title",
-          property: "og:title",
-          content: metaTitle
-        });
-        meta.push({
-          // Control title used in social shares, e.g. Slack link previews
-          hid: "apple-mobile-web-app-title",
-          property: "apple-mobile-web-app-title",
-          content: metaTitle
-        });
-        meta.push({
-          hid: "og:site_name",
-          property: "og:site_name",
-          content: metaTitle
-        });
-      }
-      if (metaDescription) {
-        meta.push({
-          hid: "description",
-          name: "description",
-          content: metaDescription
-        });
-        meta.push({
-          hid: "og:description",
-          property: "og:description",
-          content: metaDescription
-        });
-      }
-      return {
-        ...properties,
-        meta
       };
     });
 

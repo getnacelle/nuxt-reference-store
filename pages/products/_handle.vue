@@ -16,13 +16,15 @@ export default {
     Product
   },
   head() {
-    if (this.product || this.content) {
-      const title = this.content?.fields?.meta?.title
-        ? this.product?.fields?.meta?.title
-        : this.product?.title;
-      const description = this.content?.fields?.meta?.description;
-      const tags = this.content?.fields?.meta?.tags;
-      const robots = this.content?.fields?.meta?.robots;
+    const product = this.page?.product;
+    const content = this.page?.content;
+    if (product || content) {
+      const title = content?.fields?.meta?.title
+        ? product?.fields?.meta?.title
+        : product?.title;
+      const description = content?.fields?.meta?.description;
+      const tags = content?.fields?.meta?.tags;
+      const robots = content?.fields?.meta?.robots;
 
       return {
         title: title,
