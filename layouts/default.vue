@@ -1,21 +1,20 @@
 <template>
   <space-provider
-    v-if="content"
+    v-if="site"
     :config="$config.nacelle"
-    :space="initialSpace"
-    :locale="$config.nacelle.locale"
+    :space="site.space"
     :sdk="nacelleSdk"
     class="app"
   >
     <event-provider>
       <cart-provider>
-        <search-provider :searchData="content.searchData">
-          <site-header :content="content.header" />
-          <cart :content="content.cart" />
+        <search-provider :searchData="site.searchData">
+          <site-header :content="site.header" />
+          <cart :content="site.cart" />
           <nuxt />
-          <site-newsletter :content="content.newsletter" />
-          <site-footer :content="content.footer" />
-          <site-nav :content="content.header" />
+          <site-newsletter :content="site.newsletter" />
+          <site-footer :content="site.footer" />
+          <site-nav :content="site.header" />
         </search-provider>
       </cart-provider>
     </event-provider>
@@ -23,13 +22,15 @@
 </template>
 
 <script>
+import NacelleClient from "@nacelle/client-js-sdk";
 import {
-  inject,
-  provide,
+  defineComponent,
   ref,
   useContext,
-  useFetch,
-  watch
+  useAsync,
+  useMeta,
+  watch,
+  provide
 } from "@nuxtjs/composition-api";
 
 import {
@@ -44,7 +45,7 @@ import SiteFooter from "~/components/footer/Footer.vue";
 import SiteNav from "~/components/nav/Nav.vue";
 import Cart from "~/components/cart/Cart.vue";
 
-export default {
+export default defineComponent({
   components: {
     SpaceProvider,
     EventProvider,
@@ -56,19 +57,30 @@ export default {
     SiteNav,
     Cart
   },
+  head: {},
   setup() {
-    const content = ref(null);
     const cartOpen = ref(false);
     const navOpen = ref(false);
-    const initialSpace = inject("initialSpace");
-    const nacelleSdk = inject("nacelleSdk");
-    const { route } = useContext();
+    const { $config, route } = useContext();
+
+    const nacelleSdk = new NacelleClient({
+      ...$config.nacelle,
+      useStatic: false
+    });
 
     const setCartOpen = val => (cartOpen.value = val);
     const setNavOpen = val => (navOpen.value = val);
 
-    useFetch(async () => {
-      const [header, footer, newsletter, cart, searchData] = await Promise.all([
+    const site = useAsync(async () => {
+      const [
+        space,
+        header,
+        footer,
+        newsletter,
+        cart,
+        searchData
+      ] = await Promise.all([
+        nacelleSdk.data.space(),
         nacelleSdk.data.content({
           handle: "component-header",
           type: "componentHeader"
@@ -87,7 +99,61 @@ export default {
         }),
         nacelleSdk.data.allProducts()
       ]);
-      content.value = { header, footer, newsletter, cart, searchData };
+      return {
+        space,
+        header,
+        footer,
+        newsletter,
+        cart,
+        searchData
+      };
+    });
+
+    useMeta(() => {
+      const properties = {};
+      const meta = [];
+      const metaTitle = site.value?.space?.metafields?.find(
+        field => field.namespace === "metatag" && field.key === "title"
+      );
+      const metaDescription = site.value?.space?.metafields?.find(
+        field => field.namespace === "metatag" && field.key === "description"
+      );
+
+      if (metaTitle) {
+        properties.title = metaTitle;
+        meta.push({
+          hid: "og:title",
+          property: "og:title",
+          content: metaTitle
+        });
+        meta.push({
+          // Control title used in social shares, e.g. Slack link previews
+          hid: "apple-mobile-web-app-title",
+          property: "apple-mobile-web-app-title",
+          content: metaTitle
+        });
+        meta.push({
+          hid: "og:site_name",
+          property: "og:site_name",
+          content: metaTitle
+        });
+      }
+      if (metaDescription) {
+        meta.push({
+          hid: "description",
+          name: "description",
+          content: metaDescription
+        });
+        meta.push({
+          hid: "og:description",
+          property: "og:description",
+          content: metaDescription
+        });
+      }
+      return {
+        ...properties,
+        meta
+      };
     });
 
     watch(route, () => {
@@ -100,9 +166,12 @@ export default {
     provide("setCartOpen", setCartOpen);
     provide("setNavOpen", setNavOpen);
 
-    return { initialSpace, content, nacelleSdk };
+    return {
+      nacelleSdk,
+      site
+    };
   }
-};
+});
 </script>
 
 <style lang="scss" scoped>

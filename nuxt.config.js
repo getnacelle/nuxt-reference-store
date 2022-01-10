@@ -20,10 +20,7 @@ export default {
 
   css: [],
 
-  plugins: [
-    { src: "~/plugins/globalSetup.js" },
-    { src: "~/plugins/shopifyCheckout.js", mode: "client" }
-  ],
+  plugins: [{ src: "~/plugins/shopifyCheckout.js", mode: "client" }],
 
   components: true,
 
