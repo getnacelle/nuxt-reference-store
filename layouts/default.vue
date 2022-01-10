@@ -41,7 +41,7 @@ import {
 import SiteHeader from "~/components/header/Header";
 import SiteNewsletter from "~/components/newsletter/Newsletter";
 import SiteFooter from "~/components/footer/Footer";
-import SiteNav from "~/components/Nav/Nav";
+import SiteNav from "~/components/nav/Nav";
 import SiteCart from "~/components/cart/Cart";
 
 export default defineComponent({
