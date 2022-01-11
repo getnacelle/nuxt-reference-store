@@ -6,6 +6,7 @@ import {
   provide
 } from "@nuxtjs/composition-api";
 import { useSdk } from "@nacelle/vue";
+import createCompatibilityConnector from "@nacelle/compatibility-connector";
 import LRU from "lru-cache";
 import { delay, setupPreview } from "~/utils";
 
@@ -15,7 +16,16 @@ let routeCount = 0;
 export default () => {
   onGlobalSetup(() => {
     const { $config } = useContext();
-    let nacelleSdk = useSdk({ config: $config.nacelle });
+    let nacelleSdk = useSdk({ config: $config.nacelle.v1 });
+
+    // Initialize the Compatibility Connector
+    const compatibilityConnector = new createCompatibilityConnector(
+      $config.nacelle.v2
+    );
+
+    nacelleSdk.data.update({
+      connector: compatibilityConnector
+    });
 
     if ($config.app?.contentMode === "preview") {
       const connector = $config.app?.contentSource;
@@ -43,10 +53,10 @@ export default () => {
      * @param {String} tag
      * @returns {Object|null}
      */
-    const getMetatag = tag => {
+    const getMetatag = (tag) => {
       if (initialSpace.value?.metafields) {
         return initialSpace.value.metafields.find(
-          field => field.namespace === "metatag" && field.key === tag
+          (field) => field.namespace === "metatag" && field.key === tag
         );
       }
       return null;

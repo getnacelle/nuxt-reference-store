@@ -37,10 +37,17 @@ export default {
       contentSource: process.env.APP_CONTENT_SOURCE
     },
     nacelle: {
-      id: process.env.NACELLE_SPACE_ID,
-      token: process.env.NACELLE_GRAPHQL_TOKEN,
-      nacelleEndpoint: process.env.NACELLE_ENDPOINT,
-      locale: process.env.NACELLE_LOCALE || "en-us"
+      v1: {
+        id: process.env.NACELLE_V1_SPACE_ID,
+        token: process.env.NACELLE_V1_GRAPHQL_TOKEN,
+        nacelleEndpoint: process.env.NACELLE_V1_ENDPOINT,
+        locale: process.env.NACELLE_V1_LOCALE || "en-us"
+      },
+      v2: {
+        endpoint: process.env.NACELLE_V2_ENDPOINT,
+        token: process.env.NACELLE_V2_TOKEN,
+        locale: process.env.NACELLE_V2_LOCALE || "en-US"
+      }
     },
     sanity: {
       projectId: process.env.SANITY_PROJECT_ID,
@@ -87,7 +94,6 @@ export default {
   generate: {
     crawler: false,
     concurrency: 25,
-    interval: 2000,
     fallback: true,
     routes: () => routes()
   }
