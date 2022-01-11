@@ -54,7 +54,7 @@ export default {
         product,
         content
       };
-    }, `page-product-${handle}`);
+    }, route.value.path);
 
     return {
       page

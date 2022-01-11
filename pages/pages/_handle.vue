@@ -44,7 +44,7 @@ export default {
         handle: `page-${handle}`,
         type: "pageSections"
       });
-    }, `page-${handle}`);
+    }, route.value.path);
 
     return { page };
   }

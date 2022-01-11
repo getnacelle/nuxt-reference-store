@@ -33,7 +33,7 @@ export default {
           products
         }
       };
-    }, `page-collection-${handle}`);
+    }, route.value.path);
 
     return { page };
   }
