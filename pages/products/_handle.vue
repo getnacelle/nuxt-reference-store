@@ -42,18 +42,19 @@ export default {
     const handle = route.value.params.handle;
 
     const page = useAsync(async () => {
-      const [product, content] = await Promise.all([
-        nacelleSdk.data.product({ handle }),
-        nacelleSdk.data.content({
+      const product = await nacelleSdk.data.product({ handle });
+      let content = null;
+      try {
+        content = await nacelleSdk.data.content({
           handle,
           type: "productContent"
-        })
-      ]);
+        });
+      } catch {}
       return {
         product,
         content
       };
-    });
+    }, `page-product-${handle}`);
 
     return {
       page

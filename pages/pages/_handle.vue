@@ -39,12 +39,12 @@ export default {
     const { params } = useContext();
     const handle = params.value?.handle;
 
-    const page = useAsync(() =>
-      nacelleSdk.data.content({
+    const page = useAsync(() => {
+      return nacelleSdk.data.content({
         handle: `page-${handle}`,
         type: "pageSections"
-      })
-    );
+      });
+    }, `page-${handle}`);
 
     return { page };
   }

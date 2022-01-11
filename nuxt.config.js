@@ -44,7 +44,7 @@ export default {
     },
     shopify: {
       storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
-      myshopifyDomain: process.env.SHOPIFY_SHOP_ID,
+      myshopifyDomain: process.env.SHOPIFY_STOREFRONT_DOMAIN,
       storefrontApiVersion: process.env.SHOPIFY_STOREFRONT_VERSION
     }
   },
