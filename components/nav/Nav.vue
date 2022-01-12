@@ -15,10 +15,11 @@
 <script>
 import { ref, inject, provide, watch } from "@nuxtjs/composition-api";
 import NavOverlay from "./NavOverlay.vue";
+import NavDrawer from "./NavDrawer.vue";
 
 export default {
   name: "Nav",
-  components: { NavOverlay },
+  components: { NavOverlay, NavDrawer },
   props: {
     content: {
       type: Object,

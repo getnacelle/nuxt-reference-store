@@ -20,12 +20,7 @@ export default {
 
   css: [],
 
-  plugins: [
-    { src: "~/plugins/globalSetup.js" },
-    { src: "~/plugins/shopifyCheckout.js", mode: "client" }
-  ],
-
-  components: true,
+  plugins: [{ src: "~/plugins/shopifyCheckout.js", mode: "client" }],
 
   image: {
     domains: ["https://cdn.shopify.com", "cdn.sanity.io"]
@@ -49,7 +44,7 @@ export default {
     },
     shopify: {
       storefrontCheckoutToken: process.env.SHOPIFY_STOREFRONT_TOKEN,
-      myshopifyDomain: process.env.SHOPIFY_SHOP_ID,
+      myshopifyDomain: process.env.SHOPIFY_STOREFRONT_DOMAIN,
       storefrontApiVersion: process.env.SHOPIFY_STOREFRONT_VERSION
     }
   },
@@ -87,7 +82,6 @@ export default {
   generate: {
     crawler: false,
     concurrency: 25,
-    interval: 2000,
     fallback: true,
     routes: () => routes()
   }

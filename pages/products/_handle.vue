@@ -1,16 +1,14 @@
 <template>
-  <product-provider v-if="product" :product="product">
-    <product :content="content" />
+  <product-provider v-if="page" :product="page.product">
+    <product :content="page.content" />
   </product-provider>
-  <div v-else-if="fetchState.pending">Loading...</div>
-  <div v-else-if="fetchState.error">Error</div>
 </template>
 
 <script>
-import { ProductProvider } from "@nacelle/vue";
-import Product from "~/components/products/Product.vue"
+import { useContext, useStatic } from "@nuxtjs/composition-api";
+import { ProductProvider, useSpaceProvider } from "@nacelle/vue";
+import Product from "~/components/products/Product.vue";
 import { buildRobotsTags, buildMetaTags } from "~/utils";
-import { inject, ref, useContext, useFetch } from "@nuxtjs/composition-api";
 
 export default {
   components: {
@@ -18,13 +16,15 @@ export default {
     Product
   },
   head() {
-    if(this.product || this.content) {
-      const title = this.content?.fields?.meta?.title
-        ? this.product?.fields?.meta?.title
-        : this.product?.title;
-      const description = this.content?.fields?.meta?.description;
-      const tags = this.content?.fields?.meta?.tags;
-      const robots = this.content?.fields?.meta?.robots;
+    const product = this.page?.product;
+    const content = this.page?.content;
+    if (product || content) {
+      const title = content?.fields?.meta?.title
+        ? product?.fields?.meta?.title
+        : product?.title;
+      const description = content?.fields?.meta?.description;
+      const tags = content?.fields?.meta?.tags;
+      const robots = content?.fields?.meta?.robots;
 
       return {
         title: title,
@@ -36,24 +36,36 @@ export default {
     }
   },
   setup() {
-    const product = ref(null);
-    const content = ref({});
     const { route } = useContext();
-    const nacelleSdk = inject("nacelleSdk");
+    const { nacelleSdk } = useSpaceProvider();
 
     const handle = route.value.params.handle;
-    const { fetchState } = useFetch(async () => {
-      product.value = await nacelleSdk.data.product({ handle });
 
-      try {
-        content.value = await nacelleSdk.data.content({
-          handle,
-          type: "productContent"
-        })
-      } catch(error) {}
-    });
+    const page = useStatic(
+      async () => {
+        const [product, content] = await Promise.all([
+          nacelleSdk.data.product({ handle }),
+          nacelleSdk.data
+            .content({
+              handle,
+              type: "productContent"
+            })
+            .catch(() => {
+              console.info(`No content entry found for ${handle}`);
+            })
+        ]);
+        return {
+          product,
+          content
+        };
+      },
+      route.value.path,
+      route.value.path
+    );
 
-    return { fetchState, product, content }
-  },
-}
+    return {
+      page
+    };
+  }
+};
 </script>
