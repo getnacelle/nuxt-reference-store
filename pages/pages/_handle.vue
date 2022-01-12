@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { useContext, useAsync } from "@nuxtjs/composition-api";
+import { useContext, useStatic } from "@nuxtjs/composition-api";
 import { useSpaceProvider } from "@nacelle/vue";
 import SiteSection from "~/components/core/Section.vue";
 import { buildRobotsTags, buildMetaTags } from "~/utils";
@@ -36,15 +36,19 @@ export default {
   },
   setup() {
     const { nacelleSdk } = useSpaceProvider();
-    const { params } = useContext();
+    const { params, route } = useContext();
     const handle = params.value?.handle;
 
-    const page = useAsync(() => {
-      return nacelleSdk.data.content({
-        handle: `page-${handle}`,
-        type: "pageSections"
-      });
-    }, route.value.path);
+    const page = useStatic(
+      () => {
+        return nacelleSdk.data.content({
+          handle: `page-${handle}`,
+          type: "pageSections"
+        });
+      },
+      route.value.path,
+      route.value.path
+    );
 
     return { page };
   }

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { useContext, useAsync } from "@nuxtjs/composition-api";
+import { useContext, useStatic } from "@nuxtjs/composition-api";
 import { CollectionProvider, useSpaceProvider } from "@nacelle/vue";
 import Collection from "~/components/collection/Collection";
 export default {
@@ -20,20 +20,24 @@ export default {
 
     const handle = route.value.params.handle;
 
-    const page = useAsync(async () => {
-      const [collection, products] = await Promise.all([
-        nacelleSdk.data.collection({ handle }),
-        nacelleSdk.data.collectionPage({
-          handle
-        })
-      ]);
-      return {
-        collection: {
-          ...collection,
-          products
-        }
-      };
-    }, route.value.path);
+    const page = useStatic(
+      async () => {
+        const [collection, products] = await Promise.all([
+          nacelleSdk.data.collection({ handle }),
+          nacelleSdk.data.collectionPage({
+            handle
+          })
+        ]);
+        return {
+          collection: {
+            ...collection,
+            products
+          }
+        };
+      },
+      route.value.path,
+      route.value.path
+    );
 
     return { page };
   }

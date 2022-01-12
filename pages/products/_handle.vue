@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { useContext, useAsync } from "@nuxtjs/composition-api";
+import { useContext, useStatic } from "@nuxtjs/composition-api";
 import { ProductProvider, useSpaceProvider } from "@nacelle/vue";
 import Product from "~/components/products/Product.vue";
 import { buildRobotsTags, buildMetaTags } from "~/utils";
@@ -41,23 +41,27 @@ export default {
 
     const handle = route.value.params.handle;
 
-    const page = useAsync(async () => {
-      const [product, content] = await Promise.all([
-        nacelleSdk.data.product({ handle }),
-        nacelleSdk.data
-          .content({
-            handle,
-            type: "productContent"
-          })
-          .catch(() => {
-            console.info(`No content entry found for ${handle}`);
-          })
-      ]);
-      return {
-        product,
-        content
-      };
-    });
+    const page = useStatic(
+      async () => {
+        const [product, content] = await Promise.all([
+          nacelleSdk.data.product({ handle }),
+          nacelleSdk.data
+            .content({
+              handle,
+              type: "productContent"
+            })
+            .catch(() => {
+              console.info(`No content entry found for ${handle}`);
+            })
+        ]);
+        return {
+          product,
+          content
+        };
+      },
+      route.value.path,
+      route.value.path
+    );
 
     return {
       page

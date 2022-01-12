@@ -27,7 +27,7 @@ import {
   defineComponent,
   ref,
   useContext,
-  useAsync,
+  useStatic,
   watch,
   provide
 } from "@nuxtjs/composition-api";
@@ -116,43 +116,47 @@ export default defineComponent({
     const setCartOpen = val => (cartOpen.value = val);
     const setNavOpen = val => (navOpen.value = val);
 
-    const site = useAsync(async () => {
-      const [
-        space,
-        header,
-        footer,
-        newsletter,
-        cart,
-        searchData
-      ] = await Promise.all([
-        nacelleSdk.data.space(),
-        nacelleSdk.data.content({
-          handle: "component-header",
-          type: "componentHeader"
-        }),
-        nacelleSdk.data.content({
-          handle: "component-footer",
-          type: "componentFooter"
-        }),
-        nacelleSdk.data.content({
-          handle: "component-newsletter",
-          type: "componentNewsletter"
-        }),
-        nacelleSdk.data.content({
-          handle: "component-cart",
-          type: "componentCart"
-        }),
-        nacelleSdk.data.allProducts()
-      ]);
-      return {
-        space,
-        header,
-        footer,
-        newsletter,
-        cart,
-        searchData
-      };
-    });
+    const site = useStatic(
+      async () => {
+        const [
+          space,
+          header,
+          footer,
+          newsletter,
+          cart,
+          searchData
+        ] = await Promise.all([
+          nacelleSdk.data.space(),
+          nacelleSdk.data.content({
+            handle: "component-header",
+            type: "componentHeader"
+          }),
+          nacelleSdk.data.content({
+            handle: "component-footer",
+            type: "componentFooter"
+          }),
+          nacelleSdk.data.content({
+            handle: "component-newsletter",
+            type: "componentNewsletter"
+          }),
+          nacelleSdk.data.content({
+            handle: "component-cart",
+            type: "componentCart"
+          }),
+          nacelleSdk.data.allProducts()
+        ]);
+        return {
+          space,
+          header,
+          footer,
+          newsletter,
+          cart,
+          searchData
+        };
+      },
+      "layout",
+      "layout"
+    );
 
     watch(route, () => {
       cartOpen.value = false;
