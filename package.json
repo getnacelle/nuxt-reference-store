@@ -2,6 +2,10 @@
   "name": "nuxt-starter",
   "version": "0.0.2",
   "private": true,
+  "engines": {
+    "node": ">=16.11 <17",
+    "npm": ">=7"
+  },
   "scripts": {
     "dev": "nuxt",
     "generate": "nuxt generate",
