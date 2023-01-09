@@ -32,7 +32,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.8",
     "fibers": "^5.0.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^8.0.0",
     "sass-loader": "^10.2.0",
     "serve": "^12.0.1"
   }
