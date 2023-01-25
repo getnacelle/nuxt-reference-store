@@ -9,14 +9,15 @@
 </template>
 
 <script>
-import { ref, inject, useContext, useFetch } from "@nuxtjs/composition-api";
+import { useContext, useStatic } from "@nuxtjs/composition-api";
+import { useSpaceProvider } from "@nacelle/vue";
 import SiteSection from "~/components/core/Section.vue";
 import { buildRobotsTags, buildMetaTags } from "~/utils";
 
 export default {
   components: { SiteSection },
   head() {
-    if(this.page) {
+    if (this.page) {
       const title = this.page.fields?.meta?.title
         ? this.page.fields.meta.title
         : this.page.title;
@@ -34,17 +35,20 @@ export default {
     }
   },
   setup() {
-    const page = ref(null);
-    const nacelleSdk = inject("nacelleSdk");
-    const { params } = useContext();
+    const { nacelleSdk } = useSpaceProvider();
+    const { params, route } = useContext();
     const handle = params.value?.handle;
 
-    useFetch(async () => {
-      page.value = await nacelleSdk.data.content({
-        handle: `page-${handle}`,
-        type: "pageSections"
-      });
-    });
+    const page = useStatic(
+      () => {
+        return nacelleSdk.data.content({
+          handle: `page-${handle}`,
+          type: "pageSections"
+        });
+      },
+      route.value.path,
+      route.value.path
+    );
 
     return { page };
   }

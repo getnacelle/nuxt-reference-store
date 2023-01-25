@@ -9,28 +9,26 @@
 </template>
 
 <script>
-import { inject, ref, useFetch } from "@nuxtjs/composition-api";
+import { useStatic } from "@nuxtjs/composition-api";
+import { useSpaceProvider } from "@nacelle/vue";
 import SiteSection from "~/components/core/Section.vue";
 
 export default {
   components: { SiteSection },
   setup() {
-    const nacelleSdk = inject("nacelleSdk");
-    const page = ref(null);
+    const { nacelleSdk } = useSpaceProvider();
 
-    useFetch(async () => {
-      page.value = await nacelleSdk.data
-        .content({
+    const page = useStatic(
+      () =>
+        nacelleSdk.data.content({
           handle: "page-homepage",
-          type: "pageSections",
-        })
-        .catch(() => {
-          console.warn(
-            `No page entry with handle 'page-homepage' found. Please create one in your CMS.`
-          );
-        });
-    });
+          type: "pageSections"
+        }),
+      "/",
+      "/"
+    );
+
     return { page };
-  },
+  }
 };
 </script>

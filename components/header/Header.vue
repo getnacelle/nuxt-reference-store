@@ -20,6 +20,7 @@
 import { provide } from "@nuxtjs/composition-api";
 
 import HeaderPromo from "./HeaderPromo.vue";
+import HeaderLogo from "./HeaderLogo.vue";
 import HeaderMenu from "./HeaderMenu.vue";
 import HeaderPrimary from "./HeaderPrimary.vue";
 import HeaderSearch from "./HeaderSearch.vue";
@@ -29,6 +30,7 @@ export default {
   name: "Header",
   components: {
     HeaderPromo,
+    HeaderLogo,
     HeaderMenu,
     HeaderPrimary,
     HeaderSearch,
